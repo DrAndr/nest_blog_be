@@ -2,59 +2,43 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { User } from 'prisma/__generated__/client';
 
 @Injectable()
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
   create(createUserDto: CreateUserDto) {
-    try {
-      return this.prisma.user.create({ data: createUserDto });
-    } catch (err) {
-      console.error('User > create => ' + err);
-    }
-    return false;
+    return this.prisma.user.create({ data: createUserDto });
   }
 
-  async findAll() {
-    try {
-      return await this.prisma.user.findMany({
-        /** TODO add limits */
-      });
-    } catch (err) {
-      console.error('User > findAll => ' + err);
-    }
+  async findAll(): Promise<User[] | null> {
+    return await this.prisma.user.findMany({
+      /** TODO add limits */
+    });
   }
 
-  async findById(id: string) {
-    try {
-      return await this.prisma.user.findFirst({
-        where: {
-          id,
-        },
-      });
-    } catch (err) {
-      console.error('User > findById => ' + err);
-    }
+  async findById(id: string): Promise<User | null> {
+    return await this.prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
   }
 
-  async findByEmail(email: string) {
-    try {
-      return await this.prisma.user.findFirst({
-        where: {
-          email,
-        },
-      });
-    } catch (err) {
-      console.error('User > findByEmail => ' + err);
-    }
+  async findByEmail(email: string): Promise<User | null> {
+    return await this.prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
   }
 
-  update(id: string, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
+  // update(id: string, updateUserDto: UpdateUserDto) {
+  //   return `This action updates a #${id} user`;
+  // }
 
-  remove(id: string) {
-    return `This action removes a #${id} user`;
-  }
+  // remove(id: string) {
+  //   return `This action removes a #${id} user`;
+  // }
 }

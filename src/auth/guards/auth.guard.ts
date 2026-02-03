@@ -20,11 +20,11 @@ export class AuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const userId = request.session?.userId;
 
-    if (typeof userId === undefined) {
+    if (typeof userId === 'undefined') {
       throw new UnauthorizedException('Unauthorized.');
     }
 
-    const user = this.userService.findById(userId);
+    const user = await this.userService.findById(userId);
 
     if (!user) {
       throw new UnauthorizedException('Unauthorized, user not found.');

@@ -40,12 +40,12 @@ async function bootstrap() {
       secret: config.getOrThrow<string>('SESSION_SECRET'),
       name: config.getOrThrow<string>('SESSION_NAME'),
       resave: true,
-      saveUninitialized: true,
+      saveUninitialized: false, // saveUninitialized: true,
       cookie: {
-        // domain: config.getOrThrow<string>('SESSION_DOMAIN'),
+        domain: config.getOrThrow<string>('SESSION_DOMAIN'),
         maxAge: +config.getOrThrow<number>('SESSION_MAX_AGE'),
-        httpOnly: !!config.getOrThrow<number>('SESSION_HTTP_ONLY'),
-        secure: !!config.getOrThrow<number>('SESSION_SECURE'),
+        httpOnly: config.getOrThrow<string>('SESSION_HTTP_ONLY') === 'true', // bottleneck
+        secure: config.getOrThrow<string>('SESSION_SECURE') === 'true', // bottleneck
         sameSite: 'lax',
       },
       store: new RedisStore({

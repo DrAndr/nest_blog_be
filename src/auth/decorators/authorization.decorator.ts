@@ -11,7 +11,7 @@ import { RolesGuard } from '../guards/roles.guard';
  * @param roles
  * @returns
  */
-export function AuthorizationDecorator(...roles: UserRole[]) {
+export function Authorization(...roles: UserRole[]) {
   if (roles.length > 0) {
     return applyDecorators(Roles(...roles), UseGuards(AuthGuard, RolesGuard));
   }

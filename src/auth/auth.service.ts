@@ -57,7 +57,7 @@ export class AuthService {
     return this.saveSession(req, user);
   }
 
-  public async logout(req: Request, res: Response): Promise<void> {
+  public async logout(req: Request): Promise<void> {
     await new Promise((resolve, reject) => {
       req.session.destroy((err) => {
         if (err) {
@@ -65,7 +65,7 @@ export class AuthService {
             new InternalServerErrorException('Cant`t destroy session.'),
           );
         }
-        res.clearCookie(this.configService.getOrThrow<string>('SESSION_NAME'));
+
         resolve(true);
       });
     });
@@ -74,6 +74,8 @@ export class AuthService {
   private async saveSession(req: Request, user) {
     return new Promise((resolve, reject) => {
       req.session.userId = user.id;
+      console.log('user', user);
+      console.log('saveSession req.session', req.session.id);
 
       req.session.save((err) => {
         if (err) {
