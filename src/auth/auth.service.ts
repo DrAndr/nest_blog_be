@@ -2,6 +2,7 @@ import {
   ConflictException,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { RegisterDto } from './dto/register.dto';
@@ -12,10 +13,14 @@ import argon2 from 'argon2';
 import { plainToInstance } from 'class-transformer';
 import { PublickUserDto } from 'src/user/dto/publick-user.dto';
 import { AuthUserFactory } from './utils/auth-user.factory';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly configService: ConfigService,
+  ) {}
 
   public async register(req: Request, registerDto: RegisterDto) {
     const user = await this.userService.findByEmail(registerDto.email);
@@ -33,14 +38,14 @@ export class AuthService {
   public async login(req: Request, dto: LoginDto) {
     const user = await this.userService.findByEmail(dto.email);
 
-    if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
+    if (!user || !user?.password) {
+      throw new NotFoundException('Invalid credentials');
     }
 
     const isPasswordMatched = await argon2.verify(user.password, dto.password);
 
     if (!isPasswordMatched) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new NotFoundException('Invalid credentials');
     }
 
     if (req.session.userId && req.session.userId !== user.id) {
@@ -52,7 +57,7 @@ export class AuthService {
     return this.saveSession(req, user);
   }
 
-  public async logout(req: Request, res: Response) {
+  public async logout(req: Request, res: Response): Promise<void> {
     await new Promise((resolve, reject) => {
       req.session.destroy((err) => {
         if (err) {
@@ -60,12 +65,9 @@ export class AuthService {
             new InternalServerErrorException('Cant`t destroy session.'),
           );
         }
+        res.clearCookie(this.configService.getOrThrow<string>('SESSION_NAME'));
         resolve(true);
       });
-    });
-
-    res.send({
-      success: true,
     });
   }
 
@@ -79,6 +81,8 @@ export class AuthService {
             new InternalServerErrorException('Cant`t save session.'),
           );
         }
+
+        //TODO To implement session mapping
 
         resolve(
           plainToInstance(PublickUserDto, user, {
