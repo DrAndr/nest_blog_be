@@ -20,6 +20,7 @@ import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { ClearSessionCookie } from './interceptors/clear-session-cookie.interceptor';
 import { Serialize } from 'src/libs/common/decorators/serialize.decorator';
 import { PublickUserDto } from 'src/user/dto/publick-user.dto';
+import { Recaptcha } from '@nestlab/google-recaptcha';
 
 @Controller('auth')
 export class AuthController {
@@ -27,6 +28,7 @@ export class AuthController {
 
   @ApiOperation({ summary: 'Register user' })
   @ApiResponse({ status: 201, description: 'Registred.' })
+  @Recaptcha()
   @HttpCode(HttpStatus.CREATED)
   @Post('register')
   register(@Req() req: Request, @Body() dto: RegisterDto) {
@@ -35,6 +37,7 @@ export class AuthController {
 
   @ApiOperation({ summary: 'Authenticate user' })
   @ApiResponse({ status: 200, description: 'Logged in.' })
+  @Recaptcha()
   @HttpCode(HttpStatus.OK)
   @Serialize(PublickUserDto)
   @Post('login')
