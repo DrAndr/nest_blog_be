@@ -31,6 +31,16 @@
 $ npm install
 ```
 
+Create and set up correct .env !
+
+```bash
+$ cp .example.env .env
+```
+
+```bash
+$ docker compose up -d
+```
+
 ## Compile and run the project
 
 ```bash
