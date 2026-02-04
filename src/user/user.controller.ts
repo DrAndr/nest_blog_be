@@ -14,13 +14,16 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Authorization } from 'src/auth/decorators/authorization.decorator';
 import { Authorized } from 'src/auth/decorators/authorized.decorator';
+import { Serialize } from 'src/libs/common/decorators/serialize.decorator';
+import { PublickUserDto } from './dto/publick-user.dto';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Authorization() // The "Method" decorator
+  @Authorization()
   @HttpCode(HttpStatus.OK)
+  @Serialize(PublickUserDto) // instead of @UseInterceptors(new SerializeInterceptor(UserDto))
   @Get('profile')
   public async getUserProfile(@Authorized('id') userId: string) {
     return this.userService.findById(userId);

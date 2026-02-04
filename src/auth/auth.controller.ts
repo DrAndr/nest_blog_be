@@ -18,6 +18,8 @@ import { LoginDto } from './dto/login.dto';
 import type { Request, Response } from 'express';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { ClearSessionCookie } from './interceptors/clear-session-cookie.interceptor';
+import { Serialize } from 'src/libs/common/decorators/serialize.decorator';
+import { PublickUserDto } from 'src/user/dto/publick-user.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -34,13 +36,15 @@ export class AuthController {
   @ApiOperation({ summary: 'Authenticate user' })
   @ApiResponse({ status: 200, description: 'Logged in.' })
   @HttpCode(HttpStatus.OK)
+  @Serialize(PublickUserDto)
   @Post('login')
   login(@Req() req: Request, @Body() dto: LoginDto) {
     return this.authService.login(req, dto);
   }
-  @UseInterceptors(ClearSessionCookie)
+
   @ApiOperation({ summary: 'Logout user' })
   @ApiResponse({ status: 200, description: 'Logged out.' })
+  @UseInterceptors(ClearSessionCookie)
   @HttpCode(HttpStatus.OK)
   @Post('logout')
   logout(@Req() req: Request) {

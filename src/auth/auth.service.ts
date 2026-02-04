@@ -74,8 +74,6 @@ export class AuthService {
   private async saveSession(req: Request, user) {
     return new Promise((resolve, reject) => {
       req.session.userId = user.id;
-      console.log('user', user);
-      console.log('saveSession req.session', req.session.id);
 
       req.session.save((err) => {
         if (err) {
@@ -86,11 +84,7 @@ export class AuthService {
 
         //TODO To implement session mapping
 
-        resolve(
-          plainToInstance(PublickUserDto, user, {
-            excludeExtraneousValues: true,
-          }),
-        );
+        resolve(user);
       });
     });
   }
