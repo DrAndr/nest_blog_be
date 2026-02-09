@@ -3,14 +3,14 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
-  Delete,
   Req,
-  Res,
   HttpCode,
   HttpStatus,
   UseInterceptors,
+  Res,
+  Query,
+  BadRequestException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
@@ -21,10 +21,18 @@ import { ClearSessionCookie } from './interceptors/clear-session-cookie.intercep
 import { Serialize } from 'src/libs/common/decorators/serialize.decorator';
 import { PublickUserDto } from 'src/user/dto/publick-user.dto';
 import { Recaptcha } from '@nestlab/google-recaptcha';
+import { OauthProviderGuard } from './decorators/oauth-provider.decorator';
+import type { TypeProvider } from './provider/utils/types';
+import { ProviderService } from './provider/provider.service';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly providerService: ProviderService,
+    private readonly configService: ConfigService,
+  ) {}
 
   @ApiOperation({ summary: 'Register user' })
   @ApiResponse({ status: 201, description: 'Registred.' })
@@ -43,6 +51,33 @@ export class AuthController {
   @Post('login')
   login(@Req() req: Request, @Body() dto: LoginDto) {
     return this.authService.login(req, dto);
+  }
+
+  @OauthProviderGuard()
+  @Get('/oauth/connect/:provider')
+  public async connect(@Param('provider') provider: TypeProvider) {
+    const providerInstance = this.providerService.findByService(provider);
+
+    return providerInstance?.getAuthUrl();
+  }
+
+  @OauthProviderGuard()
+  @Get('/oauth/callback/:provider')
+  public async callback(
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+    @Query('code') code: string,
+    @Param('provider') provider: TypeProvider,
+  ) {
+    if (!code) {
+      throw new BadRequestException('Thea no "code" provided.');
+    }
+
+    await this.authService.extractProfileFromCode(req, provider, code);
+
+    return res.redirect(
+      `${this.configService.getOrThrow<string>('ALLOWED_ORIGIN')}/dashboard/settings`,
+    );
   }
 
   @ApiOperation({ summary: 'Logout user' })

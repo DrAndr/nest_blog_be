@@ -5,6 +5,7 @@ import {
   IsNotEmpty,
   MaxLength,
   MinLength,
+  IsBoolean,
 } from 'class-validator';
 import { AuthMethod } from 'prisma/__generated__/enums';
 
@@ -36,4 +37,11 @@ export class CreateUserDto {
   @IsString({ message: 'Should be a string.' })
   @IsNotEmpty({ message: 'Method is required.' })
   method!: AuthMethod;
+
+  @ApiProperty({
+    example: 'false',
+    description: 'User verification status.',
+  })
+  @IsBoolean()
+  isVerified?: boolean;
 }

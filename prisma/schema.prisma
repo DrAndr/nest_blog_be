@@ -44,11 +44,11 @@ model Account {
   provider String
 
   refreshToken String? @map("refresh_token")
-  accessToken  String? @map("access_token")
+  accessToken  String  @map("access_token")
   expiresAt    Int     @map("expires_at")
 
-  user   User?   @relation(fields: [userId], references: [id])
-  userId String?
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -63,6 +63,7 @@ model Token {
   token     String    @unique
   type      TokenType
   expiresIn DateTime  @map("expires_in")
+  createdAt DateTime  @default(now()) @map("created_at")
 
   @@map("tokens")
 }
