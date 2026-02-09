@@ -53,6 +53,8 @@ export class AuthController {
     return this.authService.login(req, dto);
   }
 
+  @ApiOperation({ summary: 'Authenticate user throught Oauth provider' })
+  @ApiResponse({ status: 200, description: 'Return provider URL' })
   @OauthProviderGuard()
   @Get('/oauth/connect/:provider')
   public async connect(@Param('provider') provider: TypeProvider) {

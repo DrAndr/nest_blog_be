@@ -87,7 +87,7 @@ export class AuthService {
     request: Request,
     provider: string,
     code: string,
-  ) {
+  ): Promise<void> {
     const profile = await this.getOAuthProfile(provider, code);
 
     /**
@@ -121,7 +121,7 @@ export class AuthService {
     /**
      * Set user session.
      */
-    return this.saveSession(request, user);
+    this.saveSession(request, user);
   }
 
   /**
