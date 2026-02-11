@@ -8,6 +8,7 @@ import { ConfigModule } from '@nestjs/config';
 import { IS_DEV_ENV } from './libs/common/utils/is-dev.util';
 import { AuthModule } from './auth/auth.module';
 import { ProviderModule } from './auth/provider/provider.module';
+import { MailerModule } from './mailer/mailer.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ProviderModule } from './auth/provider/provider.module';
     UserModule,
     AuthModule,
     ProviderModule,
+    MailerModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],

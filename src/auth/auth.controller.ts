@@ -53,8 +53,9 @@ export class AuthController {
     return this.authService.login(req, dto);
   }
 
-  @ApiOperation({ summary: 'Authenticate user throught Oauth provider' })
+  @ApiOperation({ summary: 'Init authenticate user throught Oauth provider' })
   @ApiResponse({ status: 200, description: 'Return provider URL' })
+  @HttpCode(HttpStatus.OK)
   @OauthProviderGuard()
   @Get('/oauth/connect/:provider')
   public async connect(@Param('provider') provider: TypeProvider) {
@@ -63,6 +64,15 @@ export class AuthController {
     return providerInstance?.getAuthUrl();
   }
 
+  @ApiOperation({
+    summary: 'Authenticate user throught Oauth provider on the site',
+  })
+  @ApiResponse({
+    status: 200,
+    description:
+      'Find or create new user account and rediret to the user profile page',
+  })
+  @HttpCode(HttpStatus.OK)
   @OauthProviderGuard()
   @Get('/oauth/callback/:provider')
   public async callback(
