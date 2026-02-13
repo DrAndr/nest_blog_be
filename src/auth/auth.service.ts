@@ -12,7 +12,7 @@ import { UserService } from 'src/user/user.service';
 import type { Request, Response } from 'express';
 import argon2 from 'argon2';
 import { plainToInstance } from 'class-transformer';
-import { PublickUserDto } from 'src/user/dto/publick-user.dto';
+import { PublicUserDto } from 'src/user/dto/publick-user.dto';
 import { AuthUserFactory } from './utils/auth-user.factory';
 import { ConfigService } from '@nestjs/config';
 import { ProviderService } from './provider/provider.service';
@@ -20,6 +20,11 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { AuthMethod } from 'prisma/__generated__/enums';
 import { TypeUserInfo } from './provider/services/types/user-info.type';
 import type { User } from 'prisma/__generated__/client';
+import { MailService } from '../mail/mail.service';
+import { EmailVerificationService } from './email-verification/email-verification.service';
+
+import { saveSession } from './utils/saveSession';
+import destroySession from './utils/destroySession';
 
 @Injectable()
 export class AuthService {
@@ -28,6 +33,8 @@ export class AuthService {
     private readonly configService: ConfigService,
     private readonly providerService: ProviderService,
     private readonly prismaService: PrismaService,
+    private readonly mailService: MailService,
+    private readonly emailVerificationService: EmailVerificationService,
   ) {}
 
   public async register(req: Request, registerDto: RegisterDto) {
@@ -40,7 +47,16 @@ export class AuthService {
     const userData = await AuthUserFactory.createWithCredentials(registerDto);
     const newUser = await this.userService.create(userData);
 
-    return this.saveSession(req, newUser);
+    // const token = await this.emailVerificationService.newVerificationToken(
+    //   req,
+    //   registerDto.email,
+    // );
+
+    // sendVerificationToken;
+    // Use HERE mail before give an access, for verification email firstly
+    this.mailService.onRegisterVerification({ to: '', subject: '', url: '' });
+
+    return saveSession(req, newUser);
   }
 
   public async login(req: Request, dto: LoginDto) {
@@ -62,21 +78,13 @@ export class AuthService {
       );
     }
 
-    return this.saveSession(req, user);
+    // add validation isVerified, before give an access
+
+    return saveSession(req, user);
   }
 
-  public async logout(req: Request): Promise<void> {
-    await new Promise((resolve, reject) => {
-      req.session.destroy((err) => {
-        if (err) {
-          return reject(
-            new InternalServerErrorException('Cant`t destroy session.'),
-          );
-        }
-
-        resolve(true);
-      });
-    });
+  public async logout(req: Request): Promise<boolean> {
+    return await destroySession(req);
   }
 
   /**
@@ -121,7 +129,7 @@ export class AuthService {
     /**
      * Set user session.
      */
-    this.saveSession(request, user);
+    saveSession(request, user);
   }
 
   /**
@@ -187,29 +195,5 @@ export class AuthService {
       }
     }
     return user;
-  }
-
-  /**
-   * Write and save session.
-   * @param req
-   * @param user
-   * @returns
-   */
-  private async saveSession(req: Request, user) {
-    return new Promise((resolve, reject) => {
-      req.session.userId = user.id;
-
-      req.session.save((err) => {
-        if (err) {
-          return reject(
-            new InternalServerErrorException('Cant`t save session.'),
-          );
-        }
-
-        //TODO To implement session mapping
-
-        resolve(user);
-      });
-    });
   }
 }

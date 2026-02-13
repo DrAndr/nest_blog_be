@@ -1,13 +1,12 @@
 import {
   IsEmail,
   IsNotEmpty,
-  IsObject,
   IsString,
-  isString,
   MaxLength,
+  ValidateNested,
 } from 'class-validator';
 
-export class SendEmailDto {
+export class OnRegisterVerificationDto {
   @IsEmail()
   @IsNotEmpty()
   @MaxLength(40)
@@ -18,9 +17,6 @@ export class SendEmailDto {
   subject!: string;
 
   @IsString()
-  @MaxLength(40)
-  template?: string;
-
-  @IsObject()
-  context!: object;
+  @IsNotEmpty()
+  url!: string;
 }

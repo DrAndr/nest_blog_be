@@ -27,16 +27,21 @@ export class UserService {
   }
 
   async findByEmail(email: string): Promise<User | null> {
-    return await this.prisma.user.findUnique({
+    return this.prisma.user.findUnique({
       where: {
         email,
       },
     });
   }
 
-  // update(id: string, updateUserDto: UpdateUserDto) {
-  //   return `This action updates a #${id} user`;
-  // }
+  async update(id: string, updateUserDto: UpdateUserDto): Promise<User | null> {
+    return this.prisma.user.update({
+      where: {
+        id,
+      },
+      data: updateUserDto,
+    });
+  }
 
   // remove(id: string) {
   //   return `This action removes a #${id} user`;

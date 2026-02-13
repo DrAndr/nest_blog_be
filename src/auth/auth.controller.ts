@@ -19,7 +19,7 @@ import type { Request, Response } from 'express';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { ClearSessionCookie } from './interceptors/clear-session-cookie.interceptor';
 import { Serialize } from 'src/libs/common/decorators/serialize.decorator';
-import { PublickUserDto } from 'src/user/dto/publick-user.dto';
+import { PublicUserDto } from 'src/user/dto/publick-user.dto';
 import { Recaptcha } from '@nestlab/google-recaptcha';
 import { OauthProviderGuard } from './decorators/oauth-provider.decorator';
 import type { TypeProvider } from './provider/utils/types';
@@ -35,7 +35,7 @@ export class AuthController {
   ) {}
 
   @ApiOperation({ summary: 'Register user' })
-  @ApiResponse({ status: 201, description: 'Registred.' })
+  @ApiResponse({ status: 201, description: 'Registered.' })
   @Recaptcha()
   @HttpCode(HttpStatus.CREATED)
   @Post('register')
@@ -47,13 +47,13 @@ export class AuthController {
   @ApiResponse({ status: 200, description: 'Logged in.' })
   @Recaptcha()
   @HttpCode(HttpStatus.OK)
-  @Serialize(PublickUserDto)
+  @Serialize(PublicUserDto)
   @Post('login')
   login(@Req() req: Request, @Body() dto: LoginDto) {
     return this.authService.login(req, dto);
   }
 
-  @ApiOperation({ summary: 'Init authenticate user throught Oauth provider' })
+  @ApiOperation({ summary: 'Init authenticate user through Oauth provider' })
   @ApiResponse({ status: 200, description: 'Return provider URL' })
   @HttpCode(HttpStatus.OK)
   @OauthProviderGuard()
@@ -65,12 +65,12 @@ export class AuthController {
   }
 
   @ApiOperation({
-    summary: 'Authenticate user throught Oauth provider on the site',
+    summary: 'Authenticate user through Oauth provider on the site',
   })
   @ApiResponse({
     status: 200,
     description:
-      'Find or create new user account and rediret to the user profile page',
+      'Find or create new user account and redirect to the user profile page',
   })
   @HttpCode(HttpStatus.OK)
   @OauthProviderGuard()

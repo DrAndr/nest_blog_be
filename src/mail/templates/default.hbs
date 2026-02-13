@@ -1,3 +1,3 @@
-<h1>Привет, {{name ?? "name"}}</h1>
+<h1>Привет, {{default name 'name'}}</h1>
 <p>Пожалуйста, подтвердите ваш email по ссылке:</p>
-<a href="#">{{url??"#"}}</a>
+<a href='#'>{{default url '#'}}</a>

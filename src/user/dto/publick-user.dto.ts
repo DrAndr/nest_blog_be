@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 
-export class PublickUserDto {
+export class PublicUserDto {
   @ApiProperty({
     example: 'a03b84c8-2f85-4b15-a6bd-bfb9489fd0ff',
     description: 'User id.',

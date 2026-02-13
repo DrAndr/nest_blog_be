@@ -7,6 +7,8 @@ import { getRecaptchaConfig } from 'src/config/recaptcha.config';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ProviderModule } from './provider/provider.module';
 import { getProvidersConfig } from 'src/config/providers.config';
+import { MailModule } from '../mail/mail.module';
+import { MailService } from '../mail/mail.service';
 
 @Module({
   imports: [
@@ -20,8 +22,9 @@ import { getProvidersConfig } from 'src/config/providers.config';
       useFactory: getRecaptchaConfig,
       inject: [ConfigService],
     }),
+    MailModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, UserService],
+  providers: [AuthService, UserService, MailService],
 })
 export class AuthModule {}

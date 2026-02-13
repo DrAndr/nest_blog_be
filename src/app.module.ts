@@ -8,7 +8,8 @@ import { ConfigModule } from '@nestjs/config';
 import { IS_DEV_ENV } from './libs/common/utils/is-dev.util';
 import { AuthModule } from './auth/auth.module';
 import { ProviderModule } from './auth/provider/provider.module';
-import { MailerModule } from './mailer/mailer.module';
+import { MailModule } from './mail/mail.module';
+import { EmailVerificationModule } from './auth/email-verification/email-verification.module';
 
 @Module({
   imports: [
@@ -22,7 +23,8 @@ import { MailerModule } from './mailer/mailer.module';
     UserModule,
     AuthModule,
     ProviderModule,
-    MailerModule,
+    MailModule,
+    EmailVerificationModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
