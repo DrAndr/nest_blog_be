@@ -6,7 +6,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 
-export class OnRegisterVerificationDto {
+export class SendMailDto {
   @IsEmail()
   @IsNotEmpty()
   @MaxLength(40)
@@ -18,5 +18,5 @@ export class OnRegisterVerificationDto {
 
   @IsString()
   @IsNotEmpty()
-  url!: string;
+  html!: string;
 }

@@ -9,18 +9,14 @@ import {
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { UserService } from 'src/user/user.service';
-import type { Request, Response } from 'express';
+import type { Request } from 'express';
 import argon2 from 'argon2';
-import { plainToInstance } from 'class-transformer';
-import { PublicUserDto } from 'src/user/dto/publick-user.dto';
 import { AuthUserFactory } from './utils/auth-user.factory';
-import { ConfigService } from '@nestjs/config';
 import { ProviderService } from './provider/provider.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AuthMethod } from 'prisma/__generated__/enums';
 import { TypeUserInfo } from './provider/services/types/user-info.type';
 import type { User } from 'prisma/__generated__/client';
-import { MailService } from '../mail/mail.service';
 import { EmailVerificationService } from './email-verification/email-verification.service';
 
 import { saveSession } from './utils/saveSession';
@@ -30,13 +26,16 @@ import destroySession from './utils/destroySession';
 export class AuthService {
   constructor(
     private readonly userService: UserService,
-    private readonly configService: ConfigService,
     private readonly providerService: ProviderService,
     private readonly prismaService: PrismaService,
-    private readonly mailService: MailService,
     private readonly emailVerificationService: EmailVerificationService,
   ) {}
 
+  /**
+   * Validate email, create new user and send verification email
+   * @param req
+   * @param registerDto
+   */
   public async register(req: Request, registerDto: RegisterDto) {
     const user = await this.userService.findByEmail(registerDto.email);
 
@@ -47,19 +46,15 @@ export class AuthService {
     const userData = await AuthUserFactory.createWithCredentials(registerDto);
     const newUser = await this.userService.create(userData);
 
-    // const token = await this.emailVerificationService.newVerificationToken(
-    //   req,
-    //   registerDto.email,
-    // );
-
-    // sendVerificationToken;
-    // Use HERE mail before give an access, for verification email firstly
-    this.mailService.onRegisterVerification({ to: '', subject: '', url: '' });
-
-    return saveSession(req, newUser);
+    return await this.emailVerificationService.sendVerificationToken(newUser);
   }
 
-  public async login(req: Request, dto: LoginDto) {
+  /**
+   * Validate credentials and auth via writing session
+   * @param req
+   * @param dto
+   */
+  public async login(req: Request, dto: LoginDto): Promise<User> {
     const user = await this.userService.findByEmail(dto.email);
 
     if (!user || !user?.password) {
@@ -78,11 +73,18 @@ export class AuthService {
       );
     }
 
-    // add validation isVerified, before give an access
+    if (!user.isVerified) {
+      await this.emailVerificationService.sendVerificationToken(user);
+      throw new UnauthorizedException('Unverified email.');
+    }
 
     return saveSession(req, user);
   }
 
+  /**
+   * Destroy session when logout rout was bound
+   * @param req
+   */
   public async logout(req: Request): Promise<boolean> {
     return await destroySession(req);
   }

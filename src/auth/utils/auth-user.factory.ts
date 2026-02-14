@@ -14,8 +14,4 @@ export class AuthUserFactory {
       method: AuthMethod.CREDENTIALS,
     };
   }
-
-  // TODO createWithYandex
-
-  // TODO createWithGoogle
 }
