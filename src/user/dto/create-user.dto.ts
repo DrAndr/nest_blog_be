@@ -17,8 +17,8 @@ export class CreateUserDto {
   @ApiProperty({ example: 'John', description: 'User name.' })
   @IsString({ message: 'Should be a string.' })
   @IsNotEmpty({ message: 'Name is required.' })
-  @MinLength(2, { message: 'Min 2 simbols' })
-  @MaxLength(25, { message: 'Max 25 simbols' })
+  @MinLength(2, { message: 'Min 2 symbols' })
+  @MaxLength(25, { message: 'Max 25 symbols' })
   name!: string;
 
   @ApiProperty({ description: 'User image.' })
@@ -26,8 +26,8 @@ export class CreateUserDto {
 
   @ApiProperty({ example: 'qwerty123U', description: 'User password.' })
   @IsString({ message: 'Should be a string.' })
-  @MinLength(8, { message: 'Min 8 simbols' })
-  @MaxLength(40, { message: 'Max 40 simbols' })
+  @MinLength(8, { message: 'Min 8 symbols' })
+  @MaxLength(40, { message: 'Max 40 symbols' })
   password!: string;
 
   @ApiProperty({

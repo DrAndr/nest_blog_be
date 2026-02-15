@@ -10,6 +10,8 @@ import { AuthModule } from './auth/auth.module';
 import { ProviderModule } from './auth/provider/provider.module';
 import { MailModule } from './mail/mail.module';
 import { EmailVerificationModule } from './auth/email-verification/email-verification.module';
+import { PasswordRecoveryModule } from './auth/reset-password/password-recovery.module';
+import { TokenProviderModule } from './auth/token-provider/token-provider.module';
 
 @Module({
   imports: [
@@ -25,6 +27,8 @@ import { EmailVerificationModule } from './auth/email-verification/email-verific
     ProviderModule,
     MailModule,
     EmailVerificationModule,
+    PasswordRecoveryModule,
+    TokenProviderModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],

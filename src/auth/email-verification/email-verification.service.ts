@@ -6,7 +6,6 @@ import {
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
-import { v4 as uuid } from 'uuid';
 import { TokenType } from '../../../prisma/__generated__/enums';
 import type { Token, User } from '../../../prisma/__generated__/client';
 import { ConfirmationDto } from './dto/confirmation.dto';
@@ -14,6 +13,7 @@ import type { Request } from 'express';
 import { UserService } from '../../user/user.service';
 import { saveSession } from '../utils/saveSession';
 import { MailService } from '../../mail/mail.service';
+import { TokenProviderService } from '../token-provider/token-provider.service';
 
 @Injectable()
 export class EmailVerificationService {
@@ -21,6 +21,7 @@ export class EmailVerificationService {
     private readonly prismaService: PrismaService,
     private readonly userService: UserService,
     private readonly mailService: MailService,
+    private readonly tokenService: TokenProviderService,
   ) {}
 
   /**
@@ -28,7 +29,10 @@ export class EmailVerificationService {
    * @param user
    */
   public async sendVerificationToken(user: User): Promise<boolean> {
-    const tokenData = await this.generateVerificationToken(user.email);
+    const tokenData = await this.tokenService.generateToken(
+      user.email,
+      TokenType.VERIFICATION,
+    );
     const sentMessageInfo = await this.mailService.sendConfirmationEmail({
       email: user.email,
       token: tokenData.token,
@@ -40,7 +44,7 @@ export class EmailVerificationService {
       );
     }
 
-    return true;
+    return true; // { message: 'Email for verification sent.', status: 'success' };
   }
 
   /**
@@ -55,6 +59,8 @@ export class EmailVerificationService {
     const tokenData = await this.validateToken(token);
     const user = await this.verifyUser(tokenData.email);
 
+    await this.tokenService.deleteToken(tokenData.id); // remove token after all actions
+
     return this.authenticateUser(req, user);
   }
 
@@ -65,7 +71,10 @@ export class EmailVerificationService {
    * @private Promise<Token>
    */
   private async validateToken(token: string): Promise<Token> {
-    const existingToken = await this.getVerificationToken(token);
+    const existingToken = await this.tokenService.getToken(
+      token,
+      TokenType.VERIFICATION,
+    );
 
     if (!existingToken) {
       throw new NotFoundException('Token not found.');
@@ -95,7 +104,9 @@ export class EmailVerificationService {
     });
 
     if (!updatedUser) {
-      throw new NotFoundException('User not found.');
+      throw new InternalServerErrorException(
+        'Internal server error, user status was`nt updated.',
+      );
     }
 
     return updatedUser;
@@ -110,91 +121,5 @@ export class EmailVerificationService {
    */
   private async authenticateUser(req: Request, user: User): Promise<User> {
     return await saveSession(req, user);
-  }
-
-  /**
-   * Create or update expired token in DB
-   * @param email
-   * @private
-   * @return Promise<Token>
-   */
-  private async generateVerificationToken(email: string): Promise<Token> {
-    const existingToken = await this.getVerificationTokenByEmail(email);
-
-    if (existingToken) {
-      await this.deleteToken(existingToken.id);
-    }
-
-    return await this.createVerificationToken(email);
-  }
-
-  /**
-   * Try to find existing tokens row by token string
-   * @param token
-   * @private
-   * @Return Promise<Token | null>
-   */
-  private async getVerificationToken(token: string): Promise<Token | null> {
-    return this.prismaService.token.findFirst({
-      where: {
-        token,
-        type: TokenType.VERIFICATION,
-      },
-    });
-  }
-
-  /**
-   * Try to find existing tokens row by email
-   * @param email
-   * @private
-   */
-  private async getVerificationTokenByEmail(
-    email: string,
-  ): Promise<Token | null> {
-    return this.prismaService.token.findFirst({
-      where: {
-        email,
-        type: TokenType.VERIFICATION,
-      },
-    });
-  }
-
-  /**
-   *  Create new verification token based on provided email
-   * @param email
-   * @private
-   */
-  private async createVerificationToken(email: string): Promise<Token> {
-    const token = this.prismaService.token.create({
-      data: {
-        token: uuid(),
-        email,
-        type: TokenType.VERIFICATION,
-        expiresIn: this.expiresIn(),
-      },
-    });
-
-    if (!token) {
-      throw new InternalServerErrorException('Token was not created.');
-    }
-
-    return token;
-  }
-
-  /**
-   * Delete existing token by provided token record ID
-   * @param id
-   * @private
-   */
-  private deleteToken(id: string): Promise<Token | null> {
-    return this.prismaService.token.delete({ where: { id } });
-  }
-
-  /**
-   * Helper func, return Date + 1h, for tokens expiration field
-   * @private
-   */
-  private expiresIn() {
-    return new Date(Date.now() + 60 * 60 * 1000);
   }
 }

@@ -5,8 +5,13 @@ import { ISendConfirmationEmail } from './common/interfaces/send-confirmation-em
 import { ConfigService } from '@nestjs/config';
 import { render } from '@react-email/components';
 import { EmailConfirmationTemplate } from './templates/email-confirmation.template';
-import { CONFIRMATION_EMAIL_URI } from '../common/constants';
+import {
+  CONFIRMATION_EMAIL_URI,
+  RESET_PASSWORD_EMAIL_URI,
+} from '../common/constants';
 import { SentMessageInfo } from 'nodemailer';
+import { ISendResetPasswordEmail } from './common/interfaces/send-reset-password-email.interface';
+import { ResetPasswordTemplate } from './templates/reset-password.template';
 
 @Injectable()
 export class MailService {
@@ -38,6 +43,32 @@ export class MailService {
     return await this.sendMail({
       to: email,
       subject: 'Email verification.',
+      html,
+    });
+  }
+
+  /**
+   * Send email with confirmation link for email verification
+   * @param email
+   * @param token
+   * @return Promise<SentMessageInfo>
+   */
+  public async sendResetPasswordEmail({
+    email,
+    token,
+  }: ISendResetPasswordEmail): Promise<SentMessageInfo> {
+    const domain = this.configService.getOrThrow<string>('ALLOWED_ORIGIN');
+    const html = await render(
+      ResetPasswordTemplate({
+        domain,
+        token,
+        uri: RESET_PASSWORD_EMAIL_URI,
+      }),
+    );
+
+    return await this.sendMail({
+      to: email,
+      subject: 'Reset password confirmation.',
       html,
     });
   }

@@ -27,6 +27,9 @@ import { ProviderService } from './provider/provider.service';
 import { ConfigService } from '@nestjs/config';
 import { ConfirmationDto } from './email-verification/dto/confirmation.dto';
 import { EmailVerificationService } from './email-verification/email-verification.service';
+import { ResetPasswordDto } from './dto/reset-password.dto';
+import { PasswordRecoveryService } from './reset-password/password-recovery.service';
+import { UpdatePasswordDto } from './dto/update-password.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -35,6 +38,7 @@ export class AuthController {
     private readonly providerService: ProviderService,
     private readonly configService: ConfigService,
     private readonly emailVerificationService: EmailVerificationService,
+    private readonly passwordRecoveryService: PasswordRecoveryService,
   ) {}
 
   @ApiOperation({ summary: 'Register user' })
@@ -56,16 +60,45 @@ export class AuthController {
     return this.authService.login(req, dto);
   }
 
-  @ApiOperation({ summary: 'Email confirmation entrypoint.' })
-  @ApiResponse({ status: 200, description: 'Accept confirmation token.' })
+  @ApiOperation({ summary: 'Email confirmation.' })
+  @ApiResponse({ status: 200, description: 'Require confirmation token.' })
   @HttpCode(HttpStatus.OK)
   @Serialize(PublicUserDto)
-  @Get('email-verification')
+  @Post('email-verification')
   public async newVerification(
     @Req() req: Request,
-    @Query() dto: ConfirmationDto,
+    @Body() dto: ConfirmationDto,
   ) {
     return await this.emailVerificationService.newVerification(req, dto);
+  }
+
+  @ApiOperation({ summary: 'Init the reset password event.' })
+  @ApiResponse({
+    status: 200,
+    description:
+      'Init reset password action, and send the reset password link.',
+  })
+  @Post('reset-password')
+  public async resetPassword(@Body() dto: ResetPasswordDto) {
+    await this.passwordRecoveryService.resetPassword(dto);
+    return {
+      message:
+        'An email with password recovery information has been sent to you..',
+    };
+  }
+
+  @ApiOperation({ summary: 'Update user password.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Update user password.',
+  })
+  @Post('reset-password/:token')
+  public async updatePassword(
+    @Body() dto: UpdatePasswordDto,
+    @Param('token') token: string,
+  ) {
+    await this.passwordRecoveryService.updatePassword(dto, token);
+    return { message: 'Password updated.' };
   }
 
   @ApiOperation({ summary: 'Init authenticate user through Oauth provider' })

@@ -80,12 +80,12 @@ export type PrismaVersion = {
 }
 
 /**
- * Prisma Client JS version: 7.4.0-integration-parameterization.11
- * Query Engine version: f3eee967148e573af072a859822ac3bdd9145696
+ * Prisma Client JS version: 7.4.0
+ * Query Engine version: ab56fe763f921d033a6c195e7ddeb3e255bdbb57
  */
 export const prismaVersion: PrismaVersion = {
-  client: "7.4.0-integration-parameterization.11",
-  engine: "f3eee967148e573af072a859822ac3bdd9145696"
+  client: "7.4.0",
+  engine: "ab56fe763f921d033a6c195e7ddeb3e255bdbb57"
 }
 
 /**
@@ -780,7 +780,8 @@ export const TokenScalarFieldEnum = {
   email: 'email',
   token: 'token',
   type: 'type',
-  expiresIn: 'expiresIn'
+  expiresIn: 'expiresIn',
+  createdAt: 'createdAt'
 } as const
 
 export type TokenScalarFieldEnum = (typeof TokenScalarFieldEnum)[keyof typeof TokenScalarFieldEnum]

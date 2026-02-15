@@ -12,6 +12,7 @@ import { MailService } from '../mail/mail.service';
 import { EmailVerificationService } from './email-verification/email-verification.service';
 import { EmailVerificationModule } from './email-verification/email-verification.module';
 import { UserModule } from '../user/user.module';
+import { PasswordRecoveryModule } from './reset-password/password-recovery.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { UserModule } from '../user/user.module';
     UserModule,
     MailModule,
     forwardRef(() => EmailVerificationModule),
+    PasswordRecoveryModule,
   ],
   controllers: [AuthController],
   providers: [AuthService],

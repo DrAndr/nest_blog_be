@@ -7,6 +7,7 @@ import session from 'express-session';
 import { RedisStore } from 'connect-redis';
 import initSwagger from './libs/common/utils/initSwagger';
 import { createClient } from 'redis';
+import { ResponseInterceptor } from './common/interceptors/response.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -55,8 +56,10 @@ async function bootstrap() {
     }),
   );
 
-  // to prevent output private data
-  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
+  app.useGlobalInterceptors(
+    new ClassSerializerInterceptor(app.get(Reflector)), // to prevent output private data
+    new ResponseInterceptor(),
+  );
 
   app.enableCors({
     origin: config.getOrThrow<string>('ALLOWED_ORIGIN'),
