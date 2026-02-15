@@ -17,10 +17,10 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { AuthMethod } from 'prisma/__generated__/enums';
 import { TypeUserInfo } from './provider/services/types/user-info.type';
 import type { User } from 'prisma/__generated__/client';
-import { EmailVerificationService } from './email-verification/email-verification.service';
 
 import { saveSession } from './utils/saveSession';
 import destroySession from './utils/destroySession';
+import { EmailVerificationService } from './email-verification/email-verification.service';
 
 @Injectable()
 export class AuthService {
@@ -74,8 +74,12 @@ export class AuthService {
     }
 
     if (!user.isVerified) {
+      // lok`s like not good idea to send email with new token when user try to login,
+      // perhaps would be better to allow user resent token manually... may be in future...
       await this.emailVerificationService.sendVerificationToken(user);
-      throw new UnauthorizedException('Unverified email.');
+      throw new UnauthorizedException(
+        'Unverified email. New token has been sent.',
+      );
     }
 
     return saveSession(req, user);

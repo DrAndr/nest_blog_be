@@ -25,6 +25,8 @@ import { OauthProviderGuard } from './decorators/oauth-provider.decorator';
 import type { TypeProvider } from './provider/utils/types';
 import { ProviderService } from './provider/provider.service';
 import { ConfigService } from '@nestjs/config';
+import { ConfirmationDto } from './email-verification/dto/confirmation.dto';
+import { EmailVerificationService } from './email-verification/email-verification.service';
 
 @Controller('auth')
 export class AuthController {
@@ -32,6 +34,7 @@ export class AuthController {
     private readonly authService: AuthService,
     private readonly providerService: ProviderService,
     private readonly configService: ConfigService,
+    private readonly emailVerificationService: EmailVerificationService,
   ) {}
 
   @ApiOperation({ summary: 'Register user' })
@@ -51,6 +54,18 @@ export class AuthController {
   @Post('login')
   login(@Req() req: Request, @Body() dto: LoginDto) {
     return this.authService.login(req, dto);
+  }
+
+  @ApiOperation({ summary: 'Email confirmation entrypoint.' })
+  @ApiResponse({ status: 200, description: 'Accept confirmation token.' })
+  @HttpCode(HttpStatus.OK)
+  @Serialize(PublicUserDto)
+  @Get('email-verification')
+  public async newVerification(
+    @Req() req: Request,
+    @Query() dto: ConfirmationDto,
+  ) {
+    return await this.emailVerificationService.newVerification(req, dto);
   }
 
   @ApiOperation({ summary: 'Init authenticate user through Oauth provider' })
