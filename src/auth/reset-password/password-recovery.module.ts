@@ -4,14 +4,14 @@ import { UserModule } from '../../user/user.module';
 import { AuthModule } from '../auth.module';
 import { TokenProviderService } from '../token-provider/token-provider.service';
 import { TokenProviderModule } from '../token-provider/token-provider.module';
-import { MailModule } from '../../mail/mail.module';
+import { NotificationModule } from '../../notification/notification.module';
 
 @Module({
   controllers: [],
   providers: [PasswordRecoveryService],
   imports: [
     UserModule,
-    MailModule,
+    NotificationModule,
     // forwardRef(() => AuthModule),
     TokenProviderModule,
   ],

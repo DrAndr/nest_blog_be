@@ -7,8 +7,8 @@ import { getRecaptchaConfig } from 'src/config/recaptcha.config';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ProviderModule } from './provider/provider.module';
 import { getProvidersConfig } from 'src/config/providers.config';
-import { MailModule } from '../mail/mail.module';
-import { MailService } from '../mail/mail.service';
+import { NotificationModule } from '../notification/notification.module';
+import { NotificationService } from '../notification/notification.service';
 import { EmailVerificationService } from './email-verification/email-verification.service';
 import { EmailVerificationModule } from './email-verification/email-verification.module';
 import { UserModule } from '../user/user.module';
@@ -27,7 +27,7 @@ import { PasswordRecoveryModule } from './reset-password/password-recovery.modul
       inject: [ConfigService],
     }),
     UserModule,
-    MailModule,
+    NotificationModule,
     forwardRef(() => EmailVerificationModule),
     PasswordRecoveryModule,
   ],

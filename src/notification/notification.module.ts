@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MailerModule } from '@nestjs-modules/mailer';
-import { MailService } from './mail.service';
+import { NotificationService } from './notification.service';
 
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserModule } from 'src/user/user.module';
@@ -15,7 +15,7 @@ import { getMailConfig } from 'src/config/mail.config';
       useFactory: getMailConfig,
     }),
   ],
-  providers: [MailService],
-  exports: [MailService],
+  providers: [NotificationService],
+  exports: [NotificationService],
 })
-export class MailModule {}
+export class NotificationModule {}

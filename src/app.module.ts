@@ -8,10 +8,11 @@ import { ConfigModule } from '@nestjs/config';
 import { IS_DEV_ENV } from './libs/common/utils/is-dev.util';
 import { AuthModule } from './auth/auth.module';
 import { ProviderModule } from './auth/provider/provider.module';
-import { MailModule } from './mail/mail.module';
+import { NotificationModule } from './notification/notification.module';
 import { EmailVerificationModule } from './auth/email-verification/email-verification.module';
 import { PasswordRecoveryModule } from './auth/reset-password/password-recovery.module';
 import { TokenProviderModule } from './auth/token-provider/token-provider.module';
+import { TwoFactorAuthModule } from './auth/two-factor-auth/two-factor-auth.module';
 
 @Module({
   imports: [
@@ -25,10 +26,11 @@ import { TokenProviderModule } from './auth/token-provider/token-provider.module
     UserModule,
     AuthModule,
     ProviderModule,
-    MailModule,
+    NotificationModule,
     EmailVerificationModule,
     PasswordRecoveryModule,
     TokenProviderModule,
+    TwoFactorAuthModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],

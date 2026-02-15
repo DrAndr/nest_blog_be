@@ -15,7 +15,7 @@ export const getMailConfig = (config: ConfigService) => ({
     from: config.getOrThrow<string>('MAIL_FROM'),
   },
   template: {
-    dir: join(__dirname, '../mail/templates'),
+    dir: join(__dirname, '../notification/templates'),
     adapter: new HandlebarsAdapter({
       /** register helper for templates */
       default: (value: any, defaultValue: any) => value ?? defaultValue,

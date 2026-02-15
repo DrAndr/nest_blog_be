@@ -9,7 +9,7 @@ import { ResetPasswordDto } from '../dto/reset-password.dto';
 import { TokenType } from '../../../prisma/__generated__/enums';
 import { UpdatePasswordDto } from '../dto/update-password.dto';
 import { TokenProviderService } from '../token-provider/token-provider.service';
-import { MailService } from '../../mail/mail.service';
+import { NotificationService } from '../../notification/notification.service';
 import argon2 from 'argon2';
 
 @Injectable()
@@ -17,7 +17,7 @@ export class PasswordRecoveryService {
   constructor(
     private readonly userService: UserService,
     private readonly tokenService: TokenProviderService,
-    private readonly mailService: MailService,
+    private readonly notificationService: NotificationService,
   ) {}
 
   /**
@@ -28,7 +28,7 @@ export class PasswordRecoveryService {
     // checking user email
     const existingUser = await this.userService.findByEmail(email);
 
-    // hide the mail checking status to prevent brute force
+    // hide the notification-serviceemail checking status to prevent brute force
     if (existingUser?.email) {
       // create temporary token for reset password
       const tokenData = await this.tokenService.generateToken(
@@ -36,11 +36,12 @@ export class PasswordRecoveryService {
         TokenType.PASSWORD_RESET,
       );
 
-      // send mail with link for the password reset
-      const sentMessageInfo = await this.mailService.sendResetPasswordEmail({
-        email,
-        token: tokenData.token,
-      });
+      // send notification-serviceemail with link for the password reset
+      const sentMessageInfo =
+        await this.notificationService.sendResetPasswordEmail({
+          email,
+          token: tokenData.token,
+        });
 
       if (!sentMessageInfo?.accepted?.length) {
         throw new ServiceUnavailableException('Failed to send email.');

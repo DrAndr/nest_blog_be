@@ -1,24 +1,29 @@
 import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { SendMailDto } from './dto/send-mail.dto';
-import { ISendConfirmationEmail } from './common/interfaces/send-confirmation-email.interface';
 import { ConfigService } from '@nestjs/config';
 import { render } from '@react-email/components';
 import { EmailConfirmationTemplate } from './templates/email-confirmation.template';
+import { ResetPasswordTemplate } from './templates/reset-password.template';
+import { TwoFactorAuthTemplate } from './templates/two-factor-auth.template';
 import {
   CONFIRMATION_EMAIL_URI,
   RESET_PASSWORD_EMAIL_URI,
 } from '../common/constants';
 import { SentMessageInfo } from 'nodemailer';
+import { ISendConfirmationEmail } from './common/interfaces/send-confirmation-email.interface';
 import { ISendResetPasswordEmail } from './common/interfaces/send-reset-password-email.interface';
-import { ResetPasswordTemplate } from './templates/reset-password.template';
+import { ISendTwoFactorAuthEmail } from './common/interfaces/send-two-factor-auth-email.interface';
 
 @Injectable()
-export class MailService {
+export class NotificationService {
+  private domain!: string;
   public constructor(
     private readonly mailerService: MailerService,
     private readonly configService: ConfigService,
-  ) {}
+  ) {
+    this.domain = this.configService.getOrThrow<string>('ALLOWED_ORIGIN');
+  }
 
   /**
    * Send email with confirmation link for email verification
@@ -30,10 +35,9 @@ export class MailService {
     email,
     token,
   }: ISendConfirmationEmail): Promise<SentMessageInfo> {
-    const domain = this.configService.getOrThrow<string>('ALLOWED_ORIGIN');
     const html = await render(
       EmailConfirmationTemplate({
-        domain,
+        domain: this.domain,
         email,
         token,
         uri: CONFIRMATION_EMAIL_URI,
@@ -48,7 +52,7 @@ export class MailService {
   }
 
   /**
-   * Send email with confirmation link for email verification
+   * Send the reset password token
    * @param email
    * @param token
    * @return Promise<SentMessageInfo>
@@ -57,10 +61,9 @@ export class MailService {
     email,
     token,
   }: ISendResetPasswordEmail): Promise<SentMessageInfo> {
-    const domain = this.configService.getOrThrow<string>('ALLOWED_ORIGIN');
     const html = await render(
       ResetPasswordTemplate({
-        domain,
+        domain: this.domain,
         token,
         uri: RESET_PASSWORD_EMAIL_URI,
       }),
@@ -69,6 +72,30 @@ export class MailService {
     return await this.sendMail({
       to: email,
       subject: 'Reset password confirmation.',
+      html,
+    });
+  }
+
+  /**
+   * Send two-auth token
+   * @param email
+   * @param token
+   * @return Promise<SentMessageInfo>
+   */
+  public async sendTwoFactorTokenEmail({
+    email,
+    token,
+  }: ISendTwoFactorAuthEmail): Promise<SentMessageInfo> {
+    const html = await render(
+      TwoFactorAuthTemplate({
+        domain: this.domain,
+        token,
+      }),
+    );
+
+    return await this.sendMail({
+      to: email,
+      subject: 'Two Factor Token.',
       html,
     });
   }

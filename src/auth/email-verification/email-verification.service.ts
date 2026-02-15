@@ -12,7 +12,7 @@ import { ConfirmationDto } from './dto/confirmation.dto';
 import type { Request } from 'express';
 import { UserService } from '../../user/user.service';
 import { saveSession } from '../utils/saveSession';
-import { MailService } from '../../mail/mail.service';
+import { NotificationService } from '../../notification/notification.service';
 import { TokenProviderService } from '../token-provider/token-provider.service';
 
 @Injectable()
@@ -20,7 +20,7 @@ export class EmailVerificationService {
   public constructor(
     private readonly prismaService: PrismaService,
     private readonly userService: UserService,
-    private readonly mailService: MailService,
+    private readonly NotificationService: NotificationService,
     private readonly tokenService: TokenProviderService,
   ) {}
 
@@ -33,10 +33,11 @@ export class EmailVerificationService {
       user.email,
       TokenType.VERIFICATION,
     );
-    const sentMessageInfo = await this.mailService.sendConfirmationEmail({
-      email: user.email,
-      token: tokenData.token,
-    });
+    const sentMessageInfo =
+      await this.NotificationService.sendConfirmationEmail({
+        email: user.email,
+        token: tokenData.token,
+      });
 
     if (!sentMessageInfo?.accepted?.length) {
       throw new ServiceUnavailableException(
