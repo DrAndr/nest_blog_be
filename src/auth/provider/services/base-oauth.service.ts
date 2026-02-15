@@ -42,7 +42,7 @@ export class BaseOauthService {
       code,
     });
 
-    const tokenRsponse = await fetch(this.options.access_url, {
+    const tokenResponse = await fetch(this.options.access_url, {
       method: 'POST',
       body: tokenQuery,
       headers: {
@@ -51,14 +51,14 @@ export class BaseOauthService {
       },
     });
 
-    if (!tokenRsponse.ok) {
+    if (!tokenResponse.ok) {
       throw new BadRequestException(
-        'User retriving failure, check the access_token: ' +
+        'User retrieving failure, check the access_token: ' +
           this.options.profile_url,
       );
     }
 
-    const data = (await tokenRsponse.json()) as TypeTkenData;
+    const data = (await tokenResponse.json()) as TypeTkenData;
 
     if (!data.access_token) {
       throw new BadRequestException(

@@ -125,7 +125,7 @@ export class AuthService {
           userId: user.id,
           type: 'oauth',
           provider: profile.provider,
-          accessToken: profile.access_token,
+          accessToken: profile?.access_token,
           refreshToken: profile.refresh_token,
           expiresAt: profile.expires_at ?? 0,
         },
@@ -139,12 +139,15 @@ export class AuthService {
   }
 
   /**
-   * Search and return an user profile by Oauth provider code
+   * Search and return a user profile by Oauth provider code
    * @param provider
    * @param code
    * @returns
    */
-  private async getOAuthProfile(provider: string, code: string) {
+  private async getOAuthProfile(
+    provider: string,
+    code: string,
+  ): Promise<TypeUserInfo> {
     /**
      * Get OAuth provider instance from registry.
      */
