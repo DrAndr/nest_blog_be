@@ -7,5 +7,6 @@ import { TokenProviderModule } from '../token-provider/token-provider.module';
   controllers: [],
   providers: [TwoFactorAuthService],
   imports: [NotificationModule, TokenProviderModule],
+  exports: [TwoFactorAuthService],
 })
 export class TwoFactorAuthModule {}
