@@ -75,10 +75,10 @@ export class TokenProviderService {
   private async createToken(email: string, type: TokenType): Promise<Token> {
     const token = this.prismaService.token.create({
       data: {
-        token: uuid(),
+        token: this.getTokenValue(type),
         email,
         type,
-        expiresIn: this.expiresIn(),
+        expiresIn: this.expiresIn(type),
       },
     });
 
@@ -93,7 +93,19 @@ export class TokenProviderService {
    * Helper func, return Date + 1h, for tokens expiration field
    * @private
    */
-  private expiresIn() {
-    return new Date(Date.now() + 60 * 60 * 1000);
+  private expiresIn(type: TokenType) {
+    return type !== TokenType.TWO_FACTOR
+      ? new Date(Date.now() + 60 * 60 * 1000) // 1h
+      : new Date(Date.now() + 60 * 15 * 1000); // 15min
+  }
+
+  /**
+   * Helper func, return Date + 1h, for tokens expiration field
+   * @private
+   */
+  private getTokenValue(type: TokenType) {
+    return type !== TokenType.TWO_FACTOR
+      ? uuid()
+      : `${Math.floor(Math.random() * 900000 + 100000)}`;
   }
 }

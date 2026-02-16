@@ -1,108 +1,240 @@
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
+# 📝 NestJS Blog API (Auth + Notifications Demo)
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A learning **production-style** project built with **NestJS**,
+featuring:
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+-   user authentication\
+-   email verification & password recovery\
+-   SMTP email sending\
+-   PostgreSQL & Redis integration\
+-   preparation for notification microservice architecture
+-   blog and image file storage
 
-## Description
+This project is designed as a **real-world backend architecture demo
+**.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+------------------------------------------------------------------------
 
-## Project setup
+# 🚀 Tech Stack
 
-```bash
-$ npm install
+-   **NestJS**
+-   **PostgreSQL**
+-   **Prisma ORM**
+-   **Redis (sessions / cache)**
+-   **Mailpit (local SMTP testing)**
+-   **Docker Compose**
+-   **RebbitMq in near future**
+-   Prepared for:
+    -   Notification microservice\
+    -   Event‑driven architecture\
+    -   RabbitMQ / queues
+
+------------------------------------------------------------------------
+
+# 📦 Features
+
+## Authentication
+
+-   registration
+-   login
+-   logout
+-   OAuth (Google / Yandex)
+-   email confirmation
+-   password recovery
+
+## User
+
+-   stored in PostgreSQL
+-   sessions stored in Redis
+
+## Email
+
+-   SMTP sending
+-   HTML templates
+-   local email preview via Mailpit
+
+------------------------------------------------------------------------
+
+# 🐳 Running with Docker
+
+## 1. Clone repository
+
+``` bash
+git clone <repo-url>
+cd backend
 ```
 
-Create and set up correct .env !
+------------------------------------------------------------------------
 
-```bash
-$ cp .example.env .env
+## 2. Create `.env`
+
+Rename:
+
+    .example.env → .env
+
+------------------------------------------------------------------------
+
+## 3. Minimum required environment variables
+
+``` env
+NODE_ENV="development"
+
+APP_PORT=3000
+APP_URL="http://localhost:${APP_PORT}"
+ALLOWED_ORIGIN="http://localhost:4000" # frontend
+
+POSTGRES_USER=root
+POSTGRES_PASSWORD=pwd123
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5433
+POSTGRES_DB=main
+POSTGRES_URI="postgresql://root:pwd123@localhost:5433/main?schema=public"
+
+REDIS_PASSWORD=pwd123
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_URI="redis://${REDIS_PASSWORD}@${REDIS_HOST}:${REDIS_PORT}"
+
+COOKIES_SECRET="secret"
+
+SESSION_SECRET="secret"
+SESSION_NAME="session"
+SESSION_DOMAIN="localhost"
+SESSION_MAX_AGE=259200000
+SESSION_HTTP_ONLY=true
+SESSION_SECURE=false
+SESSION_FOLDER="sessions:"
+
+MAIL_HOST=localhost
+MAIL_PORT=1025
+MAIL_LOGIN=null
+MAIL_PASSWORD=null
+MAIL_FROM='"No Reply" <mail@gmail.com>'
 ```
 
-```bash
-$ docker compose up -d
+------------------------------------------------------------------------
+
+## 4. Variables NOT included in `.example.env`
+
+You must provide manually:
+
+-   SMTP production credentials\
+-   Google reCAPTCHA\
+-   OAuth keys
+
+``` env
+GOOGLE_RECAPTCHA_SECRET_KEY=...
+
+GOOGLE_CLIENT_ID=...
+GOOGLE_CLIENT_SECRET=...
+
+YANDEX_CLIENT_ID=...
+YANDEX_CLIENT_SECRET=...
 ```
 
-## Compile and run the project
+------------------------------------------------------------------------
 
-```bash
-# development
-$ npm run start
+## 5. Start infrastructure
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+``` bash
+docker compose up -d
 ```
 
-## Run tests
+Services:
 
-```bash
-# unit tests
-$ npm run test
+-   **PostgreSQL** → `localhost:5433`
+-   **Redis** → `localhost:6379`
+-   **Mailpit UI** → http://localhost:8025
 
-# e2e tests
-$ npm run test:e2e
+------------------------------------------------------------------------
 
-# test coverage
-$ npm run test:cov
+## 6. Install dependencies
+
+``` bash
+npm install
 ```
 
-## Deployment
+------------------------------------------------------------------------
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+## 7. Prisma setup
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+``` bash
+npx prisma generate
+npx prisma migrate deploy
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+------------------------------------------------------------------------
 
-## Resources
+## 8. Start server
 
-Check out a few resources that may come in handy when working with NestJS:
+``` bash
+npm run start:dev
+```
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+API will be available at:
 
-## Support
+    http://localhost:3000
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+------------------------------------------------------------------------
 
-## Stay in touch
+# 📬 Email Preview
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Open Mailpit:
 
-## License
+    http://localhost:8025
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+You can:
+
+-   view sent emails\
+-   open HTML templates\
+-   test email verification & password reset
+
+------------------------------------------------------------------------
+
+# 🧱 Architecture (simplified)
+
+    Client
+      ↓
+    NestJS API
+      ├─ Auth
+      ├─ Users
+      ├─ Notifier
+      └─ Sessions (Redis)
+            ↓
+       PostgreSQL
+
+### Planned evolution
+
+-   notification microservice\
+-   message queues\
+-   scalable email delivery\
+-   event‑driven architecture
+
+------------------------------------------------------------------------
+
+# 📖 Useful Commands
+
+### prisma studio
+
+``` bash
+npx prisma studio
+```
+
+------------------------------------------------------------------------
+
+# 🎯 Project Goal
+
+Demonstrate:
+
+-   **backend architectural thinking**
+-   real infrastructure integration
+-   readiness for **microservices / queues / production**
+
+------------------------------------------------------------------------
+
+# 👨‍💻 Author
+
+Andrey Yanush.
