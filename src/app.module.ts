@@ -7,7 +7,7 @@ import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { IS_DEV_ENV } from './libs/common/utils/is-dev.util';
 import { AuthModule } from './auth/auth.module';
-import { ProviderModule } from './auth/provider/provider.module';
+import { OAuthProviderModule } from './auth/oauth-provider/oauth-provider.module';
 import { NotificationModule } from './notification/notification.module';
 import { EmailVerificationModule } from './auth/email-verification/email-verification.module';
 import { PasswordRecoveryModule } from './auth/reset-password/password-recovery.module';
@@ -25,7 +25,7 @@ import { TwoFactorAuthModule } from './auth/two-factor-auth/two-factor-auth.modu
     PrismaModule,
     UserModule,
     AuthModule,
-    ProviderModule,
+    OAuthProviderModule,
     NotificationModule,
     EmailVerificationModule,
     PasswordRecoveryModule,

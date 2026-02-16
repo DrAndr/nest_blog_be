@@ -1,10 +1,10 @@
 import { ConfigService } from '@nestjs/config';
-import { GoogleProvider } from 'src/auth/provider/services/google.provider';
-import { YandexProvider } from 'src/auth/provider/services/yandex.provide';
-import { TypeOptions } from 'src/auth/provider/utils/types';
+import { GoogleProvider } from 'src/auth/oauth-provider/services/google.provider';
+import { YandexProvider } from 'src/auth/oauth-provider/services/yandex.provide';
+import { TypeOptions } from 'src/auth/oauth-provider/utils/types';
 
 /**
- * Runtime factory that builds OAuth provider configuration
+ * Runtime factory that builds OAuth oauth-provider configuration
  * using values from ConfigService (.env).
  */
 export const getProvidersConfig = async (
@@ -17,7 +17,7 @@ export const getProvidersConfig = async (
     configService.getOrThrow<string>('APP_URL'),
 
   /**
-   * Instantiated OAuth provider services
+   * Instantiated OAuth oauth-provider services
    * */
   services: [
     new GoogleProvider({

@@ -22,8 +22,8 @@ import { Serialize } from 'src/libs/common/decorators/serialize.decorator';
 import { PublicUserDto } from 'src/user/dto/publick-user.dto';
 import { Recaptcha } from '@nestlab/google-recaptcha';
 import { OauthProviderGuard } from './decorators/oauth-provider.decorator';
-import type { TypeProvider } from './provider/utils/types';
-import { ProviderService } from './provider/provider.service';
+import type { TypeProvider } from './oauth-provider/utils/types';
+import { OAuthProviderService } from './oauth-provider/oauth-provider.service';
 import { ConfigService } from '@nestjs/config';
 import { ConfirmationDto } from './email-verification/dto/confirmation.dto';
 import { EmailVerificationService } from './email-verification/email-verification.service';
@@ -35,7 +35,7 @@ import { UpdatePasswordDto } from './dto/update-password.dto';
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
-    private readonly providerService: ProviderService,
+    private readonly providerService: OAuthProviderService,
     private readonly configService: ConfigService,
     private readonly emailVerificationService: EmailVerificationService,
     private readonly passwordRecoveryService: PasswordRecoveryService,
@@ -101,11 +101,13 @@ export class AuthController {
     return { message: 'Password updated.' };
   }
 
-  @ApiOperation({ summary: 'Init authenticate user through Oauth provider' })
-  @ApiResponse({ status: 200, description: 'Return provider URL' })
+  @ApiOperation({
+    summary: 'Init authenticate user through Oauth oauth-provider',
+  })
+  @ApiResponse({ status: 200, description: 'Return oauth-provider URL' })
   @HttpCode(HttpStatus.OK)
   @OauthProviderGuard()
-  @Get('/oauth/connect/:provider')
+  @Get('/oauth/connect/:oauth-provider')
   public async connect(@Param('provider') provider: TypeProvider) {
     const providerInstance = this.providerService.findByService(provider);
 
@@ -113,7 +115,7 @@ export class AuthController {
   }
 
   @ApiOperation({
-    summary: 'Authenticate user through Oauth provider on the site',
+    summary: 'Authenticate user through Oauth oauth-provider on the site',
   })
   @ApiResponse({
     status: 200,
@@ -122,7 +124,7 @@ export class AuthController {
   })
   @HttpCode(HttpStatus.OK)
   @OauthProviderGuard()
-  @Get('/oauth/callback/:provider')
+  @Get('/oauth/callback/:oauth-provider')
   public async callback(
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,

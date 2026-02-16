@@ -4,12 +4,12 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { ProviderService } from '../provider/provider.service';
+import { OAuthProviderService } from '../oauth-provider/oauth-provider.service';
 import type { Request } from 'express';
 
 @Injectable()
 export class OauthProviderGuard implements CanActivate {
-  public constructor(private readonly providerService: ProviderService) {}
+  public constructor(private readonly providerService: OAuthProviderService) {}
 
   canActivate(context: ExecutionContext): boolean {
     const request: Request = context.switchToHttp().getRequest();

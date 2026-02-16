@@ -5,7 +5,7 @@ import { UserService } from 'src/user/user.service';
 import { GoogleRecaptchaModule } from '@nestlab/google-recaptcha';
 import { getRecaptchaConfig } from 'src/config/recaptcha.config';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ProviderModule } from './provider/provider.module';
+import { OAuthProviderModule } from './oauth-provider/oauth-provider.module';
 import { getProvidersConfig } from 'src/config/providers.config';
 import { NotificationModule } from '../notification/notification.module';
 import { NotificationService } from '../notification/notification.service';
@@ -17,7 +17,7 @@ import { TwoFactorAuthModule } from './two-factor-auth/two-factor-auth.module';
 
 @Module({
   imports: [
-    ProviderModule.registerAsync({
+    OAuthProviderModule.registerAsync({
       imports: [ConfigModule],
       useFactory: getProvidersConfig,
       inject: [ConfigService],

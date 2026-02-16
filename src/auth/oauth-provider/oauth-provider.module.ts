@@ -1,27 +1,27 @@
 import { DynamicModule, Module } from '@nestjs/common';
-import { ProviderService } from './provider.service';
 import { ProviderOptionsSymbol } from './utils/constants';
 import { TypeAsyncOptions, TypeOptions } from './utils/types';
+import { OAuthProviderService } from './oauth-provider.service';
 
 @Module({})
-export class ProviderModule {
+export class OAuthProviderModule {
   /**
    * Synchronous registration of the module.
-   * Accepts ready-to-use provider configuration.
+   * Accepts ready-to-use oauth-provider configuration.
    */
   public static register(options: TypeOptions): DynamicModule {
     return {
-      module: ProviderModule,
+      module: OAuthProviderModule,
       providers: [
         /**
-         * Store provider configuration in DI container
+         * Store oauth-provider configuration in DI container
          * using a custom injection token.
          */
         { useValue: options.services, provide: ProviderOptionsSymbol },
         /** Registry service that gives access to providers */
-        ProviderService,
+        OAuthProviderService,
       ],
-      exports: [ProviderService],
+      exports: [OAuthProviderService],
     };
   }
 
@@ -34,7 +34,7 @@ export class ProviderModule {
    */
   public static registerAsync(options: TypeAsyncOptions): DynamicModule {
     return {
-      module: ProviderModule,
+      module: OAuthProviderModule,
       imports: options.imports,
       providers: [
         {
@@ -46,9 +46,9 @@ export class ProviderModule {
           provide: ProviderOptionsSymbol,
           inject: options.inject,
         },
-        ProviderService,
+        OAuthProviderService,
       ],
-      exports: [ProviderService],
+      exports: [OAuthProviderService],
     };
   }
 }

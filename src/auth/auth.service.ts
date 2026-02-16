@@ -12,10 +12,10 @@ import { UserService } from 'src/user/user.service';
 import type { Request } from 'express';
 import argon2 from 'argon2';
 import { AuthUserFactory } from './utils/auth-user.factory';
-import { ProviderService } from './provider/provider.service';
+import { OAuthProviderService } from './oauth-provider/oauth-provider.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AuthMethod } from 'prisma/__generated__/enums';
-import { TypeUserInfo } from './provider/services/types/user-info.type';
+import { TypeUserInfo } from './oauth-provider/services/types/user-info.type';
 import type { User } from 'prisma/__generated__/client';
 
 import { saveSession } from './utils/saveSession';
@@ -28,7 +28,7 @@ import { IServiceResponse } from '../common/interfaces';
 export class AuthService {
   constructor(
     private readonly userService: UserService,
-    private readonly providerService: ProviderService,
+    private readonly providerService: OAuthProviderService,
     private readonly prismaService: PrismaService,
     private readonly emailVerificationService: EmailVerificationService,
     private readonly twoFactorAuthService: TwoFactorAuthService,
@@ -175,7 +175,7 @@ export class AuthService {
   }
 
   /**
-   * Search and return a user profile by Oauth provider code
+   * Search and return a user profile by Oauth oauth-provider code
    * @param provider
    * @param code
    * @returns
@@ -185,12 +185,12 @@ export class AuthService {
     code: string,
   ): Promise<TypeUserInfo> {
     /**
-     * Get OAuth provider instance from registry.
+     * Get OAuth oauth-provider instance from registry.
      */
     const providerInstance = this.providerService.findByService(provider);
 
     if (!providerInstance) {
-      throw new BadRequestException('Wrong provider value' + provider);
+      throw new BadRequestException('Wrong oauth-provider value' + provider);
     }
 
     /**
