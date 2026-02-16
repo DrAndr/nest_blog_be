@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ServiceUnavailableException } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { SendMailDto } from './dto/send-mail.dto';
 import { ConfigService } from '@nestjs/config';
@@ -106,7 +106,7 @@ export class NotificationService {
    * @return Promise<SentMessageInfo>
    */
   public async sendMail(dto: SendMailDto): Promise<SentMessageInfo> {
-    return await this.mailerService.sendMail({
+    const resp = await this.mailerService.sendMail({
       to: dto.to,
       subject: dto.subject,
       html: dto.html,
@@ -119,5 +119,12 @@ export class NotificationService {
       //   url: dto.url,
       // },
     });
+
+    // TODO add several retry sending attempts
+    if (!resp?.accepted?.length) {
+      throw new ServiceUnavailableException('Failed to send email.');
+    }
+
+    return resp;
   }
 }

@@ -21,6 +21,8 @@ import type { User } from 'prisma/__generated__/client';
 import { saveSession } from './utils/saveSession';
 import destroySession from './utils/destroySession';
 import { EmailVerificationService } from './email-verification/email-verification.service';
+import { TwoFactorAuthService } from './two-factor-auth/two-factor-auth.service';
+import { IServiceResponse } from '../common/interfaces';
 
 @Injectable()
 export class AuthService {
@@ -29,6 +31,7 @@ export class AuthService {
     private readonly providerService: ProviderService,
     private readonly prismaService: PrismaService,
     private readonly emailVerificationService: EmailVerificationService,
+    private readonly twoFactorAuthService: TwoFactorAuthService,
   ) {}
 
   /**
@@ -46,7 +49,9 @@ export class AuthService {
     const userData = await AuthUserFactory.createWithCredentials(registerDto);
     const newUser = await this.userService.create(userData);
 
-    return await this.emailVerificationService.sendVerificationToken(newUser);
+    return await this.emailVerificationService.sendVerificationToken(
+      newUser.email,
+    );
   }
 
   /**
@@ -54,7 +59,10 @@ export class AuthService {
    * @param req
    * @param dto
    */
-  public async login(req: Request, dto: LoginDto): Promise<User> {
+  public async login(
+    req: Request,
+    dto: LoginDto,
+  ): Promise<User | IServiceResponse> {
     const user = await this.userService.findByEmail(dto.email);
 
     if (!user || !user?.password) {
@@ -76,10 +84,38 @@ export class AuthService {
     if (!user.isVerified) {
       // lok`s like not good idea to send email with new token when user try to login,
       // perhaps would be better to allow user resent token manually... may be in future...
-      await this.emailVerificationService.sendVerificationToken(user);
+      await this.emailVerificationService.sendVerificationToken(user.email);
       throw new UnauthorizedException(
         'Unverified email. New token has been sent.',
       );
+    }
+
+    if (user.isTwoFactorEnabled) {
+      if (dto.code) {
+        /**
+         * validate token and authorize user
+         */
+        const isCodeValid = await this.twoFactorAuthService.validateToken(
+          user.email,
+          dto.code,
+        );
+
+        if (isCodeValid) {
+          return saveSession(req, user);
+        }
+        /**
+         *         The validateToken should cath all expected issues,
+         *         but for unexpected casse was added next break-point
+         */
+        throw new InternalServerErrorException(
+          'Provided code was`nt verified.',
+        );
+      } else {
+        /**
+         * Send code, if user have no code yet...
+         */
+        return await this.twoFactorAuthService.sendToken(user.email);
+      }
     }
 
     return saveSession(req, user);

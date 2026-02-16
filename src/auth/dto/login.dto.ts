@@ -2,6 +2,7 @@ import {
   IsEmail,
   IsNotEmpty,
   IsString,
+  Length,
   MaxLength,
   MinLength,
 } from 'class-validator';
@@ -24,4 +25,13 @@ export class LoginDto extends PartialType(RegisterDto) {
   @MinLength(8)
   @MaxLength(40)
   password!: string;
+
+  @ApiProperty({
+    example: '1234567',
+    description: 'The two-factor authentication code.',
+  })
+  @IsString()
+  @IsNotEmpty()
+  // @Length(7, 7)
+  code?: string;
 }

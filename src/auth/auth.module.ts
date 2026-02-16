@@ -13,6 +13,7 @@ import { EmailVerificationService } from './email-verification/email-verificatio
 import { EmailVerificationModule } from './email-verification/email-verification.module';
 import { UserModule } from '../user/user.module';
 import { PasswordRecoveryModule } from './reset-password/password-recovery.module';
+import { TwoFactorAuthModule } from './two-factor-auth/two-factor-auth.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { PasswordRecoveryModule } from './reset-password/password-recovery.modul
     NotificationModule,
     forwardRef(() => EmailVerificationModule),
     PasswordRecoveryModule,
+    TwoFactorAuthModule,
   ],
   controllers: [AuthController],
   providers: [AuthService],

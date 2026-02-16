@@ -26,16 +26,16 @@ export class EmailVerificationService {
 
   /**
    * Generate and write token in to DB, then bind email sending with verification link
-   * @param user
+   * @param email string
    */
-  public async sendVerificationToken(user: User): Promise<boolean> {
+  public async sendVerificationToken(email: string): Promise<boolean> {
     const tokenData = await this.tokenService.generateToken(
-      user.email,
+      email,
       TokenType.VERIFICATION,
     );
     const sentMessageInfo =
       await this.NotificationService.sendConfirmationEmail({
-        email: user.email,
+        email: email,
         token: tokenData.token,
       });
 
@@ -45,7 +45,7 @@ export class EmailVerificationService {
       );
     }
 
-    return true; // { message: 'Email for verification sent.', status: 'success' };
+    return true;
   }
 
   /**
