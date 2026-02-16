@@ -28,14 +28,28 @@ export class TokenProviderService {
    * Try to find existing tokens row by token string
    * @param token string
    * @param type string
+   * @param email string
    * @private
    * @Return Promise<Token | null>
    */
-  public async getToken(token: string, type: TokenType): Promise<Token | null> {
+  public async getToken(
+    token: string,
+    type: TokenType,
+    email?: string,
+  ): Promise<Token | null> {
+    const where = {
+      token,
+      type,
+    };
+
+    if (email) {
+      where['email'] = email;
+    }
     return this.prismaService.token.findFirst({
       where: {
         token,
         type,
+        email: email,
       },
     });
   }

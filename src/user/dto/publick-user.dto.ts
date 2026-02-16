@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiHideProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 
 export class PublicUserDto {
@@ -36,4 +36,8 @@ export class PublicUserDto {
   })
   @Expose()
   role!: string;
+
+  @ApiHideProperty()
+  @Expose()
+  message?: string;
 }

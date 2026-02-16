@@ -39,25 +39,26 @@ export class TwoFactorAuthService {
   }
 
   public async validateToken(email: string, token: string): Promise<boolean> {
-    const existingToken = await this.tokenProviderService.generateToken(
-      email,
+    const foundToken = await this.tokenProviderService.getToken(
+      token,
       TokenType.TWO_FACTOR,
+      email,
     );
 
-    if (!existingToken) {
+    if (!foundToken) {
       throw new NotFoundException('Token not found.');
     }
 
-    if (existingToken.token !== token) {
-      throw new BadRequestException('Wrong token.');
+    if (foundToken.token !== token) {
+      throw new BadRequestException('Wrong code.');
     }
 
-    const isExpired = new Date(existingToken.expiresIn) < new Date();
+    const isExpired = new Date(foundToken.expiresIn) < new Date();
     if (isExpired) {
       throw new UnauthorizedException('Token has been expired.');
     }
 
-    await this.tokenProviderService.deleteToken(existingToken.id);
+    await this.tokenProviderService.deleteToken(foundToken.id);
 
     return true;
   }
