@@ -17,7 +17,7 @@ export interface IBaseConfirmationTemplateProps {
   heading: string;
   buttonName?: string;
   description?: string;
-  title?: string;
+  title?: string | React.ReactNode;
 }
 
 export function BaseConfirmationTemplate({

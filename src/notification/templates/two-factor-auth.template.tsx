@@ -11,7 +11,11 @@ export function TwoFactorAuthTemplate({ domain, token }: ITwoFactorAuthProps) {
     <BaseConfirmationTemplate
       domain={domain}
       heading={'Two factor authentication.'}
-      title={`Your code: <strong>${token}</strong>`}
+      title={
+        <>
+          Your code: <strong>{token}</strong>
+        </>
+      }
       description={'Use this code for finish two-factor authentication.'}
     />
   );

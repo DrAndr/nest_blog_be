@@ -34,6 +34,6 @@ export class LoginDto extends PartialType(RegisterDto) {
   })
   @IsOptional()
   @IsString()
-  // @Length(7, 7)
+  @Length(6, 6)
   code?: string;
 }

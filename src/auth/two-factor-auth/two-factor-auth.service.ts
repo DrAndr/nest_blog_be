@@ -5,7 +5,6 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { PrismaService } from '../../prisma/prisma.service';
 import { NotificationService } from '../../notification/notification.service';
 import { TokenType } from '../../../prisma/__generated__/enums';
 import { TokenProviderService } from '../token-provider/token-provider.service';
