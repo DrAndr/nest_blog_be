@@ -20,12 +20,12 @@ export class CreateUserDto {
   @IsNotEmpty({ message: 'Name is required.' })
   @MinLength(2, { message: 'Min 2 symbols' })
   @MaxLength(25, { message: 'Max 25 symbols' })
-  name!: string;
+  name?: string;
 
   @ApiProperty({ description: 'User image.' })
   @IsOptional()
   @IsString()
-  image!: string;
+  image?: string;
 
   @ApiProperty({ example: 'qwerty123U', description: 'User password.' })
   @IsString({ message: 'Should be a string.' })

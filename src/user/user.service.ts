@@ -3,27 +3,35 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { PublicUpdateUserDto } from './dto/public-update-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { User } from '@prisma/__generated__/client';
-import { PublicUserDto } from './dto/publick-user.dto';
-import { ServiceUpdateUserDto } from '@/user/dto/service-update-user.dto';
+import { type Prisma, User } from '@prisma/__generated__/client';
 
 @Injectable()
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(createUserDto: CreateUserDto) {
-    return this.prisma.user.create({ data: createUserDto });
+  /**
+   * Create new user record
+   * @param data
+   */
+  create(data: Prisma.UserCreateInput) {
+    return this.prisma.user.create({ data });
   }
 
+  /**
+   * Find users cording to filters and pagination limits TODO
+   */
   async findAll(): Promise<User[] | null> {
     return this.prisma.user.findMany({
       /** TODO add limits */
     });
   }
 
+  /**
+   * Find user by ID
+   * @param id string
+   * @return User | null
+   */
   async findById(id: string): Promise<User | null> {
     return this.prisma.user.findUnique({
       where: {
@@ -32,6 +40,11 @@ export class UserService {
     });
   }
 
+  /**
+   * Find user by uniq email
+   * @param email string
+   * @return User | null
+   */
   async findByEmail(email: string): Promise<User | null> {
     return this.prisma.user.findUnique({
       where: {
@@ -40,12 +53,17 @@ export class UserService {
     });
   }
 
-  async update(id: string, updateUserDto: ServiceUpdateUserDto): Promise<User> {
+  /**
+   * Update user
+   * @param id
+   * @param data <Prisma.UserUpdateInput>
+   */
+  async update(id: string, data: Prisma.UserUpdateInput): Promise<User> {
     const updatedUser = await this.prisma.user.update({
       where: {
         id,
       },
-      data: updateUserDto,
+      data,
     });
 
     if (!updatedUser) {
@@ -55,6 +73,10 @@ export class UserService {
     return updatedUser;
   }
 
+  /**
+   * To delete user record
+   * @param id
+   */
   async remove(id: string): Promise<User> {
     return this.prisma.user.delete({ where: { id } });
   }

@@ -5,7 +5,7 @@ import {
   NotFoundException,
   ServiceUnavailableException,
 } from '@nestjs/common';
-import { PrismaService } from '../../prisma/prisma.service';
+import { PrismaService } from '@prisma/prisma.service';
 import { TokenType } from '../../../prisma/__generated__/enums';
 import type { Token, User } from '../../../prisma/__generated__/client';
 import { ConfirmationDto } from './dto/confirmation.dto';

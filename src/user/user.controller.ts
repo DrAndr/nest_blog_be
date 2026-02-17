@@ -14,9 +14,9 @@ import { Authorized } from 'src/auth/decorators/authorized.decorator';
 import { Serialize } from 'src/libs/common/decorators/serialize.decorator';
 import { PublicUserDto } from './dto/publick-user.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { UserRole } from '../../prisma/__generated__/enums';
-import { PublicUpdateUserDto } from './dto/public-update-user.dto';
-import { User } from '../../prisma/__generated__/client';
+import { UserRole } from '@prisma/__generated__/enums';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from '@prisma/__generated__/client';
 import { IServiceResponse } from '../common/interfaces';
 
 @Controller('user')
@@ -41,7 +41,7 @@ export class UserController {
   @Patch(':id')
   public async update(
     @Param('id') id: string,
-    @Body() dto: PublicUpdateUserDto,
+    @Body() dto: UpdateUserDto,
   ): Promise<User> {
     return this.userService.update(id, dto);
   }
