@@ -6,8 +6,9 @@ import {
   MaxLength,
   MinLength,
   IsBoolean,
+  IsOptional,
 } from 'class-validator';
-import { AuthMethod } from 'prisma/__generated__/enums';
+import { AuthMethod } from '@prisma/__generated__/enums';
 
 export class CreateUserDto {
   @ApiProperty({ example: 'user@email.com', description: 'User email.' })
@@ -22,6 +23,8 @@ export class CreateUserDto {
   name!: string;
 
   @ApiProperty({ description: 'User image.' })
+  @IsOptional()
+  @IsString()
   image!: string;
 
   @ApiProperty({ example: 'qwerty123U', description: 'User password.' })

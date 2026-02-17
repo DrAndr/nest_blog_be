@@ -6,7 +6,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { UserRole } from 'prisma/__generated__/enums';
+import { UserRole } from '@prisma/__generated__/enums';
 import { ROLES_KEY } from '../decorators/roles.decorator';
 
 /**

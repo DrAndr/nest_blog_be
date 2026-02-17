@@ -1,6 +1,6 @@
 import { InternalServerErrorException } from '@nestjs/common';
 import type { Request } from 'express';
-import type { User } from '../../../prisma/__generated__/client';
+import type { User } from '@prisma/__generated__/client';
 
 /**
  * Write and save session.

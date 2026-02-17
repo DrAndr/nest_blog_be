@@ -11,7 +11,7 @@ import type { Token, User } from '../../../prisma/__generated__/client';
 import { ConfirmationDto } from './dto/confirmation.dto';
 import type { Request } from 'express';
 import { UserService } from '../../user/user.service';
-import { saveSession } from '../utils/saveSession';
+import { saveSession } from '../../libs/common/utils/saveSession';
 import { NotificationService } from '../../notification/notification.service';
 import { TokenProviderService } from '../token-provider/token-provider.service';
 
