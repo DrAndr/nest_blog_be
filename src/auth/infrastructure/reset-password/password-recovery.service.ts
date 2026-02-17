@@ -4,12 +4,12 @@ import {
   NotFoundException,
   ServiceUnavailableException,
 } from '@nestjs/common';
-import { UserService } from '../../user/user.service';
-import { ResetPasswordDto } from '../dto/reset-password.dto';
-import { TokenType } from '../../../prisma/__generated__/enums';
-import { UpdatePasswordDto } from '../dto/update-password.dto';
+import { UserService } from '../../../user/user.service';
+import { ResetPasswordDto } from '@/auth/presentation/dto/reset-password.dto';
+import { TokenType } from '@prisma/__generated__/enums';
+import { UpdatePasswordDto } from '@/auth/presentation/dto/update-password.dto';
 import { TokenProviderService } from '../token-provider/token-provider.service';
-import { NotificationService } from '../../notification/notification.service';
+import { NotificationService } from '@/infrastructure/notification/notification.service';
 import argon2 from 'argon2';
 
 @Injectable()
@@ -28,7 +28,7 @@ export class PasswordRecoveryService {
     // checking user email
     const existingUser = await this.userService.findByEmail(email);
 
-    // hide the notification-serviceemail checking status to prevent brute force
+    // hide the email checking status to prevent brute force
     if (existingUser?.email) {
       // create temporary token for reset password
       const tokenData = await this.tokenService.generateToken(
@@ -36,7 +36,7 @@ export class PasswordRecoveryService {
         TokenType.PASSWORD_RESET,
       );
 
-      // send notification-serviceemail with link for the password reset
+      // send email with link for the password reset
       const sentMessageInfo =
         await this.notificationService.sendResetPasswordEmail({
           email,

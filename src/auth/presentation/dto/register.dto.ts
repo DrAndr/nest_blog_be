@@ -8,7 +8,7 @@ import {
   Validate,
 } from 'class-validator';
 
-import { IsPasswordsMatching } from '@/common/decorators/is-password-matching.decorator';
+import { IsPasswordsMatching } from '@/presentation/decorators/is-password-matching.decorator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class RegisterDto {

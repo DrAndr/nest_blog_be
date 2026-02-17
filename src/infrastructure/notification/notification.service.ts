@@ -9,7 +9,7 @@ import { TwoFactorAuthTemplate } from './templates/two-factor-auth.template';
 import {
   CONFIRMATION_EMAIL_URI,
   RESET_PASSWORD_EMAIL_URI,
-} from '../common/constants';
+} from '@/libs/constants';
 import { SentMessageInfo } from 'nodemailer';
 import { ISendConfirmationEmail } from './common/interfaces/send-confirmation-email.interface';
 import { ISendResetPasswordEmail } from './common/interfaces/send-reset-password-email.interface';

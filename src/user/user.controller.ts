@@ -9,15 +9,15 @@ import {
   Patch,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { Authorization } from 'src/auth/decorators/authorization.decorator';
-import { Authorized } from 'src/auth/decorators/authorized.decorator';
-import { Serialize } from '@/common/decorators/serialize.decorator';
+import { Authorization } from '@/auth/presentation/decorators/authorization.decorator';
+import { Authorized } from '@/auth/presentation/decorators/authorized.decorator';
+import { Serialize } from '@/presentation/decorators/serialize.decorator';
 import { PublicUserDto } from './dto/publick-user.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { UserRole } from '@prisma/__generated__/enums';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from '@prisma/__generated__/client';
-import { IServiceResponse } from '../common/interfaces';
+import { IServiceResponse } from '@/libs/interfaces';
 
 @Controller('user')
 export class UserController {

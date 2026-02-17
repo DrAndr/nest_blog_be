@@ -1,5 +1,5 @@
 import argon2 from 'argon2';
-import { RegisterDto } from '../dto/register.dto';
+import { RegisterDto } from '@/auth/presentation/dto/register.dto';
 import { AuthMethod } from '@prisma/__generated__/enums';
 
 export class AuthUserFactory {

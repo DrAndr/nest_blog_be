@@ -13,23 +13,23 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { RegisterDto } from './dto/register.dto';
-import { LoginDto } from './dto/login.dto';
+import { RegisterDto } from '@/auth/presentation/dto/register.dto';
+import { LoginDto } from '@/auth/presentation/dto/login.dto';
 import type { Request, Response } from 'express';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { ClearSessionCookie } from './interceptors/clear-session-cookie.interceptor';
-import { Serialize } from '@/common/decorators/serialize.decorator';
+import { ClearSessionCookie } from '@/auth/presentation/interceptors/clear-session-cookie.interceptor';
+import { Serialize } from '@/presentation/decorators/serialize.decorator';
 import { PublicUserDto } from 'src/user/dto/publick-user.dto';
 import { Recaptcha } from '@nestlab/google-recaptcha';
-import { OauthProviderGuard } from './decorators/oauth-provider.decorator';
-import type { TypeProvider } from './oauth-provider/utils/types';
-import { OAuthProviderService } from './oauth-provider/oauth-provider.service';
+import { OauthProviderGuard } from '@/auth/presentation/decorators/oauth-provider.decorator';
+import type { TypeProvider } from '@/auth/infrastructure/oauth-provider/utils/types';
+import { OAuthProviderService } from '@/auth/infrastructure/oauth-provider/oauth-provider.service';
 import { ConfigService } from '@nestjs/config';
-import { ConfirmationDto } from './email-verification/dto/confirmation.dto';
-import { EmailVerificationService } from './email-verification/email-verification.service';
-import { ResetPasswordDto } from './dto/reset-password.dto';
-import { PasswordRecoveryService } from './reset-password/password-recovery.service';
-import { UpdatePasswordDto } from './dto/update-password.dto';
+import { ConfirmationDto } from '@/auth/infrastructure/email-verification/dto/confirmation.dto';
+import { EmailVerificationService } from '@/auth/infrastructure/email-verification/email-verification.service';
+import { ResetPasswordDto } from '@/auth/presentation/dto/reset-password.dto';
+import { PasswordRecoveryService } from '@/auth/infrastructure/reset-password/password-recovery.service';
+import { UpdatePasswordDto } from '@/auth/presentation/dto/update-password.dto';
 
 @Controller('auth')
 export class AuthController {

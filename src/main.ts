@@ -5,9 +5,9 @@ import cookieParser from 'cookie-parser';
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import session from 'express-session';
 import { RedisStore } from 'connect-redis';
-import initSwagger from '@/common/utils/initSwagger';
+import initSwagger from '@/libs/utils/initSwagger';
 import { createClient } from 'redis';
-import { ResponseInterceptor } from './common/interceptors/response.interceptor';
+import { ResponseInterceptor } from '@/presentation/interceptors/response.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

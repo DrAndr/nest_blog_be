@@ -4,7 +4,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { OAuthProviderService } from '../oauth-provider/oauth-provider.service';
+import { OAuthProviderService } from '@/auth/infrastructure/oauth-provider/oauth-provider.service';
 import type { Request } from 'express';
 
 @Injectable()

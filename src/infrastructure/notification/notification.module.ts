@@ -3,8 +3,8 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { NotificationService } from './notification.service';
 
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { UserModule } from 'src/user/user.module';
-import { getMailConfig } from 'src/config/mail.config';
+import { UserModule } from '@/user/user.module';
+import { getMailConfig } from '@/libs/config/mail.config';
 
 @Module({
   imports: [

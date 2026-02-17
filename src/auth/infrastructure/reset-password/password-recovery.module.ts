@@ -1,10 +1,10 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { PasswordRecoveryService } from './password-recovery.service';
-import { UserModule } from '../../user/user.module';
-import { AuthModule } from '../auth.module';
+import { UserModule } from '../../../user/user.module';
+import { AuthModule } from '../../auth.module';
 import { TokenProviderService } from '../token-provider/token-provider.service';
 import { TokenProviderModule } from '../token-provider/token-provider.module';
-import { NotificationModule } from '../../notification/notification.module';
+import { NotificationModule } from '@/infrastructure/notification/notification.module';
 
 @Module({
   controllers: [],

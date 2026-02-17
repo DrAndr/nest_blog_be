@@ -1,7 +1,7 @@
 import { ConfigService } from '@nestjs/config';
-import { GoogleProvider } from 'src/auth/oauth-provider/services/google.provider';
-import { YandexProvider } from 'src/auth/oauth-provider/services/yandex.provide';
-import { TypeOptions } from 'src/auth/oauth-provider/utils/types';
+import { GoogleProvider } from '@/auth/infrastructure/oauth-provider/services/google.provider';
+import { YandexProvider } from '@/auth/infrastructure/oauth-provider/services/yandex.provide';
+import { TypeOptions } from '@/auth/infrastructure/oauth-provider/utils/types';
 
 /**
  * Runtime factory that builds OAuth oauth-provider configuration
