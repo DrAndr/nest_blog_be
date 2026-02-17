@@ -13,13 +13,13 @@ import type { Request } from 'express';
 import argon2 from 'argon2';
 import { AuthUserFactory } from './utils/auth-user.factory';
 import { OAuthProviderService } from './oauth-provider/oauth-provider.service';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '@/prisma-provider/prisma.service';
 import { AuthMethod } from '@prisma/__generated__/enums';
 import { TypeUserInfo } from './oauth-provider/services/types/user-info.type';
 import type { User } from '@prisma/__generated__/client';
 
-import { saveSession } from '../libs/common/utils/saveSession';
-import destroySession from '../libs/common/utils/destroySession';
+import { saveSession } from '@/common/utils/saveSession';
+import destroySession from '@/common/utils/destroySession';
 import { EmailVerificationService } from './email-verification/email-verification.service';
 import { TwoFactorAuthService } from './two-factor-auth/two-factor-auth.service';
 import { IServiceResponse } from '../common/interfaces';

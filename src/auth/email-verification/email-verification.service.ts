@@ -5,14 +5,14 @@ import {
   NotFoundException,
   ServiceUnavailableException,
 } from '@nestjs/common';
-import { PrismaService } from '@prisma/prisma.service';
-import { TokenType } from '../../../prisma/__generated__/enums';
-import type { Token, User } from '../../../prisma/__generated__/client';
+import { PrismaService } from '@/prisma-provider/prisma.service';
+import { TokenType } from '@prisma/__generated__/enums';
+import type { Token, User } from '@prisma/__generated__/client';
 import { ConfirmationDto } from './dto/confirmation.dto';
 import type { Request } from 'express';
-import { UserService } from '../../user/user.service';
-import { saveSession } from '../../libs/common/utils/saveSession';
-import { NotificationService } from '../../notification/notification.service';
+import { UserService } from '@/user/user.service';
+import { saveSession } from '@/common/utils/saveSession';
+import { NotificationService } from '@/notification/notification.service';
 import { TokenProviderService } from '../token-provider/token-provider.service';
 
 @Injectable()

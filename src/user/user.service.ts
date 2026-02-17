@@ -3,7 +3,7 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '@/prisma-provider/prisma.service';
 import { type Prisma, User } from '@prisma/__generated__/client';
 
 @Injectable()

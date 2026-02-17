@@ -11,7 +11,7 @@ import {
 import { UserService } from './user.service';
 import { Authorization } from 'src/auth/decorators/authorization.decorator';
 import { Authorized } from 'src/auth/decorators/authorized.decorator';
-import { Serialize } from 'src/libs/common/decorators/serialize.decorator';
+import { Serialize } from '@/common/decorators/serialize.decorator';
 import { PublicUserDto } from './dto/publick-user.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { UserRole } from '@prisma/__generated__/enums';

@@ -5,7 +5,7 @@ import cookieParser from 'cookie-parser';
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import session from 'express-session';
 import { RedisStore } from 'connect-redis';
-import initSwagger from './libs/common/utils/initSwagger';
+import initSwagger from '@/common/utils/initSwagger';
 import { createClient } from 'redis';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
 

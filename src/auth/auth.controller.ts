@@ -18,7 +18,7 @@ import { LoginDto } from './dto/login.dto';
 import type { Request, Response } from 'express';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { ClearSessionCookie } from './interceptors/clear-session-cookie.interceptor';
-import { Serialize } from 'src/libs/common/decorators/serialize.decorator';
+import { Serialize } from '@/common/decorators/serialize.decorator';
 import { PublicUserDto } from 'src/user/dto/publick-user.dto';
 import { Recaptcha } from '@nestlab/google-recaptcha';
 import { OauthProviderGuard } from './decorators/oauth-provider.decorator';

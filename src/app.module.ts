@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { PrismaService } from './prisma/prisma.service';
-import { PrismaModule } from './prisma/prisma.module';
+import { PrismaService } from '@/prisma-provider/prisma.service';
+import { PrismaModule } from '@/prisma-provider/prisma.module';
 import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
-import { IS_DEV_ENV } from './libs/common/utils/is-dev.util';
+import { IS_DEV_ENV } from '@/common/utils/is-dev.util';
 import { AuthModule } from './auth/auth.module';
 import { OAuthProviderModule } from './auth/oauth-provider/oauth-provider.module';
 import { NotificationModule } from './notification/notification.module';
