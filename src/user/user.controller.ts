@@ -33,7 +33,7 @@ export class UserController {
     return this.userService.findById(userId);
   }
 
-  @ApiOperation({ summary: 'Get user profile' })
+  @ApiOperation({ summary: 'Update user profile' })
   @ApiResponse({ status: 200, description: 'Return updated user profile.' })
   @Authorization(UserRole.ADMIN)
   @HttpCode(HttpStatus.ACCEPTED)
