@@ -1,0 +1,28 @@
+import { Global, Module } from '@nestjs/common';
+import { RedisProviderService } from './redis-provider.service';
+import { REDIS_CLIENT } from '@/infrastructure/redis-provider/common/constants';
+import { Connection } from 'pg';
+import { createClient, RedisClientType } from 'redis';
+import { RedisHealthController } from '@/infrastructure/redis-provider/redis-provider.controller';
+
+@Global()
+@Module({
+  controllers: [RedisHealthController],
+  providers: [
+    {
+      provide: REDIS_CLIENT,
+      useFactory: async (connection: RedisClientType) =>
+        createClient({
+          socket: {
+            host: process.env.REDIS_HOST,
+            port: Number(process.env.REDIS_PORT),
+            reconnectStrategy: (retries) => Math.min(retries * 50, 2000),
+          },
+          password: process.env.REDIS_PASSWORD,
+        }),
+    },
+    RedisProviderService,
+  ],
+  exports: [RedisProviderService],
+})
+export class RedisProviderModule {}

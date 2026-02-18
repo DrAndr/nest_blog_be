@@ -9,8 +9,8 @@ import { UserService } from '@/user/user.service';
 
 /**
  * Auth restriction guard.
- * Сheck the userId and if the user exists,
- * write their public data to the session.
+ * check the userId and if the user exists,
+ * write public user data to the session.
  */
 @Injectable()
 export class AuthGuard implements CanActivate {

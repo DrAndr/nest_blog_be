@@ -18,10 +18,9 @@ import { AuthMethod } from '@prisma/__generated__/enums';
 import { TypeUserInfo } from '@/auth/infrastructure/oauth-provider/services/types/user-info.type';
 import type { User } from '@prisma/__generated__/client';
 import { IServiceResponse } from '@/libs/interfaces';
-import { saveSession } from '@/libs/utils/saveSession';
-import destroySession from '@/libs/utils/destroySession';
 import { EmailVerificationService } from '@/auth/infrastructure/email-verification/email-verification.service';
 import { TwoFactorAuthService } from '@/auth/infrastructure/two-factor-auth/two-factor-auth.service';
+import { SessionProviderService } from '@/infrastructure/session-provider/session-provider.service';
 
 @Injectable()
 export class AuthService {
@@ -31,6 +30,7 @@ export class AuthService {
     private readonly prismaService: PrismaService,
     private readonly emailVerificationService: EmailVerificationService,
     private readonly twoFactorAuthService: TwoFactorAuthService,
+    private readonly sessionProviderService: SessionProviderService,
   ) {}
 
   /**
@@ -74,7 +74,7 @@ export class AuthService {
       throw new NotFoundException('Invalid credentials');
     }
 
-    if (req.session.userId && req.session.userId !== user.id) {
+    if (req.session?.userId && req.session.userId !== user.id) {
       throw new UnauthorizedException(
         'Logout before logging in with another account',
       );
@@ -100,7 +100,8 @@ export class AuthService {
         );
 
         if (isCodeValid) {
-          return saveSession(req, user);
+          await this.sessionProviderService.saveSession(req, user);
+          return user;
         }
         /**
          *         The validateToken should cath all expected issues,
@@ -117,15 +118,17 @@ export class AuthService {
       }
     }
 
-    return saveSession(req, user);
+    await this.sessionProviderService.saveSession(req, user);
+    return user;
   }
 
   /**
    * Destroy session when logout rout was bound
-   * @param req
+   * @param req Request
+   * @param userId string
    */
-  public async logout(req: Request): Promise<boolean> {
-    return await destroySession(req);
+  public async logout(req: Request, userId: string): Promise<boolean> {
+    return await this.sessionProviderService.destroySession(req, userId);
   }
 
   /**
@@ -170,7 +173,7 @@ export class AuthService {
     /**
      * Set user session.
      */
-    saveSession(request, user);
+    await this.sessionProviderService.saveSession(request, user);
   }
 
   /**

@@ -30,6 +30,8 @@ import { EmailVerificationService } from '@/auth/infrastructure/email-verificati
 import { ResetPasswordDto } from '@/auth/presentation/dto/reset-password.dto';
 import { PasswordRecoveryService } from '@/auth/infrastructure/reset-password/password-recovery.service';
 import { UpdatePasswordDto } from '@/auth/presentation/dto/update-password.dto';
+import { Authorized } from '@/auth/presentation/decorators/authorized.decorator';
+import { Authorization } from '@/auth/presentation/decorators/authorization.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -144,10 +146,11 @@ export class AuthController {
 
   @ApiOperation({ summary: 'Logout user' })
   @ApiResponse({ status: 200, description: 'Logged out.' })
+  @Authorization()
   @UseInterceptors(ClearSessionCookie)
   @HttpCode(HttpStatus.OK)
   @Post('logout')
-  logout(@Req() req: Request) {
-    return this.authService.logout(req);
+  logout(@Req() req: Request, @Authorized('id') userId: string) {
+    return this.authService.logout(req, userId);
   }
 }

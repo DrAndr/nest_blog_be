@@ -14,6 +14,7 @@ import { EmailVerificationModule } from '@/auth/infrastructure/email-verificatio
 import { UserModule } from '../user/user.module';
 import { PasswordRecoveryModule } from '@/auth/infrastructure/reset-password/password-recovery.module';
 import { TwoFactorAuthModule } from '@/auth/infrastructure/two-factor-auth/two-factor-auth.module';
+import { SessionProviderModule } from '@/infrastructure/session-provider/session-provider.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { TwoFactorAuthModule } from '@/auth/infrastructure/two-factor-auth/two-f
     forwardRef(() => EmailVerificationModule),
     PasswordRecoveryModule,
     TwoFactorAuthModule,
+    SessionProviderModule,
   ],
   controllers: [AuthController],
   providers: [AuthService],

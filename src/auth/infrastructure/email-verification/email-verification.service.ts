@@ -11,9 +11,9 @@ import type { Token, User } from '@prisma/__generated__/client';
 import { ConfirmationDto } from './dto/confirmation.dto';
 import type { Request } from 'express';
 import { UserService } from '@/user/user.service';
-import { saveSession } from '@/libs/utils/saveSession';
 import { NotificationService } from '@/infrastructure/notification/notification.service';
 import { TokenProviderService } from '../token-provider/token-provider.service';
+import { SessionProviderService } from '@/infrastructure/session-provider/session-provider.service';
 
 @Injectable()
 export class EmailVerificationService {
@@ -22,6 +22,7 @@ export class EmailVerificationService {
     private readonly userService: UserService,
     private readonly NotificationService: NotificationService,
     private readonly tokenService: TokenProviderService,
+    private readonly sessionProviderService: SessionProviderService,
   ) {}
 
   /**
@@ -121,6 +122,7 @@ export class EmailVerificationService {
    * @private Promise<User>
    */
   private async authenticateUser(req: Request, user: User): Promise<User> {
-    return await saveSession(req, user);
+    await this.sessionProviderService.saveSession(req, user);
+    return user;
   }
 }
