@@ -1,18 +1,20 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { PrismaService } from '@/prisma-provider/prisma.service';
-import { PrismaModule } from '@/prisma-provider/prisma.module';
-import { UserModule } from './user/user.module';
+import { AppController } from '@/app.controller';
+import { AppService } from '@/app.service';
+import { PrismaService } from '@/infrastructure/prisma-provider/prisma.service';
+import { PrismaModule } from '@/infrastructure/prisma-provider/prisma.module';
+import { UserModule } from '@/user/user.module';
 import { ConfigModule } from '@nestjs/config';
-import { IS_DEV_ENV } from '@/common/utils/is-dev.util';
-import { AuthModule } from './auth/auth.module';
-import { OAuthProviderModule } from './auth/oauth-provider/oauth-provider.module';
-import { NotificationModule } from './notification/notification.module';
-import { EmailVerificationModule } from './auth/email-verification/email-verification.module';
-import { PasswordRecoveryModule } from './auth/reset-password/password-recovery.module';
-import { TokenProviderModule } from './auth/token-provider/token-provider.module';
-import { TwoFactorAuthModule } from './auth/two-factor-auth/two-factor-auth.module';
+import { IS_DEV_ENV } from '@/libs/utils/is-dev.util';
+import { AuthModule } from '@/auth/auth.module';
+import { OAuthProviderModule } from '@/auth/infrastructure/oauth-provider/oauth-provider.module';
+import { NotificationModule } from '@/infrastructure/notification/notification.module';
+import { EmailVerificationModule } from '@/auth/infrastructure/email-verification/email-verification.module';
+import { PasswordRecoveryModule } from '@/auth/infrastructure/reset-password/password-recovery.module';
+import { TokenProviderModule } from '@/auth/infrastructure/token-provider/token-provider.module';
+import { TwoFactorAuthModule } from '@/auth/infrastructure/two-factor-auth/two-factor-auth.module';
+import { RedisProviderModule } from '@/infrastructure/redis-provider/redis-provider.module';
+import { SessionProviderModule } from '@/infrastructure/session-provider/session-provider.module';
 
 @Module({
   imports: [
@@ -31,6 +33,8 @@ import { TwoFactorAuthModule } from './auth/two-factor-auth/two-factor-auth.modu
     PasswordRecoveryModule,
     TokenProviderModule,
     TwoFactorAuthModule,
+    RedisProviderModule,
+    SessionProviderModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],

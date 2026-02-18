@@ -5,9 +5,10 @@ import cookieParser from 'cookie-parser';
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import session from 'express-session';
 import { RedisStore } from 'connect-redis';
-import initSwagger from '@/common/utils/initSwagger';
+import initSwagger from '@/libs/utils/initSwagger';
 import { createClient } from 'redis';
-import { ResponseInterceptor } from './common/interceptors/response.interceptor';
+import { ResponseInterceptor } from '@/presentation/interceptors/response.interceptor';
+import { RedisProviderService } from '@/infrastructure/redis-provider/redis-provider.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -17,20 +18,10 @@ async function bootstrap() {
   const config = app.get(ConfigService);
 
   /**
-   * Redis init
+   * Redis for session init
    */
-  const redis = createClient({
-    socket: {
-      host: process.env.REDIS_HOST,
-      port: Number(process.env.REDIS_PORT),
-    },
-    password: process.env.REDIS_PASSWORD,
-  });
-  redis.on('error', (err) => {
-    console.error('Redis Client Error', err);
-  });
-
-  await redis.connect();
+  const redisService = app.get(RedisProviderService);
+  const redis = redisService.getClient();
 
   app.use(cookieParser(config.getOrThrow<string>('COOKIES_SECRET')));
 
