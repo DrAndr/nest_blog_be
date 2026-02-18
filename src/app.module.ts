@@ -15,6 +15,7 @@ import { TokenProviderModule } from '@/auth/infrastructure/token-provider/token-
 import { TwoFactorAuthModule } from '@/auth/infrastructure/two-factor-auth/two-factor-auth.module';
 import { RedisProviderModule } from '@/infrastructure/redis-provider/redis-provider.module';
 import { SessionProviderModule } from '@/infrastructure/session-provider/session-provider.module';
+import { HealthCheckModule } from '@/health-check/health-check.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { SessionProviderModule } from '@/infrastructure/session-provider/session
     TwoFactorAuthModule,
     RedisProviderModule,
     SessionProviderModule,
+    HealthCheckModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
