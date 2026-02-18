@@ -104,7 +104,7 @@ export class AuthController {
   }
 
   @ApiOperation({
-    summary: 'Init authenticate user through Oauth oauth-provider',
+    summary: 'Send request to Oauth service for authenticate user',
   })
   @ApiResponse({ status: 200, description: 'Return oauth-provider URL' })
   @HttpCode(HttpStatus.OK)

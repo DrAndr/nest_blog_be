@@ -12,10 +12,10 @@ export default class {
       .setTitle('Advanced backend practice')
       .setDescription('The REST API documentation')
       .setVersion('1.0.0')
-      // .addTag('Site API Docs')
+      .addTag('Site API Docs')
       .build();
 
     const document = SwaggerModule.createDocument(this.app, swaggerConfig);
-    SwaggerModule.setup('/api/docs', this.app, document);
+    SwaggerModule.setup('/docs/v1', this.app, document);
   }
 }
