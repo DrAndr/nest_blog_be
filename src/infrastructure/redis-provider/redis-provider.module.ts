@@ -1,13 +1,11 @@
 import { Global, Module } from '@nestjs/common';
 import { RedisProviderService } from './redis-provider.service';
 import { REDIS_CLIENT } from '@/infrastructure/redis-provider/common/constants';
-import { Connection } from 'pg';
 import { createClient, RedisClientType } from 'redis';
-import { RedisHealthController } from '@/infrastructure/redis-provider/redis-provider.controller';
 
 @Global()
 @Module({
-  controllers: [RedisHealthController],
+  controllers: [],
   providers: [
     {
       provide: REDIS_CLIENT,

@@ -48,14 +48,4 @@ export class RedisProviderService
   public getClient(): RedisClientType {
     return this.redisClient;
   }
-
-  /** healthcheck */
-  async ping(): Promise<boolean> {
-    try {
-      const res: string = await this.redisClient.ping();
-      return res === 'PONG';
-    } catch {
-      return false;
-    }
-  }
 }

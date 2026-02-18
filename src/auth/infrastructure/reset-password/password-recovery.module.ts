@@ -10,7 +10,7 @@ import { NotificationModule } from '@/infrastructure/notification/notification.m
   controllers: [],
   providers: [PasswordRecoveryService],
   imports: [
-    UserModule,
+    // UserModule,
     NotificationModule,
     // forwardRef(() => AuthModule),
     TokenProviderModule,
