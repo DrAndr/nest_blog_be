@@ -7,7 +7,7 @@ import session from 'express-session';
 import { RedisStore } from 'connect-redis';
 import initSwagger from '@/libs/utils/initSwagger';
 import { createClient } from 'redis';
-import { ResponseInterceptor } from '@/presentation/interceptors/response.interceptor';
+import { ResponseInterceptor } from '@/libs/interceptors/response.interceptor';
 import { RedisProviderService } from '@/infrastructure/redis-provider/redis-provider.service';
 
 async function bootstrap() {

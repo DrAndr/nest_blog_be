@@ -11,7 +11,7 @@ import {
 import { UserService } from './user.service';
 import { Authorization } from '@/auth/presentation/decorators/authorization.decorator';
 import { Authorized } from '@/auth/presentation/decorators/authorized.decorator';
-import { Serialize } from '@/presentation/decorators/serialize.decorator';
+import { Serialize } from '@/libs/decorators/serialize.decorator';
 import { PublicUserDto } from './dto/publick-user.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { UserRole } from '@db/__generated__/enums';
