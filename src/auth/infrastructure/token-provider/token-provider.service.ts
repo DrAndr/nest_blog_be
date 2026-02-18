@@ -1,6 +1,6 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { PrismaService } from '@/infrastructure/prisma-provider/prisma.service';
-import { Token, TokenType } from '@prisma/__generated__/client';
+import { Token, TokenType } from '@db/__generated__/client';
 import { v4 as uuid } from 'uuid';
 
 @Injectable()

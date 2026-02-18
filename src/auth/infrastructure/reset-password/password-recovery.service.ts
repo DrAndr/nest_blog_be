@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { UserService } from '../../../user/user.service';
 import { ResetPasswordDto } from '@/auth/presentation/dto/reset-password.dto';
-import { TokenType } from '@prisma/__generated__/enums';
+import { TokenType } from '@db/__generated__/enums';
 import { UpdatePasswordDto } from '@/auth/presentation/dto/update-password.dto';
 import { TokenProviderService } from '../token-provider/token-provider.service';
 import { NotificationService } from '@/infrastructure/notification/notification.service';

@@ -2,7 +2,7 @@ import { PickType } from '@nestjs/mapped-types';
 import { CreateUserDto } from './create-user.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsBoolean, IsEmail, IsOptional, IsString } from 'class-validator';
-import { UserRole } from '@prisma/__generated__/enums';
+import { UserRole } from '@db/__generated__/enums';
 
 export class UpdateUserDto extends PickType(CreateUserDto, ['name', 'image']) {
   @ApiProperty({ example: 'user@email.com', description: 'User email.' })

@@ -1,6 +1,6 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { RedisProviderService } from '@/infrastructure/redis-provider/redis-provider.service';
-import { User } from '@prisma/__generated__/client';
+import { User } from '@db/__generated__/client';
 import type { Request, Response } from 'express';
 import { RedisClientType } from 'redis';
 import { ConfigService } from '@nestjs/config';

@@ -6,7 +6,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { NotificationService } from '@/infrastructure/notification/notification.service';
-import { TokenType } from '@prisma/__generated__/enums';
+import { TokenType } from '@db/__generated__/enums';
 import { TokenProviderService } from '../token-provider/token-provider.service';
 import { IServiceResponse } from '@/libs/interfaces';
 

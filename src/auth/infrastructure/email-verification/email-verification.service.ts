@@ -6,8 +6,8 @@ import {
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { PrismaService } from '@/infrastructure/prisma-provider/prisma.service';
-import { TokenType } from '@prisma/__generated__/enums';
-import type { Token, User } from '@prisma/__generated__/client';
+import { TokenType } from '@db/__generated__/enums';
+import type { Token, User } from '@db/__generated__/client';
 import { ConfirmationDto } from './dto/confirmation.dto';
 import type { Request } from 'express';
 import { UserService } from '@/user/user.service';

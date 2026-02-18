@@ -1,6 +1,6 @@
 import { Injectable, ServiceUnavailableException } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
-import { SendMailDto } from './dto/send-mail.dto';
+import { SendMailDto } from '@/infrastructure/notification/dto/send-mail.dto';
 import { ConfigService } from '@nestjs/config';
 import { render } from '@react-email/components';
 import { EmailConfirmationTemplate } from './templates/email-confirmation.template';

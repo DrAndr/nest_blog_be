@@ -8,7 +8,7 @@ import {
   IsBoolean,
   IsOptional,
 } from 'class-validator';
-import { AuthMethod } from '@prisma/__generated__/enums';
+import { AuthMethod } from '@db/__generated__/enums';
 
 export class CreateUserDto {
   @ApiProperty({ example: 'user@email.com', description: 'User email.' })

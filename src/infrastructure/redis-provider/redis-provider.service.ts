@@ -7,7 +7,7 @@ import {
   OnModuleInit,
 } from '@nestjs/common';
 import type { Request } from 'express';
-import type { User } from '@prisma/__generated__/client';
+import type { User } from '@db/__generated__/client';
 import { createClient, type RedisClientType } from 'redis';
 import { REDIS_CLIENT } from '@/infrastructure/redis-provider/common/constants';
 

@@ -1,9 +1,20 @@
 {
-  "moduleFileExtensions": ["js", "json", "ts"],
-  "rootDir": ".",
+  "moduleFileExtensions": ["js", "json", "ts", "tsx", "jsx"],
+  "rootDir": "../",
   "testEnvironment": "node",
   "testRegex": ".e2e-spec.ts$",
   "transform": {
-    "^.+\\.(t|j)s$": "ts-jest"
-  }
+    "^.+\\.(t|j)sx?$": ["ts-jest", { "tsconfig": "tsconfig.spec.json" }]
+  },
+  "globals": {
+    "ts-jest": {
+      "tsconfig": "tsconfig.spec.json"
+    }
+  },
+  "moduleNameMapper": {
+    "^@/(.*)$": "<rootDir>/src/$1",
+    "^@db/(.*)$": "<rootDir>/prisma/$1",
+    "^(\\.{1,2}/.*)\\.js$": "$1"
+  },
+  "transformIgnorePatterns": ["node_modules/(?!(@react-email|react|uuid)/)"]
 }
