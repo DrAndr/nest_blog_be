@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { Authorization } from '@/auth/presentation/decorators/authorization.decorator';
-import { UserRole } from '@prisma/__generated__/enums';
+import { UserRole } from '@db/__generated__/enums';
 import { HealthCheckService } from '@/health-check/health-check.service';
 import { IAllHealthCheckResponse } from '@/health-check/libs/interfaces/all-helth-check.interface';
 import statusStrVal from '@/health-check/libs/invertStatus';

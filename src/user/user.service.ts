@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from '@/infrastructure/prisma-provider/prisma.service';
-import { type Prisma, User } from '@prisma/__generated__/client';
+import { type Prisma, User } from '@db/__generated__/client';
 
 @Injectable()
 export class UserService {

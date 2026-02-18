@@ -19,7 +19,7 @@ import type { Request, Response } from 'express';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { ClearSessionCookie } from '@/auth/presentation/interceptors/clear-session-cookie.interceptor';
 import { Serialize } from '@/presentation/decorators/serialize.decorator';
-import { PublicUserDto } from 'src/user/dto/publick-user.dto';
+import { PublicUserDto } from '@/user/dto/publick-user.dto';
 import { Recaptcha } from '@nestlab/google-recaptcha';
 import { OauthProviderGuard } from '@/auth/presentation/decorators/oauth-provider.decorator';
 import type { TypeProvider } from '@/auth/infrastructure/oauth-provider/utils/types';

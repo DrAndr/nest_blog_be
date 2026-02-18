@@ -1,5 +1,5 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { User } from '@prisma/__generated__/client';
+import { User } from '@db/__generated__/client';
 
 /**
  * Allow as to get all user public data, or single field

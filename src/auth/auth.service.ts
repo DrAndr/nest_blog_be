@@ -8,15 +8,15 @@ import {
 } from '@nestjs/common';
 import { RegisterDto } from '@/auth/presentation/dto/register.dto';
 import { LoginDto } from '@/auth/presentation/dto/login.dto';
-import { UserService } from 'src/user/user.service';
+import { UserService } from '@/user/user.service';
 import type { Request } from 'express';
 import argon2 from 'argon2';
 import { AuthUserFactory } from './utils/auth-user.factory';
 import { OAuthProviderService } from '@/auth/infrastructure/oauth-provider/oauth-provider.service';
 import { PrismaService } from '@/infrastructure/prisma-provider/prisma.service';
-import { AuthMethod } from '@prisma/__generated__/enums';
+import { AuthMethod } from '@db/__generated__/enums';
 import { TypeUserInfo } from '@/auth/infrastructure/oauth-provider/services/types/user-info.type';
-import type { User } from '@prisma/__generated__/client';
+import type { User } from '@db/__generated__/client';
 import { IServiceResponse } from '@/libs/interfaces';
 import { EmailVerificationService } from '@/auth/infrastructure/email-verification/email-verification.service';
 import { TwoFactorAuthService } from '@/auth/infrastructure/two-factor-auth/two-factor-auth.service';

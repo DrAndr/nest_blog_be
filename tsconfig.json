@@ -2,7 +2,6 @@
   "compilerOptions": {
     "module": "nodenext",
     "moduleResolution": "nodenext",
-    "resolvePackageJsonExports": true,
     "esModuleInterop": true,
     "isolatedModules": true,
     "declaration": true,
@@ -16,7 +15,7 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
-      "@prisma/*": ["prisma/*"]
+      "@db/*": ["prisma/*"]
     },
     "incremental": true,
     "skipLibCheck": true,

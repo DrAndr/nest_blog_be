@@ -14,9 +14,9 @@ import { Authorized } from '@/auth/presentation/decorators/authorized.decorator'
 import { Serialize } from '@/presentation/decorators/serialize.decorator';
 import { PublicUserDto } from './dto/publick-user.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { UserRole } from '@prisma/__generated__/enums';
+import { UserRole } from '@db/__generated__/enums';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from '@prisma/__generated__/client';
+import { User } from '@db/__generated__/client';
 import { IServiceResponse } from '@/libs/interfaces';
 
 @Controller('user')
