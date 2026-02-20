@@ -16,6 +16,7 @@ import { TwoFactorAuthModule } from '@/auth/infrastructure/two-factor-auth/two-f
 import { RedisProviderModule } from '@/infrastructure/redis-provider/redis-provider.module';
 import { SessionProviderModule } from '@/infrastructure/session-provider/session-provider.module';
 import { HealthCheckModule } from '@/health-check/health-check.module';
+import { UploadFilesModule } from './upload-files/upload-files.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { HealthCheckModule } from '@/health-check/health-check.module';
     RedisProviderModule,
     SessionProviderModule,
     HealthCheckModule,
+    UploadFilesModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],

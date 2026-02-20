@@ -30,6 +30,7 @@ model User {
 
   method   AuthMethod
   accounts Account[]
+  files Files[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -80,6 +81,26 @@ model Post {
   updatedAt   DateTime @updatedAt @map("updated_at")
 
   @@map("posts")
+}
+
+model Files {
+  id            String @id @default(uuid())
+  url           String @unique
+  originalname  String
+  name          String @unique
+  mimetype      String
+
+  meta        Json
+
+  user        User @relation(fields: [userId], references: [id])
+  userId      String
+
+  isPrivate   Boolean @default(false) @map("is_private")
+
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("files")
 }
 
 enum UserRole {
