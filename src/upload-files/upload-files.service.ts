@@ -6,13 +6,15 @@ import {
 import * as fs from 'fs/promises';
 import * as path from 'path';
 import { v4 as uuid } from 'uuid';
-import { UpdateUploadFileDto } from './dto/update-upload-file.dto';
+import { UpdateFileDto } from './dto/update-file.dto';
 import { PrismaService } from '@/infrastructure/prisma-provider/prisma.service';
 import { UserService } from '@/user/user.service';
 import { isFileExists } from '@/upload-files/libs/utils/isFileExists';
 import { IServiceResponse } from '@/libs/interfaces';
 import sharp from 'sharp';
 import { MFile } from '@/upload-files/libs/MFile';
+import { Files } from '@db/__generated__/client';
+import { UploadFile } from '@/upload-files/entities/upload-file.entity';
 
 @Injectable()
 export class UploadFilesService {
@@ -26,10 +28,14 @@ export class UploadFilesService {
     userId: string,
     folder = '',
   ): Promise<File[]> {
+    console.log('fileData', fileData);
+
     const isSingle = !Array.isArray(fileData);
     const filteredFiles: MFile[] = await this.fileFilter(
       isSingle ? [fileData] : fileData,
     );
+    console.log('filteredFiles', filteredFiles);
+
     const uploadFolder: string = path.join(
       __dirname,
       '..',
@@ -37,7 +43,7 @@ export class UploadFilesService {
       'uploads',
       folder,
     );
-
+    console.log('uploadFolder', uploadFolder);
     // create folder if not exists
     await fs.mkdir(uploadFolder, { recursive: true });
 
@@ -74,16 +80,30 @@ export class UploadFilesService {
     );
   }
 
-  findAll() {
-    return `This action returns all uploadFiles`;
+  async findAll(): Promise<Files[]> {
+    return await this.prismaService.files.findMany({ take: 10, skip: 0 });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} uploadFile`;
+  async findOne(id: string): Promise<Files> {
+    const file = await this.prismaService.files.findUnique({ where: { id } });
+    if (!file) {
+      throw new NotFoundException(`File not found, ID: ${id}`);
+    }
+
+    return file;
   }
 
-  update(id: number, updateUploadFileDto: UpdateUploadFileDto) {
-    return `This action updates a #${id} uploadFile`;
+  async update(id: string, updateFileDto: UpdateFileDto): Promise<UploadFile> {
+    const updatedFile = this.prismaService.files.update({
+      where: { id },
+      data: updateFileDto,
+    });
+
+    if (!updatedFile) {
+      throw new NotFoundException(`Error while updating file: ${id}`);
+    }
+
+    return updatedFile;
   }
 
   async remove(id: string): Promise<IServiceResponse> {
