@@ -37,3 +37,8 @@ export type Token = Prisma.TokenModel
  * 
  */
 export type Post = Prisma.PostModel
+/**
+ * Model Files
+ * 
+ */
+export type Files = Prisma.FilesModel

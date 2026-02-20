@@ -387,7 +387,8 @@ export const ModelName = {
   User: 'User',
   Account: 'Account',
   Token: 'Token',
-  Post: 'Post'
+  Post: 'Post',
+  Files: 'Files'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -403,7 +404,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "account" | "token" | "post"
+    modelProps: "user" | "account" | "token" | "post" | "files"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -703,6 +704,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Files: {
+      payload: Prisma.$FilesPayload<ExtArgs>
+      fields: Prisma.FilesFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.FilesFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FilesPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.FilesFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FilesPayload>
+        }
+        findFirst: {
+          args: Prisma.FilesFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FilesPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.FilesFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FilesPayload>
+        }
+        findMany: {
+          args: Prisma.FilesFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FilesPayload>[]
+        }
+        create: {
+          args: Prisma.FilesCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FilesPayload>
+        }
+        createMany: {
+          args: Prisma.FilesCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.FilesCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FilesPayload>[]
+        }
+        delete: {
+          args: Prisma.FilesDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FilesPayload>
+        }
+        update: {
+          args: Prisma.FilesUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FilesPayload>
+        }
+        deleteMany: {
+          args: Prisma.FilesDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.FilesUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.FilesUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FilesPayload>[]
+        }
+        upsert: {
+          args: Prisma.FilesUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FilesPayload>
+        }
+        aggregate: {
+          args: Prisma.FilesAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateFiles>
+        }
+        groupBy: {
+          args: Prisma.FilesGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FilesGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.FilesCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FilesCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -801,12 +876,35 @@ export const PostScalarFieldEnum = {
 export type PostScalarFieldEnum = (typeof PostScalarFieldEnum)[keyof typeof PostScalarFieldEnum]
 
 
+export const FilesScalarFieldEnum = {
+  id: 'id',
+  url: 'url',
+  origin: 'origin',
+  name: 'name',
+  mimetype: 'mimetype',
+  meta: 'meta',
+  userId: 'userId',
+  isPrivate: 'isPrivate',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FilesScalarFieldEnum = (typeof FilesScalarFieldEnum)[keyof typeof FilesScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const QueryMode = {
@@ -823,6 +921,15 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
 
@@ -919,6 +1026,20 @@ export type EnumTokenTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$Prisma
  * Reference to a field of type 'TokenType[]'
  */
 export type ListEnumTokenTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TokenType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Json'
+ */
+export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+/**
+ * Reference to a field of type 'QueryMode'
+ */
+export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 
@@ -1034,6 +1155,7 @@ export type GlobalOmitConfig = {
   account?: Prisma.AccountOmit
   token?: Prisma.TokenOmit
   post?: Prisma.PostOmit
+  files?: Prisma.FilesOmit
 }
 
 /* Types for Logging */

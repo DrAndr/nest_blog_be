@@ -33,6 +33,8 @@
     "@prisma/client": "^7.3.0",
     "@react-email/components": "^1.0.7",
     "@react-email/html": "^0.0.12",
+    "@types/multer": "^2.0.0",
+    "@types/sharp": "^0.31.1",
     "argon2": "^0.44.0",
     "cache-manager": "^7.2.8",
     "cache-manager-redis-store": "^3.0.1",
@@ -42,11 +44,13 @@
     "cookie-parser": "^1.4.7",
     "express-session": "^1.19.0",
     "handlebars": "^4.7.8",
+    "multer": "^2.0.2",
     "nodemailer": "^8.0.1",
     "pg": "^8.17.2",
     "redis": "^5.10.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
+    "sharp": "^0.34.5",
     "uuid": "^13.0.0"
   },
   "devDependencies": {
