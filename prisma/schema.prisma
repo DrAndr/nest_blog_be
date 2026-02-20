@@ -83,6 +83,12 @@ model Post {
   @@map("posts")
 }
 
+// TODO add trees like folder structure
+// model Folders {
+//
+//   @@map("folders")
+// }
+
 model Files {
   id            String @id @default(uuid())
   url           String @unique
