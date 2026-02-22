@@ -388,7 +388,9 @@ export const ModelName = {
   Account: 'Account',
   Token: 'Token',
   Post: 'Post',
-  Files: 'Files'
+  Folders: 'Folders',
+  Files: 'Files',
+  FileVariants: 'FileVariants'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -404,7 +406,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "account" | "token" | "post" | "files"
+    modelProps: "user" | "account" | "token" | "post" | "folders" | "files" | "fileVariants"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -704,6 +706,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Folders: {
+      payload: Prisma.$FoldersPayload<ExtArgs>
+      fields: Prisma.FoldersFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.FoldersFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FoldersPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.FoldersFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FoldersPayload>
+        }
+        findFirst: {
+          args: Prisma.FoldersFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FoldersPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.FoldersFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FoldersPayload>
+        }
+        findMany: {
+          args: Prisma.FoldersFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FoldersPayload>[]
+        }
+        create: {
+          args: Prisma.FoldersCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FoldersPayload>
+        }
+        createMany: {
+          args: Prisma.FoldersCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.FoldersCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FoldersPayload>[]
+        }
+        delete: {
+          args: Prisma.FoldersDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FoldersPayload>
+        }
+        update: {
+          args: Prisma.FoldersUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FoldersPayload>
+        }
+        deleteMany: {
+          args: Prisma.FoldersDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.FoldersUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.FoldersUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FoldersPayload>[]
+        }
+        upsert: {
+          args: Prisma.FoldersUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FoldersPayload>
+        }
+        aggregate: {
+          args: Prisma.FoldersAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateFolders>
+        }
+        groupBy: {
+          args: Prisma.FoldersGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FoldersGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.FoldersCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FoldersCountAggregateOutputType> | number
+        }
+      }
+    }
     Files: {
       payload: Prisma.$FilesPayload<ExtArgs>
       fields: Prisma.FilesFieldRefs
@@ -775,6 +851,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.FilesCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.FilesCountAggregateOutputType> | number
+        }
+      }
+    }
+    FileVariants: {
+      payload: Prisma.$FileVariantsPayload<ExtArgs>
+      fields: Prisma.FileVariantsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.FileVariantsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FileVariantsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.FileVariantsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FileVariantsPayload>
+        }
+        findFirst: {
+          args: Prisma.FileVariantsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FileVariantsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.FileVariantsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FileVariantsPayload>
+        }
+        findMany: {
+          args: Prisma.FileVariantsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FileVariantsPayload>[]
+        }
+        create: {
+          args: Prisma.FileVariantsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FileVariantsPayload>
+        }
+        createMany: {
+          args: Prisma.FileVariantsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.FileVariantsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FileVariantsPayload>[]
+        }
+        delete: {
+          args: Prisma.FileVariantsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FileVariantsPayload>
+        }
+        update: {
+          args: Prisma.FileVariantsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FileVariantsPayload>
+        }
+        deleteMany: {
+          args: Prisma.FileVariantsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.FileVariantsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.FileVariantsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FileVariantsPayload>[]
+        }
+        upsert: {
+          args: Prisma.FileVariantsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FileVariantsPayload>
+        }
+        aggregate: {
+          args: Prisma.FileVariantsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateFileVariants>
+        }
+        groupBy: {
+          args: Prisma.FileVariantsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FileVariantsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.FileVariantsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FileVariantsCountAggregateOutputType> | number
         }
       }
     }
@@ -876,13 +1026,28 @@ export const PostScalarFieldEnum = {
 export type PostScalarFieldEnum = (typeof PostScalarFieldEnum)[keyof typeof PostScalarFieldEnum]
 
 
+export const FoldersScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  parentId: 'parentId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FoldersScalarFieldEnum = (typeof FoldersScalarFieldEnum)[keyof typeof FoldersScalarFieldEnum]
+
+
 export const FilesScalarFieldEnum = {
   id: 'id',
-  url: 'url',
-  origin: 'origin',
-  name: 'name',
-  mimetype: 'mimetype',
-  meta: 'meta',
+  originalname: 'originalname',
+  extension: 'extension',
+  mimeType: 'mimeType',
+  size: 'size',
+  checksum: 'checksum',
+  blurhash: 'blurhash',
+  dominantColor: 'dominantColor',
+  storageKey: 'storageKey',
+  folderId: 'folderId',
   userId: 'userId',
   isPrivate: 'isPrivate',
   createdAt: 'createdAt',
@@ -892,19 +1057,28 @@ export const FilesScalarFieldEnum = {
 export type FilesScalarFieldEnum = (typeof FilesScalarFieldEnum)[keyof typeof FilesScalarFieldEnum]
 
 
+export const FileVariantsScalarFieldEnum = {
+  id: 'id',
+  fileId: 'fileId',
+  type: 'type',
+  storageKey: 'storageKey',
+  format: 'format',
+  width: 'width',
+  height: 'height',
+  size: 'size',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FileVariantsScalarFieldEnum = (typeof FileVariantsScalarFieldEnum)[keyof typeof FileVariantsScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
-
-
-export const JsonNullValueInput = {
-  JsonNull: JsonNull
-} as const
-
-export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const QueryMode = {
@@ -921,15 +1095,6 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
-
-
-export const JsonNullValueFilter = {
-  DbNull: DbNull,
-  JsonNull: JsonNull,
-  AnyNull: AnyNull
-} as const
-
-export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
 
@@ -1030,16 +1195,16 @@ export type ListEnumTokenTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$Pr
 
 
 /**
- * Reference to a field of type 'Json'
+ * Reference to a field of type 'VariantType'
  */
-export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+export type EnumVariantTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'VariantType'>
     
 
 
 /**
- * Reference to a field of type 'QueryMode'
+ * Reference to a field of type 'VariantType[]'
  */
-export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+export type ListEnumVariantTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'VariantType[]'>
     
 
 
@@ -1155,7 +1320,9 @@ export type GlobalOmitConfig = {
   account?: Prisma.AccountOmit
   token?: Prisma.TokenOmit
   post?: Prisma.PostOmit
+  folders?: Prisma.FoldersOmit
   files?: Prisma.FilesOmit
+  fileVariants?: Prisma.FileVariantsOmit
 }
 
 /* Types for Logging */

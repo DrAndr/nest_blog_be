@@ -9,6 +9,18 @@
 * 🟢 You can import this file directly.
 */
 
+export const VariantType = {
+  ORIGINAL: 'ORIGINAL',
+  THUMBNAIL: 'THUMBNAIL',
+  SMALL: 'SMALL',
+  MEDIUM: 'MEDIUM',
+  LARGE: 'LARGE',
+  CUSTOM: 'CUSTOM'
+} as const
+
+export type VariantType = (typeof VariantType)[keyof typeof VariantType]
+
+
 export const UserRole = {
   ADMIN: 'ADMIN',
   MANAGER: 'MANAGER',

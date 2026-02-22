@@ -19,6 +19,7 @@ import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Authorization } from '@/auth/presentation/decorators/authorization.decorator';
 import { Authorized } from '@/auth/presentation/decorators/authorized.decorator';
 import { FilesInterceptor } from '@nestjs/platform-express';
+import type { Folders } from '@db/__generated__/client';
 
 @Controller('upload')
 export class UploadFilesController {
@@ -36,10 +37,10 @@ export class UploadFilesController {
   create(
     @UploadedFiles() files: Express.Multer.File[],
     @Authorized('id') userId: string,
-    @Query('folder') folder?: string,
+    @Body('folder') folderId?: string,
   ) {
-    console.log(files);
-    return this.uploadFilesService.create(files, userId, folder);
+    // console.log(files);
+    return this.uploadFilesService.create(files, userId, folderId);
   }
 
   @ApiOperation({ summary: 'Get files' })

@@ -38,7 +38,17 @@ export type Token = Prisma.TokenModel
  */
 export type Post = Prisma.PostModel
 /**
+ * Model Folders
+ * 
+ */
+export type Folders = Prisma.FoldersModel
+/**
  * Model Files
  * 
  */
 export type Files = Prisma.FilesModel
+/**
+ * Model FileVariants
+ * 
+ */
+export type FileVariants = Prisma.FileVariantsModel
