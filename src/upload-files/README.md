@@ -2,9 +2,9 @@
 uploads/
    original/
       123.jpg
-   variants/
+      123-custom.webp
+      123-original.webp
       123-thumb.webp
       123-medium.webp
       123-large.webp
-      123-watermark.webp
 ```
