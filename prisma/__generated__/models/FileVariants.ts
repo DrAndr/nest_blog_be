@@ -42,7 +42,7 @@ export type FileVariantsMinAggregateOutputType = {
   id: string | null
   fileId: string | null
   type: $Enums.VariantType | null
-  storageKey: string | null
+  filePath: string | null
   format: string | null
   width: number | null
   height: number | null
@@ -55,7 +55,7 @@ export type FileVariantsMaxAggregateOutputType = {
   id: string | null
   fileId: string | null
   type: $Enums.VariantType | null
-  storageKey: string | null
+  filePath: string | null
   format: string | null
   width: number | null
   height: number | null
@@ -68,7 +68,7 @@ export type FileVariantsCountAggregateOutputType = {
   id: number
   fileId: number
   type: number
-  storageKey: number
+  filePath: number
   format: number
   width: number
   height: number
@@ -95,7 +95,7 @@ export type FileVariantsMinAggregateInputType = {
   id?: true
   fileId?: true
   type?: true
-  storageKey?: true
+  filePath?: true
   format?: true
   width?: true
   height?: true
@@ -108,7 +108,7 @@ export type FileVariantsMaxAggregateInputType = {
   id?: true
   fileId?: true
   type?: true
-  storageKey?: true
+  filePath?: true
   format?: true
   width?: true
   height?: true
@@ -121,7 +121,7 @@ export type FileVariantsCountAggregateInputType = {
   id?: true
   fileId?: true
   type?: true
-  storageKey?: true
+  filePath?: true
   format?: true
   width?: true
   height?: true
@@ -221,7 +221,7 @@ export type FileVariantsGroupByOutputType = {
   id: string
   fileId: string
   type: $Enums.VariantType
-  storageKey: string
+  filePath: string
   format: string
   width: number | null
   height: number | null
@@ -257,7 +257,7 @@ export type FileVariantsWhereInput = {
   id?: Prisma.StringFilter<"FileVariants"> | string
   fileId?: Prisma.StringFilter<"FileVariants"> | string
   type?: Prisma.EnumVariantTypeFilter<"FileVariants"> | $Enums.VariantType
-  storageKey?: Prisma.StringFilter<"FileVariants"> | string
+  filePath?: Prisma.StringFilter<"FileVariants"> | string
   format?: Prisma.StringFilter<"FileVariants"> | string
   width?: Prisma.IntNullableFilter<"FileVariants"> | number | null
   height?: Prisma.IntNullableFilter<"FileVariants"> | number | null
@@ -271,7 +271,7 @@ export type FileVariantsOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   fileId?: Prisma.SortOrder
   type?: Prisma.SortOrder
-  storageKey?: Prisma.SortOrder
+  filePath?: Prisma.SortOrder
   format?: Prisma.SortOrder
   width?: Prisma.SortOrderInput | Prisma.SortOrder
   height?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -283,7 +283,7 @@ export type FileVariantsOrderByWithRelationInput = {
 
 export type FileVariantsWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  storageKey?: string
+  filePath?: string
   AND?: Prisma.FileVariantsWhereInput | Prisma.FileVariantsWhereInput[]
   OR?: Prisma.FileVariantsWhereInput[]
   NOT?: Prisma.FileVariantsWhereInput | Prisma.FileVariantsWhereInput[]
@@ -296,13 +296,13 @@ export type FileVariantsWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"FileVariants"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"FileVariants"> | Date | string
   file?: Prisma.XOR<Prisma.FilesScalarRelationFilter, Prisma.FilesWhereInput>
-}, "id" | "storageKey">
+}, "id" | "filePath">
 
 export type FileVariantsOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   fileId?: Prisma.SortOrder
   type?: Prisma.SortOrder
-  storageKey?: Prisma.SortOrder
+  filePath?: Prisma.SortOrder
   format?: Prisma.SortOrder
   width?: Prisma.SortOrderInput | Prisma.SortOrder
   height?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -323,7 +323,7 @@ export type FileVariantsScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"FileVariants"> | string
   fileId?: Prisma.StringWithAggregatesFilter<"FileVariants"> | string
   type?: Prisma.EnumVariantTypeWithAggregatesFilter<"FileVariants"> | $Enums.VariantType
-  storageKey?: Prisma.StringWithAggregatesFilter<"FileVariants"> | string
+  filePath?: Prisma.StringWithAggregatesFilter<"FileVariants"> | string
   format?: Prisma.StringWithAggregatesFilter<"FileVariants"> | string
   width?: Prisma.IntNullableWithAggregatesFilter<"FileVariants"> | number | null
   height?: Prisma.IntNullableWithAggregatesFilter<"FileVariants"> | number | null
@@ -335,7 +335,7 @@ export type FileVariantsScalarWhereWithAggregatesInput = {
 export type FileVariantsCreateInput = {
   id?: string
   type: $Enums.VariantType
-  storageKey: string
+  filePath: string
   format: string
   width?: number | null
   height?: number | null
@@ -349,7 +349,7 @@ export type FileVariantsUncheckedCreateInput = {
   id?: string
   fileId: string
   type: $Enums.VariantType
-  storageKey: string
+  filePath: string
   format: string
   width?: number | null
   height?: number | null
@@ -361,7 +361,7 @@ export type FileVariantsUncheckedCreateInput = {
 export type FileVariantsUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumVariantTypeFieldUpdateOperationsInput | $Enums.VariantType
-  storageKey?: Prisma.StringFieldUpdateOperationsInput | string
+  filePath?: Prisma.StringFieldUpdateOperationsInput | string
   format?: Prisma.StringFieldUpdateOperationsInput | string
   width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -375,7 +375,7 @@ export type FileVariantsUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   fileId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumVariantTypeFieldUpdateOperationsInput | $Enums.VariantType
-  storageKey?: Prisma.StringFieldUpdateOperationsInput | string
+  filePath?: Prisma.StringFieldUpdateOperationsInput | string
   format?: Prisma.StringFieldUpdateOperationsInput | string
   width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -388,7 +388,7 @@ export type FileVariantsCreateManyInput = {
   id?: string
   fileId: string
   type: $Enums.VariantType
-  storageKey: string
+  filePath: string
   format: string
   width?: number | null
   height?: number | null
@@ -400,7 +400,7 @@ export type FileVariantsCreateManyInput = {
 export type FileVariantsUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumVariantTypeFieldUpdateOperationsInput | $Enums.VariantType
-  storageKey?: Prisma.StringFieldUpdateOperationsInput | string
+  filePath?: Prisma.StringFieldUpdateOperationsInput | string
   format?: Prisma.StringFieldUpdateOperationsInput | string
   width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -413,7 +413,7 @@ export type FileVariantsUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   fileId?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumVariantTypeFieldUpdateOperationsInput | $Enums.VariantType
-  storageKey?: Prisma.StringFieldUpdateOperationsInput | string
+  filePath?: Prisma.StringFieldUpdateOperationsInput | string
   format?: Prisma.StringFieldUpdateOperationsInput | string
   width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -436,7 +436,7 @@ export type FileVariantsCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   fileId?: Prisma.SortOrder
   type?: Prisma.SortOrder
-  storageKey?: Prisma.SortOrder
+  filePath?: Prisma.SortOrder
   format?: Prisma.SortOrder
   width?: Prisma.SortOrder
   height?: Prisma.SortOrder
@@ -455,7 +455,7 @@ export type FileVariantsMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   fileId?: Prisma.SortOrder
   type?: Prisma.SortOrder
-  storageKey?: Prisma.SortOrder
+  filePath?: Prisma.SortOrder
   format?: Prisma.SortOrder
   width?: Prisma.SortOrder
   height?: Prisma.SortOrder
@@ -468,7 +468,7 @@ export type FileVariantsMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   fileId?: Prisma.SortOrder
   type?: Prisma.SortOrder
-  storageKey?: Prisma.SortOrder
+  filePath?: Prisma.SortOrder
   format?: Prisma.SortOrder
   width?: Prisma.SortOrder
   height?: Prisma.SortOrder
@@ -529,18 +529,10 @@ export type EnumVariantTypeFieldUpdateOperationsInput = {
   set?: $Enums.VariantType
 }
 
-export type NullableIntFieldUpdateOperationsInput = {
-  set?: number | null
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type FileVariantsCreateWithoutFileInput = {
   id?: string
   type: $Enums.VariantType
-  storageKey: string
+  filePath: string
   format: string
   width?: number | null
   height?: number | null
@@ -552,7 +544,7 @@ export type FileVariantsCreateWithoutFileInput = {
 export type FileVariantsUncheckedCreateWithoutFileInput = {
   id?: string
   type: $Enums.VariantType
-  storageKey: string
+  filePath: string
   format: string
   width?: number | null
   height?: number | null
@@ -594,7 +586,7 @@ export type FileVariantsScalarWhereInput = {
   id?: Prisma.StringFilter<"FileVariants"> | string
   fileId?: Prisma.StringFilter<"FileVariants"> | string
   type?: Prisma.EnumVariantTypeFilter<"FileVariants"> | $Enums.VariantType
-  storageKey?: Prisma.StringFilter<"FileVariants"> | string
+  filePath?: Prisma.StringFilter<"FileVariants"> | string
   format?: Prisma.StringFilter<"FileVariants"> | string
   width?: Prisma.IntNullableFilter<"FileVariants"> | number | null
   height?: Prisma.IntNullableFilter<"FileVariants"> | number | null
@@ -606,7 +598,7 @@ export type FileVariantsScalarWhereInput = {
 export type FileVariantsCreateManyFileInput = {
   id?: string
   type: $Enums.VariantType
-  storageKey: string
+  filePath: string
   format: string
   width?: number | null
   height?: number | null
@@ -618,7 +610,7 @@ export type FileVariantsCreateManyFileInput = {
 export type FileVariantsUpdateWithoutFileInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumVariantTypeFieldUpdateOperationsInput | $Enums.VariantType
-  storageKey?: Prisma.StringFieldUpdateOperationsInput | string
+  filePath?: Prisma.StringFieldUpdateOperationsInput | string
   format?: Prisma.StringFieldUpdateOperationsInput | string
   width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -630,7 +622,7 @@ export type FileVariantsUpdateWithoutFileInput = {
 export type FileVariantsUncheckedUpdateWithoutFileInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumVariantTypeFieldUpdateOperationsInput | $Enums.VariantType
-  storageKey?: Prisma.StringFieldUpdateOperationsInput | string
+  filePath?: Prisma.StringFieldUpdateOperationsInput | string
   format?: Prisma.StringFieldUpdateOperationsInput | string
   width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -642,7 +634,7 @@ export type FileVariantsUncheckedUpdateWithoutFileInput = {
 export type FileVariantsUncheckedUpdateManyWithoutFileInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.EnumVariantTypeFieldUpdateOperationsInput | $Enums.VariantType
-  storageKey?: Prisma.StringFieldUpdateOperationsInput | string
+  filePath?: Prisma.StringFieldUpdateOperationsInput | string
   format?: Prisma.StringFieldUpdateOperationsInput | string
   width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -657,7 +649,7 @@ export type FileVariantsSelect<ExtArgs extends runtime.Types.Extensions.Internal
   id?: boolean
   fileId?: boolean
   type?: boolean
-  storageKey?: boolean
+  filePath?: boolean
   format?: boolean
   width?: boolean
   height?: boolean
@@ -671,7 +663,7 @@ export type FileVariantsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   id?: boolean
   fileId?: boolean
   type?: boolean
-  storageKey?: boolean
+  filePath?: boolean
   format?: boolean
   width?: boolean
   height?: boolean
@@ -685,7 +677,7 @@ export type FileVariantsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   id?: boolean
   fileId?: boolean
   type?: boolean
-  storageKey?: boolean
+  filePath?: boolean
   format?: boolean
   width?: boolean
   height?: boolean
@@ -699,7 +691,7 @@ export type FileVariantsSelectScalar = {
   id?: boolean
   fileId?: boolean
   type?: boolean
-  storageKey?: boolean
+  filePath?: boolean
   format?: boolean
   width?: boolean
   height?: boolean
@@ -708,7 +700,7 @@ export type FileVariantsSelectScalar = {
   updatedAt?: boolean
 }
 
-export type FileVariantsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "fileId" | "type" | "storageKey" | "format" | "width" | "height" | "size" | "createdAt" | "updatedAt", ExtArgs["result"]["fileVariants"]>
+export type FileVariantsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "fileId" | "type" | "filePath" | "format" | "width" | "height" | "size" | "createdAt" | "updatedAt", ExtArgs["result"]["fileVariants"]>
 export type FileVariantsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   file?: boolean | Prisma.FilesDefaultArgs<ExtArgs>
 }
@@ -728,7 +720,7 @@ export type $FileVariantsPayload<ExtArgs extends runtime.Types.Extensions.Intern
     id: string
     fileId: string
     type: $Enums.VariantType
-    storageKey: string
+    filePath: string
     format: string
     width: number | null
     height: number | null
@@ -1162,7 +1154,7 @@ export interface FileVariantsFieldRefs {
   readonly id: Prisma.FieldRef<"FileVariants", 'String'>
   readonly fileId: Prisma.FieldRef<"FileVariants", 'String'>
   readonly type: Prisma.FieldRef<"FileVariants", 'VariantType'>
-  readonly storageKey: Prisma.FieldRef<"FileVariants", 'String'>
+  readonly filePath: Prisma.FieldRef<"FileVariants", 'String'>
   readonly format: Prisma.FieldRef<"FileVariants", 'String'>
   readonly width: Prisma.FieldRef<"FileVariants", 'Int'>
   readonly height: Prisma.FieldRef<"FileVariants", 'Int'>

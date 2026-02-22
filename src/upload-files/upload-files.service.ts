@@ -1,7 +1,6 @@
 import {
   BadRequestException,
   Injectable,
-  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import * as fs from 'fs/promises';
@@ -16,14 +15,10 @@ import sharp from 'sharp';
 import { MFile } from '@/upload-files/libs/MFile';
 import type { Files, Folders } from '@db/__generated__/client';
 import { UploadFile } from '@/upload-files/entities/upload-file.entity';
-import argon2 from 'argon2';
 import crypto from 'crypto';
 import { encode } from 'blurhash';
-import { Prisma } from '@prisma/client';
 import { fileTypeFromBuffer } from 'file-type';
 import { VariantType } from '@db/__generated__/enums';
-// import { Prisma } from '@prisma/client/extension';
-import Extension = Prisma.Extension;
 import { IMAGE_FILE_TYPE, WEBP_EXTENSION } from '@/upload-files/libs/constants';
 
 @Injectable()
@@ -45,6 +40,7 @@ export class UploadFilesService {
         // Check duplication
         const existing = await tx.files.findFirst({
           where: { checksum },
+          include: { variants: true },
         });
 
         // if file exist
@@ -59,39 +55,38 @@ export class UploadFilesService {
           fileType,
           fileNameUUID,
           extension,
-          VariantType.ORIGINAL,
         );
         const absolutePath = path.join(process.cwd(), filePath);
-
-        console.log('filePath', filePath);
-        console.log('absolutePath', absolutePath);
 
         await fs.mkdir(path.dirname(absolutePath), { recursive: true });
         await fs.writeFile(absolutePath, file.buffer);
 
         // file info
         const stats = await fs.stat(absolutePath);
+        const metadata = await sharp(file.buffer).metadata();
 
         // collect uploaded file data
         const data = {
-          originalname: file.filename,
+          originalname: file.originalname.split('.').at(0),
           extension: extension ?? '',
           mimeType: file.mimetype,
           size: stats.size,
+          width: metadata.width,
+          height: metadata.height,
           checksum,
-          storageKey: filePath,
+          filePath: filePath,
           folderId,
           userId,
-          variants: {
-            create: [
-              {
-                type: VariantType.ORIGINAL,
-                storageKey: filePath,
-                format: extension ?? '',
-                size: +stats.size,
-              },
-            ],
-          },
+          // variants: {
+          //   create: [
+          //     {
+          //       type: VariantType.ORIGINAL,
+          //       filePath: filePath,
+          //       format: extension ?? '',
+          //       size: +stats.size,
+          //     },
+          //   ],
+          // },
         };
 
         if (isImage) {
@@ -106,12 +101,13 @@ export class UploadFilesService {
 
         // Create variants
         if (isImage) {
-          await this.createImageVariants(
+          await this.createImageVariants({
             tx,
-            originFile,
-            file.buffer,
+            file: originFile,
+            buffer: file.buffer,
+            metadata,
             fileNameUUID,
-          );
+          });
         }
 
         results.push(originFile);
@@ -121,11 +117,18 @@ export class UploadFilesService {
     });
   }
   async findAll(): Promise<Files[]> {
-    return await this.prismaService.files.findMany({ take: 10, skip: 0 });
+    return this.prismaService.files.findMany({
+      take: 10,
+      skip: 0,
+      include: { variants: true },
+    });
   }
 
   async findOne(id: string): Promise<Files> {
-    const file = await this.prismaService.files.findUnique({ where: { id } });
+    const file = await this.prismaService.files.findUnique({
+      where: { id },
+      include: { variants: true },
+    });
     if (!file) {
       throw new NotFoundException(`File not found, ID: ${id}`);
     }
@@ -149,26 +152,36 @@ export class UploadFilesService {
   async remove(id: string): Promise<IServiceResponse> {
     const file = await this.prismaService.files.findUnique({
       where: { id },
+      include: { variants: true },
     });
 
-    if (file) {
-      const filePath = this.getFilePath(file);
-      const isFileExist = await isFileExists(filePath);
+    if (!file) {
+      throw new NotFoundException(`File not found.`);
+    }
 
-      if (isFileExist) {
-        try {
-          await fs.unlink(filePath);
-        } catch (_) {
-          throw new NotFoundException(`File not exists: ${filePath}`);
+    const variantPaths = file.variants?.map((v) => v.filePath) ?? [];
+    const filePathList = [file.filePath, ...variantPaths].filter(Boolean);
+
+    for (const file of filePathList) {
+      if (file) {
+        const filePath = this.getFilePath(file);
+        const isFileExist = await isFileExists(filePath);
+
+        if (isFileExist) {
+          try {
+            await fs.unlink(filePath);
+          } catch (_) {
+            throw new NotFoundException(`File not exists: ${filePath}`);
+          }
         }
       }
-
-      await this.prismaService.files.delete({ where: { id } });
-      return {
-        message: `File with id=${id} has been deleted.`,
-      };
     }
-    throw new NotFoundException(`File not found: ${id}`);
+
+    await this.prismaService.files.delete({ where: { id } });
+
+    return {
+      message: `File with id=${id} has been deleted.`,
+    };
   }
 
   private convertToWebp(file: Buffer): Promise<Buffer> {
@@ -183,8 +196,8 @@ export class UploadFilesService {
     return extension.ext;
   }
 
-  private getFilePath(fileUrl): string {
-    return path.join(process.cwd(), fileUrl);
+  private getFilePath(filePath): string {
+    return path.join(process.cwd(), filePath);
   }
 
   private generateFilePath(
@@ -193,7 +206,7 @@ export class UploadFilesService {
     extension: string,
     variantType?: VariantType,
   ): string {
-    let path = `dist/uploads/${fileType}/${fileNameUUID}`;
+    let path = `uploads/${fileType}/${fileNameUUID}`;
 
     if (variantType) {
       path += `_${variantType}`;
@@ -223,13 +236,15 @@ export class UploadFilesService {
     return encode(new Uint8ClampedArray(data), info.width, info.height, 4, 4);
   }
 
-  private async createImageVariants(
-    tx: Prisma.TransactionClient,
-    file: Files,
-    buffer: Buffer,
+  private async createImageVariants({
+    tx,
+    file,
+    buffer,
+    metadata,
     fileNameUUID,
-  ) {
+  }) {
     const sizes = [
+      { type: VariantType.ORIGINAL, width: metadata.width },
       { type: VariantType.THUMBNAIL, width: 150 },
       { type: VariantType.SMALL, width: 400 },
       { type: VariantType.MEDIUM, width: 800 },
@@ -237,32 +252,38 @@ export class UploadFilesService {
     ];
 
     for (const variant of sizes) {
-      const resized = await sharp(buffer)
-        .resize({ width: variant.width })
-        .webp()
-        .toBuffer();
+      // dont create redundant thumbnails fot tiny files
+      if (variant.width > metadata.width) continue;
 
-      const storageKey = this.generateFilePath(
+      const pipeline = sharp(buffer)
+        .clone()
+        .resize({ width: variant.width, withoutEnlargement: true })
+        .webp({ quality: 82 });
+
+      const resizedMeta = await pipeline.metadata();
+      const resized = await pipeline.toBuffer();
+
+      const filePath = this.generateFilePath(
         IMAGE_FILE_TYPE,
         fileNameUUID,
         WEBP_EXTENSION,
         variant.type,
       );
 
-      const absolutePath = path.join(process.cwd(), storageKey);
-
+      const absolutePath = path.join(process.cwd(), filePath);
       await fs.writeFile(absolutePath, resized);
 
-      await tx.fileVariants.create({
-        data: {
-          fileId: file.id,
-          type: variant.type as any,
-          storageKey,
-          format: WEBP_EXTENSION,
-          width: variant.width,
-          size: resized.length,
-        },
-      });
+      const data = {
+        fileId: file.id,
+        type: variant.type,
+        format: WEBP_EXTENSION,
+
+        width: resizedMeta.width || variant.width,
+        height: resizedMeta.height,
+        size: resized.length,
+        filePath,
+      };
+      await tx.fileVariants.create({ data });
     }
   }
 }

@@ -201,13 +201,6 @@ export type EnumTokenTypeWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumTokenTypeFilter<$PrismaModel>
 }
 
-export type EnumVariantTypeFilter<$PrismaModel = never> = {
-  equals?: $Enums.VariantType | Prisma.EnumVariantTypeFieldRefInput<$PrismaModel>
-  in?: $Enums.VariantType[] | Prisma.ListEnumVariantTypeFieldRefInput<$PrismaModel>
-  notIn?: $Enums.VariantType[] | Prisma.ListEnumVariantTypeFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumVariantTypeFilter<$PrismaModel> | $Enums.VariantType
-}
-
 export type IntNullableFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel> | null
   in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel> | null
@@ -217,16 +210,6 @@ export type IntNullableFilter<$PrismaModel = never> = {
   gt?: number | Prisma.IntFieldRefInput<$PrismaModel>
   gte?: number | Prisma.IntFieldRefInput<$PrismaModel>
   not?: Prisma.NestedIntNullableFilter<$PrismaModel> | number | null
-}
-
-export type EnumVariantTypeWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.VariantType | Prisma.EnumVariantTypeFieldRefInput<$PrismaModel>
-  in?: $Enums.VariantType[] | Prisma.ListEnumVariantTypeFieldRefInput<$PrismaModel>
-  notIn?: $Enums.VariantType[] | Prisma.ListEnumVariantTypeFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumVariantTypeWithAggregatesFilter<$PrismaModel> | $Enums.VariantType
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumVariantTypeFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumVariantTypeFilter<$PrismaModel>
 }
 
 export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -243,6 +226,23 @@ export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
   _sum?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _max?: Prisma.NestedIntNullableFilter<$PrismaModel>
+}
+
+export type EnumVariantTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.VariantType | Prisma.EnumVariantTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.VariantType[] | Prisma.ListEnumVariantTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.VariantType[] | Prisma.ListEnumVariantTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumVariantTypeFilter<$PrismaModel> | $Enums.VariantType
+}
+
+export type EnumVariantTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.VariantType | Prisma.EnumVariantTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.VariantType[] | Prisma.ListEnumVariantTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.VariantType[] | Prisma.ListEnumVariantTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumVariantTypeWithAggregatesFilter<$PrismaModel> | $Enums.VariantType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumVariantTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumVariantTypeFilter<$PrismaModel>
 }
 
 export type NestedStringFilter<$PrismaModel = never> = {
@@ -445,23 +445,6 @@ export type NestedEnumTokenTypeWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumTokenTypeFilter<$PrismaModel>
 }
 
-export type NestedEnumVariantTypeFilter<$PrismaModel = never> = {
-  equals?: $Enums.VariantType | Prisma.EnumVariantTypeFieldRefInput<$PrismaModel>
-  in?: $Enums.VariantType[] | Prisma.ListEnumVariantTypeFieldRefInput<$PrismaModel>
-  notIn?: $Enums.VariantType[] | Prisma.ListEnumVariantTypeFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumVariantTypeFilter<$PrismaModel> | $Enums.VariantType
-}
-
-export type NestedEnumVariantTypeWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.VariantType | Prisma.EnumVariantTypeFieldRefInput<$PrismaModel>
-  in?: $Enums.VariantType[] | Prisma.ListEnumVariantTypeFieldRefInput<$PrismaModel>
-  notIn?: $Enums.VariantType[] | Prisma.ListEnumVariantTypeFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumVariantTypeWithAggregatesFilter<$PrismaModel> | $Enums.VariantType
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumVariantTypeFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumVariantTypeFilter<$PrismaModel>
-}
-
 export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel> | null
   in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel> | null
@@ -487,6 +470,23 @@ export type NestedFloatNullableFilter<$PrismaModel = never> = {
   gt?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   gte?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   not?: Prisma.NestedFloatNullableFilter<$PrismaModel> | number | null
+}
+
+export type NestedEnumVariantTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.VariantType | Prisma.EnumVariantTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.VariantType[] | Prisma.ListEnumVariantTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.VariantType[] | Prisma.ListEnumVariantTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumVariantTypeFilter<$PrismaModel> | $Enums.VariantType
+}
+
+export type NestedEnumVariantTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.VariantType | Prisma.EnumVariantTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.VariantType[] | Prisma.ListEnumVariantTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.VariantType[] | Prisma.ListEnumVariantTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumVariantTypeWithAggregatesFilter<$PrismaModel> | $Enums.VariantType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumVariantTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumVariantTypeFilter<$PrismaModel>
 }
 
 

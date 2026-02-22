@@ -28,10 +28,14 @@ export type AggregateFiles = {
 
 export type FilesAvgAggregateOutputType = {
   size: number | null
+  width: number | null
+  height: number | null
 }
 
 export type FilesSumAggregateOutputType = {
   size: number | null
+  width: number | null
+  height: number | null
 }
 
 export type FilesMinAggregateOutputType = {
@@ -40,13 +44,15 @@ export type FilesMinAggregateOutputType = {
   extension: string | null
   mimeType: string | null
   size: number | null
+  width: number | null
+  height: number | null
   checksum: string | null
   blurhash: string | null
   dominantColor: string | null
-  storageKey: string | null
+  filePath: string | null
   folderId: string | null
   userId: string | null
-  isPrivate: boolean | null
+  isPublic: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -57,13 +63,15 @@ export type FilesMaxAggregateOutputType = {
   extension: string | null
   mimeType: string | null
   size: number | null
+  width: number | null
+  height: number | null
   checksum: string | null
   blurhash: string | null
   dominantColor: string | null
-  storageKey: string | null
+  filePath: string | null
   folderId: string | null
   userId: string | null
-  isPrivate: boolean | null
+  isPublic: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -74,13 +82,15 @@ export type FilesCountAggregateOutputType = {
   extension: number
   mimeType: number
   size: number
+  width: number
+  height: number
   checksum: number
   blurhash: number
   dominantColor: number
-  storageKey: number
+  filePath: number
   folderId: number
   userId: number
-  isPrivate: number
+  isPublic: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -89,10 +99,14 @@ export type FilesCountAggregateOutputType = {
 
 export type FilesAvgAggregateInputType = {
   size?: true
+  width?: true
+  height?: true
 }
 
 export type FilesSumAggregateInputType = {
   size?: true
+  width?: true
+  height?: true
 }
 
 export type FilesMinAggregateInputType = {
@@ -101,13 +115,15 @@ export type FilesMinAggregateInputType = {
   extension?: true
   mimeType?: true
   size?: true
+  width?: true
+  height?: true
   checksum?: true
   blurhash?: true
   dominantColor?: true
-  storageKey?: true
+  filePath?: true
   folderId?: true
   userId?: true
-  isPrivate?: true
+  isPublic?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -118,13 +134,15 @@ export type FilesMaxAggregateInputType = {
   extension?: true
   mimeType?: true
   size?: true
+  width?: true
+  height?: true
   checksum?: true
   blurhash?: true
   dominantColor?: true
-  storageKey?: true
+  filePath?: true
   folderId?: true
   userId?: true
-  isPrivate?: true
+  isPublic?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -135,13 +153,15 @@ export type FilesCountAggregateInputType = {
   extension?: true
   mimeType?: true
   size?: true
+  width?: true
+  height?: true
   checksum?: true
   blurhash?: true
   dominantColor?: true
-  storageKey?: true
+  filePath?: true
   folderId?: true
   userId?: true
-  isPrivate?: true
+  isPublic?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -239,13 +259,15 @@ export type FilesGroupByOutputType = {
   extension: string
   mimeType: string
   size: number
+  width: number | null
+  height: number | null
   checksum: string | null
   blurhash: string | null
   dominantColor: string | null
-  storageKey: string
+  filePath: string
   folderId: string | null
   userId: string
-  isPrivate: boolean
+  isPublic: boolean
   createdAt: Date
   updatedAt: Date
   _count: FilesCountAggregateOutputType | null
@@ -279,13 +301,15 @@ export type FilesWhereInput = {
   extension?: Prisma.StringFilter<"Files"> | string
   mimeType?: Prisma.StringFilter<"Files"> | string
   size?: Prisma.IntFilter<"Files"> | number
+  width?: Prisma.IntNullableFilter<"Files"> | number | null
+  height?: Prisma.IntNullableFilter<"Files"> | number | null
   checksum?: Prisma.StringNullableFilter<"Files"> | string | null
   blurhash?: Prisma.StringNullableFilter<"Files"> | string | null
   dominantColor?: Prisma.StringNullableFilter<"Files"> | string | null
-  storageKey?: Prisma.StringFilter<"Files"> | string
+  filePath?: Prisma.StringFilter<"Files"> | string
   folderId?: Prisma.StringNullableFilter<"Files"> | string | null
   userId?: Prisma.StringFilter<"Files"> | string
-  isPrivate?: Prisma.BoolFilter<"Files"> | boolean
+  isPublic?: Prisma.BoolFilter<"Files"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Files"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Files"> | Date | string
   folder?: Prisma.XOR<Prisma.FoldersNullableScalarRelationFilter, Prisma.FoldersWhereInput> | null
@@ -299,13 +323,15 @@ export type FilesOrderByWithRelationInput = {
   extension?: Prisma.SortOrder
   mimeType?: Prisma.SortOrder
   size?: Prisma.SortOrder
+  width?: Prisma.SortOrderInput | Prisma.SortOrder
+  height?: Prisma.SortOrderInput | Prisma.SortOrder
   checksum?: Prisma.SortOrderInput | Prisma.SortOrder
   blurhash?: Prisma.SortOrderInput | Prisma.SortOrder
   dominantColor?: Prisma.SortOrderInput | Prisma.SortOrder
-  storageKey?: Prisma.SortOrder
+  filePath?: Prisma.SortOrder
   folderId?: Prisma.SortOrderInput | Prisma.SortOrder
   userId?: Prisma.SortOrder
-  isPrivate?: Prisma.SortOrder
+  isPublic?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   folder?: Prisma.FoldersOrderByWithRelationInput
@@ -315,7 +341,7 @@ export type FilesOrderByWithRelationInput = {
 
 export type FilesWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  storageKey?: string
+  filePath?: string
   AND?: Prisma.FilesWhereInput | Prisma.FilesWhereInput[]
   OR?: Prisma.FilesWhereInput[]
   NOT?: Prisma.FilesWhereInput | Prisma.FilesWhereInput[]
@@ -323,18 +349,20 @@ export type FilesWhereUniqueInput = Prisma.AtLeast<{
   extension?: Prisma.StringFilter<"Files"> | string
   mimeType?: Prisma.StringFilter<"Files"> | string
   size?: Prisma.IntFilter<"Files"> | number
+  width?: Prisma.IntNullableFilter<"Files"> | number | null
+  height?: Prisma.IntNullableFilter<"Files"> | number | null
   checksum?: Prisma.StringNullableFilter<"Files"> | string | null
   blurhash?: Prisma.StringNullableFilter<"Files"> | string | null
   dominantColor?: Prisma.StringNullableFilter<"Files"> | string | null
   folderId?: Prisma.StringNullableFilter<"Files"> | string | null
   userId?: Prisma.StringFilter<"Files"> | string
-  isPrivate?: Prisma.BoolFilter<"Files"> | boolean
+  isPublic?: Prisma.BoolFilter<"Files"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Files"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Files"> | Date | string
   folder?: Prisma.XOR<Prisma.FoldersNullableScalarRelationFilter, Prisma.FoldersWhereInput> | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   variants?: Prisma.FileVariantsListRelationFilter
-}, "id" | "storageKey">
+}, "id" | "filePath">
 
 export type FilesOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -342,13 +370,15 @@ export type FilesOrderByWithAggregationInput = {
   extension?: Prisma.SortOrder
   mimeType?: Prisma.SortOrder
   size?: Prisma.SortOrder
+  width?: Prisma.SortOrderInput | Prisma.SortOrder
+  height?: Prisma.SortOrderInput | Prisma.SortOrder
   checksum?: Prisma.SortOrderInput | Prisma.SortOrder
   blurhash?: Prisma.SortOrderInput | Prisma.SortOrder
   dominantColor?: Prisma.SortOrderInput | Prisma.SortOrder
-  storageKey?: Prisma.SortOrder
+  filePath?: Prisma.SortOrder
   folderId?: Prisma.SortOrderInput | Prisma.SortOrder
   userId?: Prisma.SortOrder
-  isPrivate?: Prisma.SortOrder
+  isPublic?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.FilesCountOrderByAggregateInput
@@ -367,13 +397,15 @@ export type FilesScalarWhereWithAggregatesInput = {
   extension?: Prisma.StringWithAggregatesFilter<"Files"> | string
   mimeType?: Prisma.StringWithAggregatesFilter<"Files"> | string
   size?: Prisma.IntWithAggregatesFilter<"Files"> | number
+  width?: Prisma.IntNullableWithAggregatesFilter<"Files"> | number | null
+  height?: Prisma.IntNullableWithAggregatesFilter<"Files"> | number | null
   checksum?: Prisma.StringNullableWithAggregatesFilter<"Files"> | string | null
   blurhash?: Prisma.StringNullableWithAggregatesFilter<"Files"> | string | null
   dominantColor?: Prisma.StringNullableWithAggregatesFilter<"Files"> | string | null
-  storageKey?: Prisma.StringWithAggregatesFilter<"Files"> | string
+  filePath?: Prisma.StringWithAggregatesFilter<"Files"> | string
   folderId?: Prisma.StringNullableWithAggregatesFilter<"Files"> | string | null
   userId?: Prisma.StringWithAggregatesFilter<"Files"> | string
-  isPrivate?: Prisma.BoolWithAggregatesFilter<"Files"> | boolean
+  isPublic?: Prisma.BoolWithAggregatesFilter<"Files"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Files"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Files"> | Date | string
 }
@@ -384,11 +416,13 @@ export type FilesCreateInput = {
   extension?: string
   mimeType: string
   size: number
+  width?: number | null
+  height?: number | null
   checksum?: string | null
   blurhash?: string | null
   dominantColor?: string | null
-  storageKey: string
-  isPrivate?: boolean
+  filePath: string
+  isPublic?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   folder?: Prisma.FoldersCreateNestedOneWithoutFilesInput
@@ -402,13 +436,15 @@ export type FilesUncheckedCreateInput = {
   extension?: string
   mimeType: string
   size: number
+  width?: number | null
+  height?: number | null
   checksum?: string | null
   blurhash?: string | null
   dominantColor?: string | null
-  storageKey: string
+  filePath: string
   folderId?: string | null
   userId: string
-  isPrivate?: boolean
+  isPublic?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   variants?: Prisma.FileVariantsUncheckedCreateNestedManyWithoutFileInput
@@ -420,11 +456,13 @@ export type FilesUpdateInput = {
   extension?: Prisma.StringFieldUpdateOperationsInput | string
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.IntFieldUpdateOperationsInput | number
+  width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   blurhash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dominantColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  storageKey?: Prisma.StringFieldUpdateOperationsInput | string
-  isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  filePath?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   folder?: Prisma.FoldersUpdateOneWithoutFilesNestedInput
@@ -438,13 +476,15 @@ export type FilesUncheckedUpdateInput = {
   extension?: Prisma.StringFieldUpdateOperationsInput | string
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.IntFieldUpdateOperationsInput | number
+  width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   blurhash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dominantColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  storageKey?: Prisma.StringFieldUpdateOperationsInput | string
+  filePath?: Prisma.StringFieldUpdateOperationsInput | string
   folderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   variants?: Prisma.FileVariantsUncheckedUpdateManyWithoutFileNestedInput
@@ -456,13 +496,15 @@ export type FilesCreateManyInput = {
   extension?: string
   mimeType: string
   size: number
+  width?: number | null
+  height?: number | null
   checksum?: string | null
   blurhash?: string | null
   dominantColor?: string | null
-  storageKey: string
+  filePath: string
   folderId?: string | null
   userId: string
-  isPrivate?: boolean
+  isPublic?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -473,11 +515,13 @@ export type FilesUpdateManyMutationInput = {
   extension?: Prisma.StringFieldUpdateOperationsInput | string
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.IntFieldUpdateOperationsInput | number
+  width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   blurhash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dominantColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  storageKey?: Prisma.StringFieldUpdateOperationsInput | string
-  isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  filePath?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -488,13 +532,15 @@ export type FilesUncheckedUpdateManyInput = {
   extension?: Prisma.StringFieldUpdateOperationsInput | string
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.IntFieldUpdateOperationsInput | number
+  width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   blurhash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dominantColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  storageKey?: Prisma.StringFieldUpdateOperationsInput | string
+  filePath?: Prisma.StringFieldUpdateOperationsInput | string
   folderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -515,19 +561,23 @@ export type FilesCountOrderByAggregateInput = {
   extension?: Prisma.SortOrder
   mimeType?: Prisma.SortOrder
   size?: Prisma.SortOrder
+  width?: Prisma.SortOrder
+  height?: Prisma.SortOrder
   checksum?: Prisma.SortOrder
   blurhash?: Prisma.SortOrder
   dominantColor?: Prisma.SortOrder
-  storageKey?: Prisma.SortOrder
+  filePath?: Prisma.SortOrder
   folderId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  isPrivate?: Prisma.SortOrder
+  isPublic?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type FilesAvgOrderByAggregateInput = {
   size?: Prisma.SortOrder
+  width?: Prisma.SortOrder
+  height?: Prisma.SortOrder
 }
 
 export type FilesMaxOrderByAggregateInput = {
@@ -536,13 +586,15 @@ export type FilesMaxOrderByAggregateInput = {
   extension?: Prisma.SortOrder
   mimeType?: Prisma.SortOrder
   size?: Prisma.SortOrder
+  width?: Prisma.SortOrder
+  height?: Prisma.SortOrder
   checksum?: Prisma.SortOrder
   blurhash?: Prisma.SortOrder
   dominantColor?: Prisma.SortOrder
-  storageKey?: Prisma.SortOrder
+  filePath?: Prisma.SortOrder
   folderId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  isPrivate?: Prisma.SortOrder
+  isPublic?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -553,19 +605,23 @@ export type FilesMinOrderByAggregateInput = {
   extension?: Prisma.SortOrder
   mimeType?: Prisma.SortOrder
   size?: Prisma.SortOrder
+  width?: Prisma.SortOrder
+  height?: Prisma.SortOrder
   checksum?: Prisma.SortOrder
   blurhash?: Prisma.SortOrder
   dominantColor?: Prisma.SortOrder
-  storageKey?: Prisma.SortOrder
+  filePath?: Prisma.SortOrder
   folderId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  isPrivate?: Prisma.SortOrder
+  isPublic?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type FilesSumOrderByAggregateInput = {
   size?: Prisma.SortOrder
+  width?: Prisma.SortOrder
+  height?: Prisma.SortOrder
 }
 
 export type FilesScalarRelationFilter = {
@@ -657,6 +713,14 @@ export type FilesUncheckedUpdateManyWithoutFolderNestedInput = {
   deleteMany?: Prisma.FilesScalarWhereInput | Prisma.FilesScalarWhereInput[]
 }
 
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type FilesCreateNestedOneWithoutVariantsInput = {
   create?: Prisma.XOR<Prisma.FilesCreateWithoutVariantsInput, Prisma.FilesUncheckedCreateWithoutVariantsInput>
   connectOrCreate?: Prisma.FilesCreateOrConnectWithoutVariantsInput
@@ -677,11 +741,13 @@ export type FilesCreateWithoutUserInput = {
   extension?: string
   mimeType: string
   size: number
+  width?: number | null
+  height?: number | null
   checksum?: string | null
   blurhash?: string | null
   dominantColor?: string | null
-  storageKey: string
-  isPrivate?: boolean
+  filePath: string
+  isPublic?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   folder?: Prisma.FoldersCreateNestedOneWithoutFilesInput
@@ -694,12 +760,14 @@ export type FilesUncheckedCreateWithoutUserInput = {
   extension?: string
   mimeType: string
   size: number
+  width?: number | null
+  height?: number | null
   checksum?: string | null
   blurhash?: string | null
   dominantColor?: string | null
-  storageKey: string
+  filePath: string
   folderId?: string | null
-  isPrivate?: boolean
+  isPublic?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   variants?: Prisma.FileVariantsUncheckedCreateNestedManyWithoutFileInput
@@ -740,13 +808,15 @@ export type FilesScalarWhereInput = {
   extension?: Prisma.StringFilter<"Files"> | string
   mimeType?: Prisma.StringFilter<"Files"> | string
   size?: Prisma.IntFilter<"Files"> | number
+  width?: Prisma.IntNullableFilter<"Files"> | number | null
+  height?: Prisma.IntNullableFilter<"Files"> | number | null
   checksum?: Prisma.StringNullableFilter<"Files"> | string | null
   blurhash?: Prisma.StringNullableFilter<"Files"> | string | null
   dominantColor?: Prisma.StringNullableFilter<"Files"> | string | null
-  storageKey?: Prisma.StringFilter<"Files"> | string
+  filePath?: Prisma.StringFilter<"Files"> | string
   folderId?: Prisma.StringNullableFilter<"Files"> | string | null
   userId?: Prisma.StringFilter<"Files"> | string
-  isPrivate?: Prisma.BoolFilter<"Files"> | boolean
+  isPublic?: Prisma.BoolFilter<"Files"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Files"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Files"> | Date | string
 }
@@ -757,11 +827,13 @@ export type FilesCreateWithoutFolderInput = {
   extension?: string
   mimeType: string
   size: number
+  width?: number | null
+  height?: number | null
   checksum?: string | null
   blurhash?: string | null
   dominantColor?: string | null
-  storageKey: string
-  isPrivate?: boolean
+  filePath: string
+  isPublic?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutFilesInput
@@ -774,12 +846,14 @@ export type FilesUncheckedCreateWithoutFolderInput = {
   extension?: string
   mimeType: string
   size: number
+  width?: number | null
+  height?: number | null
   checksum?: string | null
   blurhash?: string | null
   dominantColor?: string | null
-  storageKey: string
+  filePath: string
   userId: string
-  isPrivate?: boolean
+  isPublic?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   variants?: Prisma.FileVariantsUncheckedCreateNestedManyWithoutFileInput
@@ -817,11 +891,13 @@ export type FilesCreateWithoutVariantsInput = {
   extension?: string
   mimeType: string
   size: number
+  width?: number | null
+  height?: number | null
   checksum?: string | null
   blurhash?: string | null
   dominantColor?: string | null
-  storageKey: string
-  isPrivate?: boolean
+  filePath: string
+  isPublic?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   folder?: Prisma.FoldersCreateNestedOneWithoutFilesInput
@@ -834,13 +910,15 @@ export type FilesUncheckedCreateWithoutVariantsInput = {
   extension?: string
   mimeType: string
   size: number
+  width?: number | null
+  height?: number | null
   checksum?: string | null
   blurhash?: string | null
   dominantColor?: string | null
-  storageKey: string
+  filePath: string
   folderId?: string | null
   userId: string
-  isPrivate?: boolean
+  isPublic?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -867,11 +945,13 @@ export type FilesUpdateWithoutVariantsInput = {
   extension?: Prisma.StringFieldUpdateOperationsInput | string
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.IntFieldUpdateOperationsInput | number
+  width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   blurhash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dominantColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  storageKey?: Prisma.StringFieldUpdateOperationsInput | string
-  isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  filePath?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   folder?: Prisma.FoldersUpdateOneWithoutFilesNestedInput
@@ -884,13 +964,15 @@ export type FilesUncheckedUpdateWithoutVariantsInput = {
   extension?: Prisma.StringFieldUpdateOperationsInput | string
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.IntFieldUpdateOperationsInput | number
+  width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   blurhash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dominantColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  storageKey?: Prisma.StringFieldUpdateOperationsInput | string
+  filePath?: Prisma.StringFieldUpdateOperationsInput | string
   folderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -901,12 +983,14 @@ export type FilesCreateManyUserInput = {
   extension?: string
   mimeType: string
   size: number
+  width?: number | null
+  height?: number | null
   checksum?: string | null
   blurhash?: string | null
   dominantColor?: string | null
-  storageKey: string
+  filePath: string
   folderId?: string | null
-  isPrivate?: boolean
+  isPublic?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -917,11 +1001,13 @@ export type FilesUpdateWithoutUserInput = {
   extension?: Prisma.StringFieldUpdateOperationsInput | string
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.IntFieldUpdateOperationsInput | number
+  width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   blurhash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dominantColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  storageKey?: Prisma.StringFieldUpdateOperationsInput | string
-  isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  filePath?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   folder?: Prisma.FoldersUpdateOneWithoutFilesNestedInput
@@ -934,12 +1020,14 @@ export type FilesUncheckedUpdateWithoutUserInput = {
   extension?: Prisma.StringFieldUpdateOperationsInput | string
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.IntFieldUpdateOperationsInput | number
+  width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   blurhash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dominantColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  storageKey?: Prisma.StringFieldUpdateOperationsInput | string
+  filePath?: Prisma.StringFieldUpdateOperationsInput | string
   folderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   variants?: Prisma.FileVariantsUncheckedUpdateManyWithoutFileNestedInput
@@ -951,12 +1039,14 @@ export type FilesUncheckedUpdateManyWithoutUserInput = {
   extension?: Prisma.StringFieldUpdateOperationsInput | string
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.IntFieldUpdateOperationsInput | number
+  width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   blurhash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dominantColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  storageKey?: Prisma.StringFieldUpdateOperationsInput | string
+  filePath?: Prisma.StringFieldUpdateOperationsInput | string
   folderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -967,12 +1057,14 @@ export type FilesCreateManyFolderInput = {
   extension?: string
   mimeType: string
   size: number
+  width?: number | null
+  height?: number | null
   checksum?: string | null
   blurhash?: string | null
   dominantColor?: string | null
-  storageKey: string
+  filePath: string
   userId: string
-  isPrivate?: boolean
+  isPublic?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -983,11 +1075,13 @@ export type FilesUpdateWithoutFolderInput = {
   extension?: Prisma.StringFieldUpdateOperationsInput | string
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.IntFieldUpdateOperationsInput | number
+  width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   blurhash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dominantColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  storageKey?: Prisma.StringFieldUpdateOperationsInput | string
-  isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  filePath?: Prisma.StringFieldUpdateOperationsInput | string
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutFilesNestedInput
@@ -1000,12 +1094,14 @@ export type FilesUncheckedUpdateWithoutFolderInput = {
   extension?: Prisma.StringFieldUpdateOperationsInput | string
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.IntFieldUpdateOperationsInput | number
+  width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   blurhash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dominantColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  storageKey?: Prisma.StringFieldUpdateOperationsInput | string
+  filePath?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   variants?: Prisma.FileVariantsUncheckedUpdateManyWithoutFileNestedInput
@@ -1017,12 +1113,14 @@ export type FilesUncheckedUpdateManyWithoutFolderInput = {
   extension?: Prisma.StringFieldUpdateOperationsInput | string
   mimeType?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.IntFieldUpdateOperationsInput | number
+  width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   checksum?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   blurhash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dominantColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  storageKey?: Prisma.StringFieldUpdateOperationsInput | string
+  filePath?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPublic?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1064,13 +1162,15 @@ export type FilesSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   extension?: boolean
   mimeType?: boolean
   size?: boolean
+  width?: boolean
+  height?: boolean
   checksum?: boolean
   blurhash?: boolean
   dominantColor?: boolean
-  storageKey?: boolean
+  filePath?: boolean
   folderId?: boolean
   userId?: boolean
-  isPrivate?: boolean
+  isPublic?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   folder?: boolean | Prisma.Files$folderArgs<ExtArgs>
@@ -1085,13 +1185,15 @@ export type FilesSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   extension?: boolean
   mimeType?: boolean
   size?: boolean
+  width?: boolean
+  height?: boolean
   checksum?: boolean
   blurhash?: boolean
   dominantColor?: boolean
-  storageKey?: boolean
+  filePath?: boolean
   folderId?: boolean
   userId?: boolean
-  isPrivate?: boolean
+  isPublic?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   folder?: boolean | Prisma.Files$folderArgs<ExtArgs>
@@ -1104,13 +1206,15 @@ export type FilesSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   extension?: boolean
   mimeType?: boolean
   size?: boolean
+  width?: boolean
+  height?: boolean
   checksum?: boolean
   blurhash?: boolean
   dominantColor?: boolean
-  storageKey?: boolean
+  filePath?: boolean
   folderId?: boolean
   userId?: boolean
-  isPrivate?: boolean
+  isPublic?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   folder?: boolean | Prisma.Files$folderArgs<ExtArgs>
@@ -1123,18 +1227,20 @@ export type FilesSelectScalar = {
   extension?: boolean
   mimeType?: boolean
   size?: boolean
+  width?: boolean
+  height?: boolean
   checksum?: boolean
   blurhash?: boolean
   dominantColor?: boolean
-  storageKey?: boolean
+  filePath?: boolean
   folderId?: boolean
   userId?: boolean
-  isPrivate?: boolean
+  isPublic?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type FilesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "originalname" | "extension" | "mimeType" | "size" | "checksum" | "blurhash" | "dominantColor" | "storageKey" | "folderId" | "userId" | "isPrivate" | "createdAt" | "updatedAt", ExtArgs["result"]["files"]>
+export type FilesOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "originalname" | "extension" | "mimeType" | "size" | "width" | "height" | "checksum" | "blurhash" | "dominantColor" | "filePath" | "folderId" | "userId" | "isPublic" | "createdAt" | "updatedAt", ExtArgs["result"]["files"]>
 export type FilesInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   folder?: boolean | Prisma.Files$folderArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1163,13 +1269,15 @@ export type $FilesPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     extension: string
     mimeType: string
     size: number
+    width: number | null
+    height: number | null
     checksum: string | null
     blurhash: string | null
     dominantColor: string | null
-    storageKey: string
+    filePath: string
     folderId: string | null
     userId: string
-    isPrivate: boolean
+    isPublic: boolean
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["files"]>
@@ -1603,13 +1711,15 @@ export interface FilesFieldRefs {
   readonly extension: Prisma.FieldRef<"Files", 'String'>
   readonly mimeType: Prisma.FieldRef<"Files", 'String'>
   readonly size: Prisma.FieldRef<"Files", 'Int'>
+  readonly width: Prisma.FieldRef<"Files", 'Int'>
+  readonly height: Prisma.FieldRef<"Files", 'Int'>
   readonly checksum: Prisma.FieldRef<"Files", 'String'>
   readonly blurhash: Prisma.FieldRef<"Files", 'String'>
   readonly dominantColor: Prisma.FieldRef<"Files", 'String'>
-  readonly storageKey: Prisma.FieldRef<"Files", 'String'>
+  readonly filePath: Prisma.FieldRef<"Files", 'String'>
   readonly folderId: Prisma.FieldRef<"Files", 'String'>
   readonly userId: Prisma.FieldRef<"Files", 'String'>
-  readonly isPrivate: Prisma.FieldRef<"Files", 'Boolean'>
+  readonly isPublic: Prisma.FieldRef<"Files", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Files", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Files", 'DateTime'>
 }

@@ -331,7 +331,7 @@ export type UserCreateInput = {
   method: $Enums.AuthMethod
   createdAt?: Date | string
   updatedAt?: Date | string
-  posts?: Prisma.PostCreateNestedManyWithoutAuthorInput
+  posts?: Prisma.PostCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   files?: Prisma.FilesCreateNestedManyWithoutUserInput
 }
@@ -349,7 +349,7 @@ export type UserUncheckedCreateInput = {
   method: $Enums.AuthMethod
   createdAt?: Date | string
   updatedAt?: Date | string
-  posts?: Prisma.PostUncheckedCreateNestedManyWithoutAuthorInput
+  posts?: Prisma.PostUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   files?: Prisma.FilesUncheckedCreateNestedManyWithoutUserInput
 }
@@ -367,7 +367,7 @@ export type UserUpdateInput = {
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  posts?: Prisma.PostUpdateManyWithoutAuthorNestedInput
+  posts?: Prisma.PostUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   files?: Prisma.FilesUpdateManyWithoutUserNestedInput
 }
@@ -385,7 +385,7 @@ export type UserUncheckedUpdateInput = {
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  posts?: Prisma.PostUncheckedUpdateManyWithoutAuthorNestedInput
+  posts?: Prisma.PostUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   files?: Prisma.FilesUncheckedUpdateManyWithoutUserNestedInput
 }
@@ -564,7 +564,7 @@ export type UserCreateWithoutAccountsInput = {
   method: $Enums.AuthMethod
   createdAt?: Date | string
   updatedAt?: Date | string
-  posts?: Prisma.PostCreateNestedManyWithoutAuthorInput
+  posts?: Prisma.PostCreateNestedManyWithoutUserInput
   files?: Prisma.FilesCreateNestedManyWithoutUserInput
 }
 
@@ -581,7 +581,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   method: $Enums.AuthMethod
   createdAt?: Date | string
   updatedAt?: Date | string
-  posts?: Prisma.PostUncheckedCreateNestedManyWithoutAuthorInput
+  posts?: Prisma.PostUncheckedCreateNestedManyWithoutUserInput
   files?: Prisma.FilesUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -614,7 +614,7 @@ export type UserUpdateWithoutAccountsInput = {
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  posts?: Prisma.PostUpdateManyWithoutAuthorNestedInput
+  posts?: Prisma.PostUpdateManyWithoutUserNestedInput
   files?: Prisma.FilesUpdateManyWithoutUserNestedInput
 }
 
@@ -631,7 +631,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  posts?: Prisma.PostUncheckedUpdateManyWithoutAuthorNestedInput
+  posts?: Prisma.PostUncheckedUpdateManyWithoutUserNestedInput
   files?: Prisma.FilesUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -732,7 +732,7 @@ export type UserCreateWithoutFilesInput = {
   method: $Enums.AuthMethod
   createdAt?: Date | string
   updatedAt?: Date | string
-  posts?: Prisma.PostCreateNestedManyWithoutAuthorInput
+  posts?: Prisma.PostCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
 }
 
@@ -749,7 +749,7 @@ export type UserUncheckedCreateWithoutFilesInput = {
   method: $Enums.AuthMethod
   createdAt?: Date | string
   updatedAt?: Date | string
-  posts?: Prisma.PostUncheckedCreateNestedManyWithoutAuthorInput
+  posts?: Prisma.PostUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -782,7 +782,7 @@ export type UserUpdateWithoutFilesInput = {
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  posts?: Prisma.PostUpdateManyWithoutAuthorNestedInput
+  posts?: Prisma.PostUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
 }
 
@@ -799,7 +799,7 @@ export type UserUncheckedUpdateWithoutFilesInput = {
   method?: Prisma.EnumAuthMethodFieldUpdateOperationsInput | $Enums.AuthMethod
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  posts?: Prisma.PostUncheckedUpdateManyWithoutAuthorNestedInput
+  posts?: Prisma.PostUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
 }
 

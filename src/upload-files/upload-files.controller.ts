@@ -30,7 +30,7 @@ export class UploadFilesController {
     status: 201,
     description: 'Upload files, and link them with user.',
   })
-  @Authorization('ADMIN')
+  @Authorization()
   @HttpCode(HttpStatus.OK)
   @UseInterceptors(FilesInterceptor('files'))
   @Post()
@@ -39,7 +39,6 @@ export class UploadFilesController {
     @Authorized('id') userId: string,
     @Body('folder') folderId?: string,
   ) {
-    // console.log(files);
     return this.uploadFilesService.create(files, userId, folderId);
   }
 
