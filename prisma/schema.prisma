@@ -30,7 +30,7 @@ model User {
 
   method   AuthMethod
   accounts Account[]
-  files Files[]
+  files    Files[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -83,30 +83,101 @@ model Post {
   @@map("posts")
 }
 
-// TODO add trees like folder structure
-// model Folders {
-//
-//   @@map("folders")
+model Folders {
+  id   String @id @default(uuid())
+  name String
+
+  // it`s not useful when user change parrent folder, as it`s forsed us to update path for all childrens
+  // path String @unique 
+
+  parentId String?
+  parent   Folders?  @relation("Tree", fields: [parentId], references: [id])
+  children Folders[] @relation("Tree")
+
+  files Files[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("folders")
+}
+
+// TODO: implement access control for folders (e.g., read, write, admin)
+// model FolderAccess {
+//   id String @id @default(uuid())
+
+//   folderId String
+//   userId   String
+//   role     String
 // }
 
 model Files {
-  id            String @id @default(uuid())
-  url           String @unique
-  originalname  String
-  name          String @unique
-  mimetype      String
+  id           String @id @default(uuid())
+  originalname String @default("")
+  extension    String @default("")
+  mimeType     String
+  size         Int
 
-  meta        Json
+  checksum      String? // for prevent duplication
+  blurhash      String? // for preview
+  dominantColor String? // for filteryng by main color
 
-  user        User @relation(fields: [userId], references: [id])
-  userId      String
+  storageKey    String @unique @map("origin_file") // path to original image
 
-  isPrivate   Boolean @default(false) @map("is_private")
+  // TODO: implement background processing for files (e.g., generating variants, extracting metadata)
+  // processingStatus FileProcessingStatus @default(PENDING)
 
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  folderId String?
+  folder   Folders? @relation(fields: [folderId], references: [id], onDelete: SetNull)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  isPrivate Boolean @default(true)
+
+  variants FileVariants[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("files")
+}
+
+model FileVariants {
+  id String @id @default(uuid())
+
+  fileId String
+  file   Files  @relation(fields: [fileId], references: [id], onDelete: Cascade)
+
+  type       VariantType
+  storageKey String      @unique // path to variant
+
+  format String // webp, jpg, png
+  width  Int?
+  height Int?
+  size   Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("file_variants")
+}
+
+// TODO: implement background processing for files (e.g., generating variants, extracting metadata)
+// enum FileProcessingStatus {
+//   PENDING
+//   PROCESSING
+//   DONE
+//   FAILED
+// }
+
+enum VariantType {
+  ORIGINAL
+  THUMBNAIL
+  SMALL
+  MEDIUM
+  LARGE
+  CUSTOM
 }
 
 enum UserRole {

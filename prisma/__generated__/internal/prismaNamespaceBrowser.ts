@@ -55,7 +55,9 @@ export const ModelName = {
   Account: 'Account',
   Token: 'Token',
   Post: 'Post',
-  Files: 'Files'
+  Folders: 'Folders',
+  Files: 'Files',
+  FileVariants: 'FileVariants'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -133,13 +135,28 @@ export const PostScalarFieldEnum = {
 export type PostScalarFieldEnum = (typeof PostScalarFieldEnum)[keyof typeof PostScalarFieldEnum]
 
 
+export const FoldersScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  parentId: 'parentId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FoldersScalarFieldEnum = (typeof FoldersScalarFieldEnum)[keyof typeof FoldersScalarFieldEnum]
+
+
 export const FilesScalarFieldEnum = {
   id: 'id',
-  url: 'url',
-  origin: 'origin',
-  name: 'name',
-  mimetype: 'mimetype',
-  meta: 'meta',
+  originalname: 'originalname',
+  extension: 'extension',
+  mimeType: 'mimeType',
+  size: 'size',
+  checksum: 'checksum',
+  blurhash: 'blurhash',
+  dominantColor: 'dominantColor',
+  storageKey: 'storageKey',
+  folderId: 'folderId',
   userId: 'userId',
   isPrivate: 'isPrivate',
   createdAt: 'createdAt',
@@ -149,19 +166,28 @@ export const FilesScalarFieldEnum = {
 export type FilesScalarFieldEnum = (typeof FilesScalarFieldEnum)[keyof typeof FilesScalarFieldEnum]
 
 
+export const FileVariantsScalarFieldEnum = {
+  id: 'id',
+  fileId: 'fileId',
+  type: 'type',
+  storageKey: 'storageKey',
+  format: 'format',
+  width: 'width',
+  height: 'height',
+  size: 'size',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FileVariantsScalarFieldEnum = (typeof FileVariantsScalarFieldEnum)[keyof typeof FileVariantsScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
-
-
-export const JsonNullValueInput = {
-  JsonNull: JsonNull
-} as const
-
-export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const QueryMode = {
@@ -178,13 +204,4 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
-
-
-export const JsonNullValueFilter = {
-  DbNull: DbNull,
-  JsonNull: JsonNull,
-  AnyNull: AnyNull
-} as const
-
-export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 

@@ -36,6 +36,7 @@
     "@types/multer": "^2.0.0",
     "@types/sharp": "^0.31.1",
     "argon2": "^0.44.0",
+    "blurhash": "^2.0.5",
     "cache-manager": "^7.2.8",
     "cache-manager-redis-store": "^3.0.1",
     "class-transformer": "^0.5.1",
