@@ -16,5 +16,5 @@ export class UpdateFileDto {
   @ApiProperty({ example: 'true', description: 'New file privacy status.' })
   @IsOptional()
   @IsString({ message: 'Should be a string.' })
-  isPrivate?: boolean;
+  isPublic?: boolean;
 }

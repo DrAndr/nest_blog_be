@@ -15,51 +15,50 @@ datasource db {
 }
 
 model User {
-  id       String   @id @default(uuid())
-  email    String   @unique
-  password String
-  name     String
-  image    String?
-  posts    Post[]
-  role     UserRole @default(REGULAR)
-
-  isVerified         Boolean @default(false) @map("is_verified")
-  isTwoFactorEnabled Boolean @default(false) @map("is_two_factor_enabled")
-
-  banned Boolean @default(false)
-
-  method   AuthMethod
-  accounts Account[]
-  files    Files[]
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  id                 String     @id @default(uuid())
+  email              String     @unique
+  password           String
+  name               String
+  image              String?
+  posts              Post[]
+  role               UserRole   @default(REGULAR)
+  //
+  isVerified         Boolean    @default(false) @map("is_verified")
+  isTwoFactorEnabled Boolean    @default(false) @map("is_two_factor_enabled")
+  //
+  banned             Boolean    @default(false)
+  //
+  method             AuthMethod
+  accounts           Account[]
+  files              Files[]
+  //
+  createdAt          DateTime   @default(now()) @map("created_at")
+  updatedAt          DateTime   @updatedAt @map("updated_at")
 
   @@map("users")
 }
 
 model Account {
-  id String @id @default(uuid())
-
-  type     String
-  provider String
-
-  refreshToken String? @map("refresh_token")
-  accessToken  String  @map("access_token")
-  expiresAt    Int     @map("expires_at")
-
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  id           String   @id @default(uuid())
+  //
+  type         String
+  provider     String
+  //
+  refreshToken String?  @map("refresh_token")
+  accessToken  String   @map("access_token")
+  expiresAt    Int      @map("expires_at")
+  //
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String   @map("user_id")
+  //
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
 
   @@map("account")
 }
 
 model Token {
-  id String @id @default(uuid())
-
+  id        String    @id @default(uuid())
   email     String
   token     String    @unique
   type      TokenType
@@ -74,8 +73,8 @@ model Post {
   title       String
   content     String?
   published   Boolean  @default(false)
-  author      User     @relation(fields: [authorId], references: [id])
-  authorId    String
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String   @map("user_id")
   publishedAt DateTime @default(now()) @map("published_at")
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
@@ -84,20 +83,20 @@ model Post {
 }
 
 model Folders {
-  id   String @id @default(uuid())
-  name String
-
+  id        String    @id @default(uuid())
+  name      String
+  //
   // it`s not useful when user change parrent folder, as it`s forsed us to update path for all childrens
   // path String @unique 
-
-  parentId String?
-  parent   Folders?  @relation("Tree", fields: [parentId], references: [id])
-  children Folders[] @relation("Tree")
-
-  files Files[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  //
+  parentId  String?   @map("parent_id")
+  parent    Folders?  @relation("Tree", fields: [parentId], references: [id])
+  children  Folders[] @relation("Tree")
+  //
+  files     Files[]
+  //
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
 
   @@map("folders")
 }
@@ -106,59 +105,61 @@ model Folders {
 // model FolderAccess {
 //   id String @id @default(uuid())
 
-//   folderId String
+//   folderId String 
 //   userId   String
 //   role     String
 // }
 
 model Files {
-  id           String @id @default(uuid())
-  originalname String @default("")
-  extension    String @default("")
-  mimeType     String
-  size         Int
-
+  id            String         @id @default(uuid())
+  originalname  String         @default("")
+  extension     String         @default("")
+  mimeType      String         @map("mime_type")
+  size          Int
+  width         Int?
+  height        Int?
+  //
   checksum      String? // for prevent duplication
   blurhash      String? // for preview
-  dominantColor String? // for filteryng by main color
-
-  storageKey    String @unique @map("origin_file") // path to original image
-
+  dominantColor String?        @map("dominant_color") // for filteryng by main color
+  //
+  filePath      String         @unique @map("file_path") // path to original image
+  //
   // TODO: implement background processing for files (e.g., generating variants, extracting metadata)
   // processingStatus FileProcessingStatus @default(PENDING)
-
-  folderId String?
-  folder   Folders? @relation(fields: [folderId], references: [id], onDelete: SetNull)
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
-
-  isPrivate Boolean @default(true)
-
-  variants FileVariants[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  //
+  folderId      String?        @map("folder_id")
+  folder        Folders?       @relation(fields: [folderId], references: [id], onDelete: SetNull)
+  //
+  userId        String         @map("user_id")
+  user          User           @relation(fields: [userId], references: [id])
+  //
+  isPublic      Boolean        @default(true) @map("is_public")
+  //
+  variants      FileVariants[]
+  //
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
 
   @@map("files")
 }
 
 model FileVariants {
-  id String @id @default(uuid())
-
-  fileId String
-  file   Files  @relation(fields: [fileId], references: [id], onDelete: Cascade)
-
-  type       VariantType
-  storageKey String      @unique // path to variant
-
-  format String // webp, jpg, png
-  width  Int?
-  height Int?
-  size   Int
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        String      @id @default(uuid())
+  //
+  fileId    String      @map("file_id")
+  file      Files       @relation(fields: [fileId], references: [id], onDelete: Cascade)
+  //
+  type      VariantType
+  filePath  String      @unique @map("file_path") // path to variant
+  //
+  format    String // webp, jpg, png
+  width     Int?
+  height    Int?
+  size      Int
+  //
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime    @updatedAt @map("updated_at")
 
   @@map("file_variants")
 }
