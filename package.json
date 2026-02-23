@@ -44,6 +44,7 @@
     "connect-redis": "^9.0.0",
     "cookie-parser": "^1.4.7",
     "express-session": "^1.19.0",
+    "file-type": "^16.5.4",
     "handlebars": "^4.7.8",
     "multer": "^2.0.2",
     "nodemailer": "^8.0.1",
@@ -89,12 +90,18 @@
     "moduleFileExtensions": [
       "js",
       "json",
-      "ts"
+      "ts",
+      "tsx"
     ],
     "rootDir": "src",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/$1",
+      "^@db/(.*)$": "<rootDir>/../prisma/$1",
+      "^(\\.{1,2}/.*)\\.js$": "$1"
     },
     "collectCoverageFrom": [
       "**/*.(t|j)s"
