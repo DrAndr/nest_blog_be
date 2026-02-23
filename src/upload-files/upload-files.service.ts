@@ -17,7 +17,7 @@ import type { Files, Folders } from '@db/__generated__/client';
 import { UploadFile } from '@/upload-files/entities/upload-file.entity';
 import crypto from 'crypto';
 import { encode } from 'blurhash';
-import { fileTypeFromBuffer } from 'file-type';
+import fileTypeFromBuffer from 'file-type';
 import { VariantType } from '@db/__generated__/enums';
 import { IMAGE_FILE_TYPE, WEBP_EXTENSION } from '@/upload-files/libs/constants';
 
@@ -189,7 +189,7 @@ export class UploadFilesService {
   }
 
   private async getExtension(file: MFile): Promise<string> {
-    const extension = await fileTypeFromBuffer(file.buffer);
+    const extension = await fileTypeFromBuffer.fromBuffer(file.buffer);
     if (!extension) {
       throw new BadRequestException('File extension undefined');
     }
