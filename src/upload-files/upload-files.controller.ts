@@ -59,7 +59,7 @@ export class UploadFilesController {
           'isPublic',
           'folderId',
           'extension',
-          'originalname',
+          'name',
           'mimeType',
           'size',
           'width',
