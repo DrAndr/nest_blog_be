@@ -16,6 +16,6 @@ export default class {
       .build();
 
     const document = SwaggerModule.createDocument(this.app, swaggerConfig);
-    SwaggerModule.setup('/docs/v1', this.app, document);
+    SwaggerModule.setup('/docs', this.app, document);
   }
 }

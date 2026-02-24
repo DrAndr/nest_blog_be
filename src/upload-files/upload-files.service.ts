@@ -1,33 +1,18 @@
-import {
-  BadRequestException,
-  Inject,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
-import * as fs from 'fs/promises';
-import * as path from 'path';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { v4 as uuid } from 'uuid';
 import { UpdateFileDto } from './dto/update-file.dto';
 import { PrismaService } from '@/infrastructure/prisma-provider/prisma.service';
-import { UserService } from '@/user/user.service';
-import { isFileExists } from '@/upload-files/libs/utils/isFileExists';
 import { IServiceResponse } from '@/libs/interfaces';
-import sharp from 'sharp';
 import { MFile } from '@/upload-files/libs/MFile';
 import { Files, Folders, Prisma } from '@db/__generated__/client';
 import { UploadFile } from '@/upload-files/entities/upload-file.entity';
 
-import { encode } from 'blurhash';
-import fileTypeFromBuffer from 'file-type';
-import { IMAGE_FILE_TYPE, WEBP_EXTENSION } from '@/upload-files/libs/constants';
-import { contains } from 'class-validator';
-import { TFindFilesResponse } from '@/upload-files/libs/types/find-files-response.type';
+import { IMAGE_FILE_TYPE } from '@/upload-files/libs/constants';
 import { FilePathService } from '@/upload-files/infrastructure/file-path.service';
-import { FileProcessService } from '@/upload-files/infrastructure/file-proccess.service';
+import { FileProcessService } from '@/upload-files/infrastructure/file-process.service';
 import { FileStorageService } from '@/upload-files/infrastructure/file-storage.service';
 import { FileVariantsService } from '@/upload-files/infrastructure/file-variants.service';
 
-// TODO: Break this large service down into several smaller infrastructure services
 @Injectable()
 export class UploadFilesService {
   public constructor(
