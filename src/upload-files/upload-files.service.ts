@@ -12,9 +12,10 @@ import { FilePathService } from '@/upload-files/infrastructure/file-path.service
 import { FileProcessService } from '@/upload-files/infrastructure/file-process.service';
 import { FileStorageService } from '@/upload-files/infrastructure/file-storage.service';
 import { FileVariantsService } from '@/upload-files/infrastructure/file-variants.service';
+import { IUploadFiles } from '@/upload-files/libs/interfaces/upload-files.interface';
 
 @Injectable()
-export class UploadFilesService {
+export class UploadFilesService implements IUploadFiles {
   public constructor(
     private readonly prismaService: PrismaService,
     private readonly pathService: FilePathService,
@@ -29,8 +30,12 @@ export class UploadFilesService {
    * @param userId
    * @param folderId
    */
-  async create(files: MFile[], userId: string, folderId?: string) {
-    return this.prismaService.$transaction(async (tx) => {
+  async create(
+    files: MFile[],
+    userId: string,
+    folderId?: string,
+  ): Promise<Files[]> {
+    return this.prismaService.$transaction(async (tx): Promise<Files[]> => {
       const results: Files[] = [];
 
       for (const file of files) {
@@ -143,7 +148,7 @@ export class UploadFilesService {
    * @param id
    * @param updateFileDto
    */
-  async update(id: string, updateFileDto: UpdateFileDto): Promise<UploadFile> {
+  async update(id: string, updateFileDto: UpdateFileDto): Promise<Files> {
     const updatedFile = this.prismaService.files.update({
       where: { id },
       data: updateFileDto,
