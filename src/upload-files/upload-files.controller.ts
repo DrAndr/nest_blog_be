@@ -19,7 +19,9 @@ import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Authorization } from '@/auth/presentation/decorators/authorization.decorator';
 import { Authorized } from '@/auth/presentation/decorators/authorized.decorator';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import type { Folders } from '@db/__generated__/client';
+import { Prisma } from '@db/__generated__/client';
+import { DirectFilterPipe } from '@chax-at/prisma-filter';
+import { FilterDto } from '@/libs/dto/global-filter.dto';
 
 @Controller('upload')
 export class UploadFilesController {
@@ -48,8 +50,32 @@ export class UploadFilesController {
     description: 'Get files.',
   })
   @Get()
-  findAll() {
-    return this.uploadFilesService.findAll();
+  findAll(
+    @Query(
+      new DirectFilterPipe<any, Prisma.FilesWhereInput>(
+        [
+          'id',
+          'userId',
+          'isPublic',
+          'folderId',
+          'extension',
+          'originalname',
+          'mimeType',
+          'size',
+          'width',
+          'height',
+          'dominantColor',
+          'createdAt',
+        ],
+        ['variant.type', 'variant.size', 'user.name', 'folder.name'],
+        [{ createdAt: 'asc' }, { id: 'asc' }], // default sorting and limits
+      ),
+    )
+    filterDto: FilterDto<Prisma.FilesWhereInput>,
+  ) {
+    console.log('filterDto.findOptions', filterDto.findOptions);
+
+    return this.uploadFilesService.findAll(filterDto.findOptions);
   }
 
   @ApiOperation({ summary: 'Get file' })
