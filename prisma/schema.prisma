@@ -112,7 +112,7 @@ model Folders {
 
 model Files {
   id            String         @id @default(uuid())
-  originalname  String         @default("")
+  name  String         @default("")
   extension     String         @default("")
   mimeType      String         @map("mime_type")
   size          Int
