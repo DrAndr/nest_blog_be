@@ -67,14 +67,14 @@ export class UploadFilesController {
           'dominantColor',
           'createdAt',
         ],
-        ['variant.type', 'variant.size', 'user.name', 'folder.name'],
-        [{ createdAt: 'asc' }, { id: 'asc' }], // default sorting and limits
+        [
+          /*'variant.type', 'variant.size', 'user.name', 'folder.name'*/
+        ],
+        [{ createdAt: 'asc' }, { id: 'asc' }],
       ),
     )
     filterDto: FilterDto<Prisma.FilesWhereInput>,
   ) {
-    console.log('filterDto.findOptions', filterDto.findOptions);
-
     return this.uploadFilesService.findAll(filterDto.findOptions);
   }
 
