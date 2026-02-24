@@ -24,6 +24,7 @@ import { IMAGE_FILE_TYPE, WEBP_EXTENSION } from '@/upload-files/libs/constants';
 import { contains } from 'class-validator';
 import { TFindFilesResponse } from '@/upload-files/libs/types/find-files-response.type';
 
+// TODO: Break this large service down into several smaller infrastructure services
 @Injectable()
 export class UploadFilesService {
   public constructor(private readonly prismaService: PrismaService) {}

@@ -3,7 +3,10 @@ import { UploadFilesController } from './upload-files.controller';
 import { UploadFilesService } from './upload-files.service';
 import { UpdateFileDto } from './dto/update-file.dto';
 import { ExecutionContext, Injectable, CanActivate } from '@nestjs/common';
-import { AuthGuard } from '@/auth/presentation/guards/auth.guard'; // путь к твоему Guard
+import { AuthGuard } from '@/auth/presentation/guards/auth.guard';
+import { FilterDto } from '@/libs/dto/global-filter.dto';
+import { FilesWhereInput } from '@db/__generated__/models/Files';
+import { Prisma } from '@db/__generated__/client'; // путь к твоему Guard
 
 @Injectable()
 class MockAuthGuard implements CanActivate {
@@ -75,11 +78,16 @@ describe('UploadFilesController', () => {
   describe('findAll', () => {
     it('should return all files', async () => {
       const mockResult = [{ id: 'file-1' }];
+      const findOptions = {
+        filter: [{ field: 'size', type: '==', value: '5555' }],
+      };
       service.findAll.mockResolvedValue(mockResult as any);
 
-      const result = await controller.findAll();
+      const mockFilterDto = { findOptions };
 
-      expect(service.findAll).toHaveBeenCalled();
+      const result = await controller.findAll(mockFilterDto as any);
+
+      expect(service.findAll).toHaveBeenCalledWith(findOptions);
       expect(result).toEqual(mockResult);
     });
   });
