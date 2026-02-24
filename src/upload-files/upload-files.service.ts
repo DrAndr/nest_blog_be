@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -13,7 +14,7 @@ import { isFileExists } from '@/upload-files/libs/utils/isFileExists';
 import { IServiceResponse } from '@/libs/interfaces';
 import sharp from 'sharp';
 import { MFile } from '@/upload-files/libs/MFile';
-import type { Files, Folders } from '@db/__generated__/client';
+import { Files, Folders, Prisma } from '@db/__generated__/client';
 import { UploadFile } from '@/upload-files/entities/upload-file.entity';
 import crypto from 'crypto';
 import { encode } from 'blurhash';
@@ -61,13 +62,14 @@ export class UploadFilesService {
       return results;
     });
   }
+
   /**
-   *
+   * Select multiple files
+   * Filter handler doc: https://github.com/chax-at/prisma-filter?tab=readme-ov-file
    */
-  async findAll(): Promise<Files[]> {
+  async findAll(filterParams: Prisma.FilesFindManyArgs): Promise<Files[]> {
     return this.prismaService.files.findMany({
-      take: 10,
-      skip: 0,
+      ...filterParams,
       include: { variants: true },
     });
   }
@@ -150,6 +152,7 @@ export class UploadFilesService {
 
     return [id];
   }
+
   /**
    * Checks if file with the same checksum already exists
    */

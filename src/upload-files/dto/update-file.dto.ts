@@ -8,7 +8,7 @@ export class UpdateFileDto {
   @IsString({ message: 'Should be a string.' })
   originalname?: string;
 
-  @ApiProperty({ example: 'folder_id', description: 'New folder.' })
+  @ApiProperty({ example: 'folderId', description: 'New folder.' })
   @IsOptional()
   @IsString({ message: 'Should be a string.' })
   folderId?: string;

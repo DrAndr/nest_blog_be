@@ -6,15 +6,16 @@ import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import session from 'express-session';
 import { RedisStore } from 'connect-redis';
 import initSwagger from '@/libs/utils/initSwagger';
-import { createClient } from 'redis';
 import { ResponseInterceptor } from '@/libs/interceptors/response.interceptor';
 import { RedisProviderService } from '@/infrastructure/redis-provider/redis-provider.service';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  app.set('query parser', 'extended'); // required for @chax-at/prisma-filter
 
   new initSwagger(app);
-
   const config = app.get(ConfigService);
 
   /**
