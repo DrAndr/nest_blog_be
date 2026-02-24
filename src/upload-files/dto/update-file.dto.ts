@@ -6,7 +6,7 @@ export class UpdateFileDto {
   @ApiProperty({ example: 'Mona Liza', description: 'New file name.' })
   @IsOptional()
   @IsString({ message: 'Should be a string.' })
-  originalname?: string;
+  name?: string;
 
   @ApiProperty({ example: 'folderId', description: 'New folder.' })
   @IsOptional()

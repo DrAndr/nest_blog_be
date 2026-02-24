@@ -7,11 +7,13 @@ import {
   Param,
   Delete,
   UploadedFiles,
-  Req,
   Query,
   UseInterceptors,
   HttpCode,
   HttpStatus,
+  MaxFileSizeValidator,
+  FileTypeValidator,
+  ParseFilePipe,
 } from '@nestjs/common';
 import { UploadFilesService } from './upload-files.service';
 import { UpdateFileDto } from './dto/update-file.dto';
@@ -29,15 +31,29 @@ export class UploadFilesController {
 
   @ApiOperation({ summary: 'Upload files' })
   @ApiResponse({
-    status: 201,
+    status: HttpStatus.CREATED,
     description: 'Upload files, and link them with user.',
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Bad request.',
   })
   @Authorization()
   @HttpCode(HttpStatus.OK)
   @UseInterceptors(FilesInterceptor('files'))
   @Post()
   create(
-    @UploadedFiles() files: Express.Multer.File[],
+    @UploadedFiles(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({ maxSize: 1000000 * 5 }), // 5mb
+          new FileTypeValidator({
+            fileType: 'image/(jpeg|png|svg|jpg|webp)|application/pdf',
+          }),
+        ],
+      }),
+    )
+    files: Express.Multer.File[],
     @Authorized('id') userId: string,
     @Body('folder') folderId?: string,
   ) {
@@ -46,7 +62,7 @@ export class UploadFilesController {
 
   @ApiOperation({ summary: 'Get files' })
   @ApiResponse({
-    status: 201,
+    status: 200,
     description: 'Get files.',
   })
   @Get()

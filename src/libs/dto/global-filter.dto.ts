@@ -40,9 +40,19 @@ export class SingleFilter<T> implements ISingleFilter<T> {
 
 // type for the ordering param ... order[0][field]=name&order[0][dir]=asc ...
 export class SingleFilterOrder<T> implements ISingleOrder<T> {
+  @ApiProperty({
+    example: 'field=id',
+    description: 'Sorting field',
+    required: false,
+  })
   @IsString()
   field!: keyof T & string;
 
+  @ApiProperty({
+    example: 'dir=desc',
+    description: 'Sorting value',
+    required: false,
+  })
   @IsIn(['asc', 'desc'])
   dir!: FilterOrder;
 }
@@ -51,6 +61,7 @@ export class Filter<T = any> implements IFilter<T> {
   @ApiProperty({
     example: '[{field:"size", type:"==", value:"5555"}, etc...]',
     description: 'Filtering params.',
+    required: false,
   })
   @IsArray()
   @ValidateNested({ each: true })
@@ -59,9 +70,12 @@ export class Filter<T = any> implements IFilter<T> {
   filter?: Array<SingleFilter<T>>;
 
   @ApiProperty({
-    example:
-      "[{ field: 'createdAt', dir: 'asc' }, { field: 'id': dir: 'desc' }, etc...]",
+    example: [
+      { field: 'createdAt', dir: 'asc' },
+      { field: 'id', dir: 'desc' },
+    ],
     description: 'Ordering params.',
+    required: false,
   })
   @IsArray()
   @ValidateNested({ each: true })
@@ -70,8 +84,9 @@ export class Filter<T = any> implements IFilter<T> {
   order?: Array<SingleFilterOrder<T>>;
 
   @ApiProperty({
-    example: '123',
+    example: { offset: 0 },
     description: 'Offset of number rows.',
+    required: false,
   })
   @Type(() => Number)
   @IsInt()
@@ -81,6 +96,7 @@ export class Filter<T = any> implements IFilter<T> {
   @ApiProperty({
     example: '100',
     description: 'Limit of number rows.',
+    required: false,
   })
   @Type(() => Number)
   @IsInt()

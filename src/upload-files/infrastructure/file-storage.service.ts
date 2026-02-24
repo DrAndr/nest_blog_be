@@ -4,9 +4,10 @@ import path from 'path';
 import { FilePathService } from '@/upload-files/infrastructure/file-path.service';
 import { isFileExists } from '@/upload-files/libs/utils/isFileExists';
 import { Stats } from 'node:fs';
+import { IFileStorage } from '@/upload-files/libs/interfaces/file-storage.interface';
 
 @Injectable()
-export class FileStorageService {
+export class FileStorageService implements IFileStorage {
   public constructor(private readonly pathService: FilePathService) {}
 
   /**

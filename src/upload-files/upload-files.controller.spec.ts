@@ -4,9 +4,6 @@ import { UploadFilesService } from './upload-files.service';
 import { UpdateFileDto } from './dto/update-file.dto';
 import { ExecutionContext, Injectable, CanActivate } from '@nestjs/common';
 import { AuthGuard } from '@/auth/presentation/guards/auth.guard';
-import { FilterDto } from '@/libs/dto/global-filter.dto';
-import { FilesWhereInput } from '@db/__generated__/models/Files';
-import { Prisma } from '@db/__generated__/client'; // путь к твоему Guard
 
 @Injectable()
 class MockAuthGuard implements CanActivate {
@@ -40,7 +37,7 @@ describe('UploadFilesController', () => {
         },
       ],
     })
-      .overrideGuard(AuthGuard) // <-- мокируем guard
+      .overrideGuard(AuthGuard) // <-- mocking guard
       .useClass(MockAuthGuard)
       .compile();
 
