@@ -17,6 +17,7 @@ import { RedisProviderModule } from '@/infrastructure/redis-provider/redis-provi
 import { SessionProviderModule } from '@/infrastructure/session-provider/session-provider.module';
 import { HealthCheckModule } from '@/health-check/health-check.module';
 import { UploadFilesModule } from './upload-files/upload-files.module';
+import { FoldersModule } from './folders/folders.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { UploadFilesModule } from './upload-files/upload-files.module';
     SessionProviderModule,
     HealthCheckModule,
     UploadFilesModule,
+    FoldersModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
