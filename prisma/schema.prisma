@@ -84,7 +84,7 @@ model Post {
 
 model Folders {
   id        String    @id @default(uuid())
-  name      String
+  name      String // should be unyqe on the same depth lvl
   //
   // it`s not useful when user change parrent folder, as it`s forsed us to update path for all childrens
   // path String @unique 
@@ -98,6 +98,7 @@ model Folders {
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
 
+  @@index([parentId])
   @@map("folders")
 }
 
@@ -112,7 +113,7 @@ model Folders {
 
 model Files {
   id            String         @id @default(uuid())
-  name  String         @default("")
+  name          String         @default("")
   extension     String         @default("")
   mimeType      String         @map("mime_type")
   size          Int
