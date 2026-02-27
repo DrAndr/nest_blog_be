@@ -4,18 +4,20 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { CreateFolderDto } from './dto/create-folder.dto';
-import { UpdateFolderDto } from './dto/update-folder.dto';
 import { PrismaService } from '@/infrastructure/prisma-provider/prisma.service';
 import { Folders } from '@db/__generated__/client';
-import { Prisma } from '@prisma/client';
 import { FoldersRepository } from '@/folders/folders.repository';
 import { MAX_FOLDERS_DEPTH } from '@/folders/libs/constants';
+import { FoldersProcessService } from '@/folders/infrastructure/folders-process.service';
+import { IFoldersTreeNode } from '@/folders/libs/interfaces/folders-tree-node.interface';
+import { isPrismaUniqueError } from './libs/is-prisma-unique-error';
 
 @Injectable()
 export class FoldersService {
   public constructor(
     private readonly prismaService: PrismaService,
     private readonly foldersRepository: FoldersRepository,
+    private readonly foldersProcess: FoldersProcessService,
   ) {}
 
   /**
@@ -26,37 +28,39 @@ export class FoldersService {
     const parentId = dto.parentId ?? null;
 
     if (parentId?.length) {
-      const depth = await this.foldersRepository.getFolderDepth(parentId);
-      if (depth + 1 >= MAX_FOLDERS_DEPTH) {
-        throw new BadRequestException(
-          `Nesting limit reached, maximum nesting depth: ${MAX_FOLDERS_DEPTH}`,
-        );
-      }
+      await this.validateDepth(parentId);
     }
 
-    return this.prismaService.folders.create({
-      data: {
-        name: dto.name,
-        parentId: parentId,
-      },
-    });
+    try {
+      return await this.prismaService.folders.create({
+        data: {
+          name: dto.name,
+          parentId: parentId,
+        },
+      });
+    } catch (error) {
+      if (isPrismaUniqueError(error)) {
+        throw new BadRequestException(
+          'Folder name must be unique within the same parent',
+        );
+      }
+
+      throw error;
+    }
   }
 
   /**
    * Return folder tree
    * @param folderId
    */
-  async getTree(folderId: string): Promise<string> {
+  async getTree(folderId: string): Promise<IFoldersTreeNode[]> {
     const folders = await this.foldersRepository.getTreeAsc(folderId);
 
     if (!folders) {
       throw new NotFoundException('Folder not found');
     }
-    // TODO:
-    // build nested structure manually
-    // return hierarchical JSON
 
-    return JSON.stringify(folders);
+    return await this.foldersProcess.buildTree(folders);
   }
 
   /**
@@ -84,19 +88,34 @@ export class FoldersService {
     id: string,
     dto: { name?: string; parentId?: string },
   ): Promise<any> {
-    if (id === dto.parentId) {
+    if (dto.parentId?.length && id === dto.parentId) {
       throw new BadRequestException('Cannot move folder into itself');
     }
 
-    // TODO:
-    //  - check is name uniq on current or new depth lvl
-    //  - check is dto.parentId passed
-    //  - check is dto.parentId exist and is not child of this folder (cycle detection)
+    if (dto.parentId?.length) {
+      await this.validateDepth(dto.parentId);
 
-    return this.prismaService.folders.update({
-      where: { id },
-      data: dto,
-    });
+      // to prevent cyclical dependency
+      const isAncestor = await this.foldersProcess.isAncestor(id, dto.parentId);
+      if (isAncestor) {
+        throw new NotFoundException('Cannot move folder into its child');
+      }
+    }
+
+    try {
+      return await this.prismaService.folders.update({
+        where: { id },
+        data: dto,
+      });
+    } catch (error) {
+      if (isPrismaUniqueError(error)) {
+        throw new BadRequestException(
+          'Folder name must be unique within the same parent',
+        );
+      }
+
+      throw error;
+    }
   }
 
   /**
@@ -104,45 +123,39 @@ export class FoldersService {
    * @param id
    */
   async remove(id: string) {
+    /**
+     * check is folder has children
+     */
     const hasChildren = await this.foldersRepository.getTreeDesc(id);
     if (hasChildren) {
-      throw new NotFoundException('Cannot remove folder that has children.');
+      throw new BadRequestException('Cannot remove folder that has children.');
     }
 
+    /**
+     * check is folder has linked files
+     */
     const linkedFile = await this.prismaService.files.findFirst({
       where: { folderId: id },
     });
-
     if (linkedFile) {
-      throw new NotFoundException('Cannot remove folder that contain files.');
+      throw new BadRequestException('Cannot remove folder that contain files.');
     }
 
+    /**
+     * Now user can delete only empty folder.
+     * In the future, it can be changed.
+     */
     return this.prismaService.folders.delete({
       where: { id },
     });
   }
 
-  /**
-   private buildTree(folders: Folders[]) {
-   const map = new Map<string, any>();
-
-   folders.forEach(folder => {
-   map.set(folder.id, { ...folder, children: [] });
-   });
-
-   let root = null;
-
-   folders.forEach(folder => {
-   if (folder.parentId) {
-   map.get(folder.parentId)?.children.push(
-   map.get(folder.id),
-   );
-   } else {
-   root = map.get(folder.id);
-   }
-   });
-
-   return root;
-   }
-   */
+  private async validateDepth(parentId: string): Promise<void> {
+    const depth = await this.foldersRepository.getFolderDepth(parentId);
+    if (depth + 1 >= MAX_FOLDERS_DEPTH) {
+      throw new BadRequestException(
+        `Nesting limit reached, maximum nesting depth: ${MAX_FOLDERS_DEPTH}`,
+      );
+    }
+  }
 }

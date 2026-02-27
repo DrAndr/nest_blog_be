@@ -20,11 +20,6 @@ export class FoldersController {
     return this.foldersService.create(createFolderDto);
   }
 
-  // @Get()
-  // findAll() {
-  //   return this.foldersService.findAll();
-  // }
-  // //
   @Get('tree/:id')
   getTree(@Param('id') id: string) {
     return this.foldersService.getTree(id);

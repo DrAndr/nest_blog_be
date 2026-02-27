@@ -99,6 +99,7 @@ model Folders {
   updatedAt DateTime  @updatedAt @map("updated_at")
 
   @@index([parentId])
+  @@unique([parentId, name]) // prevent name duplication if folders has the same parentId
   @@map("folders")
 }
 
