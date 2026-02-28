@@ -27,7 +27,7 @@ export class FoldersProcessService {
       const current = map.get(folder.id);
       if (!current) continue;
 
-      if (folder.parentId) {
+      if (folder.parentId && folder.parentId !== 'root') {
         map.get(folder.parentId)?.children.push(current);
       } else {
         result.push(current);
@@ -42,10 +42,16 @@ export class FoldersProcessService {
    * @param folderId
    * @param destinationFolderId
    */
-  public async isAncestor(folderId: string, destinationFolderId: string) {
+  public async isAncestor(
+    folderId: string,
+    destinationFolderId: string,
+    userId: string,
+  ): Promise<boolean> {
     if (destinationFolderId) {
-      const parents =
-        await this.foldersRepository.getTreeAsc(destinationFolderId);
+      const parents = await this.foldersRepository.getTreeAsc(
+        destinationFolderId,
+        userId,
+      );
       if (parents) {
         const isDescendant = parents.find((f) => f.id === folderId);
         if (isDescendant) {

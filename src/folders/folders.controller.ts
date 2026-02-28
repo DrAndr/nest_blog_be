@@ -6,11 +6,16 @@ import {
   Patch,
   Param,
   Delete,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { FoldersService } from './folders.service';
 import { CreateFolderDto } from './dto/create-folder.dto';
 import { UpdateFolderDto } from './dto/update-folder.dto';
 import { ApiBody, ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
+import { Authorization } from '@/auth/presentation/decorators/authorization.decorator';
+import { UserRole } from '@db/__generated__/enums';
+import { Authorized } from '@/auth/presentation/decorators/authorized.decorator';
 
 @Controller('folders')
 export class FoldersController {
@@ -31,7 +36,7 @@ export class FoldersController {
     },
   })
   @ApiResponse({
-    status: 201,
+    status: HttpStatus.CREATED,
     description: 'Folder successfully created',
     example: {
       id: 'uuid',
@@ -39,16 +44,31 @@ export class FoldersController {
       parentId: null,
     },
   })
-  @ApiResponse({ status: 400, description: 'Validation error' })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized.',
+  })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    description: 'Forbidden.',
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Validation error',
+  })
+  @Authorization(UserRole.ADMIN, UserRole.MANAGER)
   @Post()
-  create(@Body() createFolderDto: CreateFolderDto) {
-    return this.foldersService.create(createFolderDto);
+  create(
+    @Authorized('id') userId: string,
+    @Body() createFolderDto: CreateFolderDto,
+  ) {
+    return this.foldersService.create(userId, createFolderDto);
   }
 
   @ApiOperation({ summary: 'Get folder tree' })
   @ApiParam({ name: 'id', example: 'uuid-folder-id' })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     description: 'Folder tree returned',
     example: [
       {
@@ -59,16 +79,28 @@ export class FoldersController {
       },
     ],
   })
-  @ApiResponse({ status: 404, description: 'Folder not found' })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized.',
+  })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    description: 'Forbidden.',
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Folder not found',
+  })
+  @Authorization(UserRole.ADMIN, UserRole.MANAGER)
   @Get('tree/:id')
-  getTree(@Param('id') id: string) {
-    return this.foldersService.getTree(id);
+  getTree(@Authorized('id') userId: string, @Param('id') id: string) {
+    return this.foldersService.getTree(userId, id);
   }
 
   @ApiOperation({ summary: 'Get folder by id' })
   @ApiParam({ name: 'id', example: 'uuid-folder-id' })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     description: 'Folder found',
     example: {
       id: 'uuid',
@@ -76,10 +108,14 @@ export class FoldersController {
       parentId: null,
     },
   })
-  @ApiResponse({ status: 404, description: 'Folder not found' })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Folder not found',
+  })
+  @Authorization(UserRole.ADMIN, UserRole.MANAGER)
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.foldersService.getById(id);
+  findOne(@Authorized('id') userId: string, @Param('id') id: string) {
+    return this.foldersService.getById(userId, id);
   }
 
   @ApiOperation({ summary: 'Update folder' })
@@ -98,7 +134,7 @@ export class FoldersController {
     },
   })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     description: 'Folder updated',
     example: {
       id: 'uuid',
@@ -106,16 +142,32 @@ export class FoldersController {
       parentId: null,
     },
   })
-  @ApiResponse({ status: 400, description: 'Validation error' })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized.',
+  })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    description: 'Forbidden.',
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Validation error',
+  })
+  @Authorization(UserRole.ADMIN, UserRole.MANAGER)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateFolderDto: UpdateFolderDto) {
-    return this.foldersService.update(id, updateFolderDto);
+  update(
+    @Authorized('id') userId: string,
+    @Param('id') id: string,
+    @Body() updateFolderDto: UpdateFolderDto,
+  ) {
+    return this.foldersService.update(userId, id, updateFolderDto);
   }
 
   @ApiOperation({ summary: 'Delete folder' })
   @ApiParam({ name: 'id', example: 'uuid-folder-id' })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     description: 'Folder deleted',
     example: {
       id: 'uuid',
@@ -123,9 +175,21 @@ export class FoldersController {
       parentId: null,
     },
   })
-  @ApiResponse({ status: 400, description: 'Folder not empty' })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized.',
+  })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    description: 'Forbidden.',
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Folder not empty',
+  })
+  @Authorization(UserRole.ADMIN, UserRole.MANAGER)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.foldersService.remove(id);
+  remove(@Authorized('id') userId: string, @Param('id') id: string) {
+    return this.foldersService.remove(userId, id);
   }
 }

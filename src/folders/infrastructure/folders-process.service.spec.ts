@@ -56,9 +56,9 @@ describe('FoldersProcessService', () => {
         { id: '2', parentId: '1' } as Folders,
       ]);
 
-      const result = await service.isAncestor('1', '2');
+      const result = await service.isAncestor('1', '2', '3');
 
-      expect(repository.getTreeAsc).toHaveBeenCalledWith('2');
+      expect(repository.getTreeAsc).toHaveBeenCalledWith('2', '3');
       expect(result).toBe(true);
     });
 
@@ -67,13 +67,13 @@ describe('FoldersProcessService', () => {
         { id: '3', parentId: null } as Folders,
       ]);
 
-      const result = await service.isAncestor('1', '3');
+      const result = await service.isAncestor('1', '2', '3');
 
       expect(result).toBe(false);
     });
 
     it('should return false if destinationFolderId is null', async () => {
-      const result = await service.isAncestor('1', null as any);
+      const result = await service.isAncestor('1', null as any, '3');
 
       expect(result).toBe(false);
       expect(repository.getTreeAsc).not.toHaveBeenCalled();
@@ -82,7 +82,7 @@ describe('FoldersProcessService', () => {
     it('should return false if repository returns null', async () => {
       repository.getTreeAsc.mockResolvedValue(null);
 
-      const result = await service.isAncestor('1', '2');
+      const result = await service.isAncestor('1', '2', '3');
 
       expect(result).toBe(false);
     });

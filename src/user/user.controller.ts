@@ -24,7 +24,10 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @ApiOperation({ summary: 'Get user profile' })
-  @ApiResponse({ status: 200, description: 'Return authorised user profile.' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Return authorised user profile.',
+  })
   @Authorization() // accept role as params "UserRole.ADMIN"
   @HttpCode(HttpStatus.OK)
   @Serialize(PublicUserDto) // instead of @UseInterceptors(new SerializeInterceptor(UserDto))
@@ -34,7 +37,10 @@ export class UserController {
   }
 
   @ApiOperation({ summary: 'Update user profile' })
-  @ApiResponse({ status: 200, description: 'Return updated user profile.' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Return updated user profile.',
+  })
   @Authorization(UserRole.ADMIN)
   @HttpCode(HttpStatus.ACCEPTED)
   @Serialize(PublicUserDto)
@@ -47,7 +53,7 @@ export class UserController {
   }
 
   @ApiOperation({ summary: 'Delete user profile' })
-  @ApiResponse({ status: 200, description: 'Return action status.' })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Return action status.' })
   @Authorization(UserRole.ADMIN)
   @HttpCode(HttpStatus.OK)
   @Delete(':id')
