@@ -31,6 +31,7 @@ model User {
   method             AuthMethod
   accounts           Account[]
   files              Files[]
+  folders            Folders[]
   //
   createdAt          DateTime   @default(now()) @map("created_at")
   updatedAt          DateTime   @updatedAt @map("updated_at")
@@ -89,9 +90,12 @@ model Folders {
   // it`s not useful when user change parrent folder, as it`s forsed us to update path for all childrens
   // path String @unique 
   //
-  parentId  String?   @map("parent_id")
+  parentId  String?   @default("root") @map("parent_id")
   parent    Folders?  @relation("Tree", fields: [parentId], references: [id])
   children  Folders[] @relation("Tree")
+  //
+  userId        String         @map("user_id")
+  user          User           @relation(fields: [userId], references: [id])
   //
   files     Files[]
   //
@@ -99,7 +103,7 @@ model Folders {
   updatedAt DateTime  @updatedAt @map("updated_at")
 
   @@index([parentId])
-  @@unique([parentId, name]) // prevent name duplication if folders has the same parentId
+  @@unique([parentId, name, userId]) // prevent name duplication if folders has the same parentId
   @@map("folders")
 }
 
@@ -126,9 +130,6 @@ model Files {
   dominantColor String?        @map("dominant_color") // for filteryng by main color
   //
   filePath      String         @unique @map("file_path") // path to original image
-  //
-  // TODO: implement background processing for files (e.g., generating variants, extracting metadata)
-  // processingStatus FileProcessingStatus @default(PENDING)
   //
   folderId      String?        @map("folder_id")
   folder        Folders?       @relation(fields: [folderId], references: [id], onDelete: SetNull)

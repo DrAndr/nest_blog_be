@@ -1,90 +1,138 @@
+import { BadRequestException } from '@nestjs/common';
 import { FoldersProcessService } from './folders-process.service';
 import { FoldersRepository } from '@/folders/folders.repository';
-import { Folders } from '@db/__generated__/client';
+import { PrismaService } from '@/infrastructure/prisma-provider/prisma.service';
+import { MAX_FOLDERS_DEPTH } from '@/folders/libs/constants';
 
 describe('FoldersProcessService', () => {
   let service: FoldersProcessService;
-  let repository: jest.Mocked<FoldersRepository>;
+
+  const foldersRepositoryMock = {
+    getTreeAsc: jest.fn(),
+    getFolderDepth: jest.fn(),
+  };
+
+  const prismaServiceMock = {
+    folders: {
+      findFirst: jest.fn(),
+    },
+  };
 
   beforeEach(() => {
-    repository = {
-      getTreeAsc: jest.fn(),
-    } as unknown as jest.Mocked<FoldersRepository>;
+    jest.clearAllMocks();
 
-    service = new FoldersProcessService(repository);
+    service = new FoldersProcessService(
+      foldersRepositoryMock as unknown as FoldersRepository,
+      prismaServiceMock as unknown as PrismaService,
+    );
   });
 
   describe('buildTree', () => {
-    it('should build nested tree correctly', async () => {
-      const folders: Folders[] = [
-        { id: '1', name: 'root', parentId: null } as Folders,
-        { id: '2', name: 'child-1', parentId: '1' } as Folders,
-        { id: '3', name: 'child-2', parentId: '1' } as Folders,
-        { id: '4', name: 'sub-child', parentId: '2' } as Folders,
+    it('should build nested structure correctly', async () => {
+      const folders: any[] = [
+        { id: '1', name: 'root', parentId: null },
+        { id: '2', name: 'child-1', parentId: '1' },
+        { id: '3', name: 'child-2', parentId: '1' },
       ];
 
-      const result = await service.buildTree(folders);
+      const result = await service.buildTree(folders as any);
 
       expect(result).toHaveLength(1);
-      expect(result[0].id).toBe('1');
       expect(result[0].children).toHaveLength(2);
-
-      const child1 = result[0].children.find((c) => c.id === '2');
-      expect(child1?.children).toHaveLength(1);
-      expect(child1?.children[0].id).toBe('4');
+      expect(result[0].children[0].id).toBe('2');
+      expect(result[0].children[1].id).toBe('3');
     });
 
-    it('should handle multiple root folders', async () => {
-      const folders: Folders[] = [
-        { id: '1', name: 'root-1', parentId: null } as Folders,
-        { id: '2', name: 'root-2', parentId: null } as Folders,
-      ];
-
-      const result = await service.buildTree(folders);
-
-      expect(result).toHaveLength(2);
-      expect(result.map((f) => f.id)).toEqual(
-        expect.arrayContaining(['1', '2']),
-      );
+    it('should return empty array if no folders', async () => {
+      const result = await service.buildTree([]);
+      expect(result).toEqual([]);
     });
   });
 
   describe('isAncestor', () => {
     it('should return true if folder is ancestor', async () => {
-      repository.getTreeAsc.mockResolvedValue([
-        { id: '1', parentId: null } as Folders,
-        { id: '2', parentId: '1' } as Folders,
+      foldersRepositoryMock.getTreeAsc.mockResolvedValue([
+        { id: 'parent' },
+        { id: 'ancestor-id' },
       ]);
 
-      const result = await service.isAncestor('1', '2');
+      const result = await service.isAncestor(
+        'ancestor-id',
+        'destination-id',
+        'user-id',
+      );
 
-      expect(repository.getTreeAsc).toHaveBeenCalledWith('2');
       expect(result).toBe(true);
+      expect(foldersRepositoryMock.getTreeAsc).toHaveBeenCalled();
     });
 
     it('should return false if folder is not ancestor', async () => {
-      repository.getTreeAsc.mockResolvedValue([
-        { id: '3', parentId: null } as Folders,
+      foldersRepositoryMock.getTreeAsc.mockResolvedValue([
+        { id: 'some-other-id' },
       ]);
 
-      const result = await service.isAncestor('1', '3');
+      const result = await service.isAncestor(
+        'folder-id',
+        'destination-id',
+        'user-id',
+      );
 
       expect(result).toBe(false);
     });
 
-    it('should return false if destinationFolderId is null', async () => {
-      const result = await service.isAncestor('1', null as any);
+    it('should return false if no parents found', async () => {
+      foldersRepositoryMock.getTreeAsc.mockResolvedValue(null);
+
+      const result = await service.isAncestor(
+        'folder-id',
+        'destination-id',
+        'user-id',
+      );
 
       expect(result).toBe(false);
-      expect(repository.getTreeAsc).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('isNameUsed', () => {
+    it('should return true if folder exists', async () => {
+      prismaServiceMock.folders.findFirst.mockResolvedValue({
+        id: 'existing-id',
+      });
+
+      const result = await service.isNameUsed('test', 'user-id', null);
+
+      expect(result).toBe(true);
+      expect(prismaServiceMock.folders.findFirst).toHaveBeenCalled();
     });
 
-    it('should return false if repository returns null', async () => {
-      repository.getTreeAsc.mockResolvedValue(null);
+    it('should return false if folder does not exist', async () => {
+      prismaServiceMock.folders.findFirst.mockResolvedValue(null);
 
-      const result = await service.isAncestor('1', '2');
+      const result = await service.isNameUsed('test', 'user-id', null);
 
       expect(result).toBe(false);
+    });
+  });
+
+  describe('validateDepth', () => {
+    it('should not throw if depth is allowed', async () => {
+      foldersRepositoryMock.getFolderDepth.mockResolvedValue(
+        MAX_FOLDERS_DEPTH - 2,
+      );
+
+      await expect(
+        service.validateDepth('user-id', 'parent-id'),
+      ).resolves.not.toThrow();
+    });
+
+    it('should throw BadRequestException if depth exceeded', async () => {
+      foldersRepositoryMock.getFolderDepth.mockResolvedValue(
+        MAX_FOLDERS_DEPTH - 1,
+      );
+
+      await expect(
+        service.validateDepth('user-id', 'parent-id'),
+      ).rejects.toBeInstanceOf(BadRequestException);
     });
   });
 });

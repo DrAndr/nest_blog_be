@@ -12,9 +12,10 @@ export class CreateFolderDto {
   name!: string;
 
   @ApiProperty({
-    example: '00000000-b0b0-000b0-000e-00a00f0000ab',
+    example: 'uuid-v4',
     description: 'Parent folder id',
     required: false,
+    nullable: true,
   })
   @IsString()
   @IsOptional()
