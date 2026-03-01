@@ -18,9 +18,9 @@ export class FoldersRepository {
 
         UNION ALL
 
-        SELECT f.id, f.parent_id, f.name, ft.nest + 1
+        SELECT f.id, f.parent_id, f.name, f.user_id, ft.nest + 1
         FROM folders f
-               INNER JOIN folder_tree ft ON ft.parent_id = f.id AND ft.user_id = = f.user_id
+               INNER JOIN folder_tree ft ON ft.parent_id = f.id AND ft.user_id = f.user_id
       )
       SELECT ft.id, ft.parent_id as parentId, ft.name, (SELECT MAX(nest) FROM folder_tree) - nest AS depth
       FROM folder_tree ft

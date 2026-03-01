@@ -16,6 +16,10 @@ import { ApiBody, ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { Authorization } from '@/auth/presentation/decorators/authorization.decorator';
 import { UserRole } from '@db/__generated__/enums';
 import { Authorized } from '@/auth/presentation/decorators/authorized.decorator';
+import { IFoldersTreeNode } from '@/folders/libs/interfaces/folders-tree-node.interface';
+import { IFoldersChildNode } from '@/folders/libs/interfaces/folders-child-node.interface';
+import { GetChildrenResponseDto } from '@/folders/dto/get-children-response.dto';
+import { GetParentsResponseDto } from '@/folders/dto/get-parents-response.dto';
 
 @Controller('folders')
 export class FoldersController {
@@ -41,7 +45,7 @@ export class FoldersController {
     example: {
       id: 'uuid',
       name: 'Documents',
-      parentId: null,
+      parentId: 'uuid',
     },
   })
   @ApiResponse({
@@ -70,14 +74,7 @@ export class FoldersController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Folder tree returned',
-    example: [
-      {
-        id: 'uuid',
-        name: 'Root',
-        parentId: null,
-        children: [],
-      },
-    ],
+    example: [GetParentsResponseDto],
   })
   @ApiResponse({
     status: HttpStatus.UNAUTHORIZED,
@@ -92,9 +89,40 @@ export class FoldersController {
     description: 'Folder not found',
   })
   @Authorization(UserRole.ADMIN, UserRole.MANAGER)
-  @Get('tree/:id')
-  getTree(@Authorized('id') userId: string, @Param('id') id: string) {
-    return this.foldersService.getTree(userId, id);
+  @Get('parents/:id')
+  getParents(
+    @Authorized('id') userId: string,
+    @Param('id') childId: string,
+  ): Promise<GetParentsResponseDto[]> {
+    return this.foldersService.getParents(userId, childId);
+  }
+
+  @ApiOperation({ summary: 'Get folder children' })
+  @ApiParam({ name: 'id', example: 'uuid-parent-folder-id' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Nested folders returned',
+    example: [GetChildrenResponseDto],
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Unauthorized.',
+  })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    description: 'Forbidden.',
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Children not found',
+  })
+  @Authorization(UserRole.ADMIN, UserRole.MANAGER)
+  @Get('children/:id')
+  getChildren(
+    @Authorized('id') userId: string,
+    @Param('id') parentId: string,
+  ): Promise<GetChildrenResponseDto[]> {
+    return this.foldersService.getChildren(userId, parentId);
   }
 
   @ApiOperation({ summary: 'Get folder by id' })

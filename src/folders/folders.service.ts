@@ -11,9 +11,15 @@ import { MAX_FOLDERS_DEPTH } from '@/folders/libs/constants';
 import { FoldersProcessService } from '@/folders/infrastructure/folders-process.service';
 import { IFoldersTreeNode } from '@/folders/libs/interfaces/folders-tree-node.interface';
 import { isPrismaUniqueError } from './libs/is-prisma-unique-error';
+import { IFoldersChildNode } from '@/folders/libs/interfaces/folders-child-node.interface';
+import { GetChildrenResponseDto } from '@/folders/dto/get-children-response.dto';
+import { GetParentsResponseDto } from '@/folders/dto/get-parents-response.dto';
+import { IFoldersService } from '@/folders/libs/interfaces/folders-service.interface';
+import { BatchPayload } from '@db/__generated__/internal/prismaNamespace';
+import { UpdateFolderDto } from '@/folders/dto/update-folder.dto';
 
 @Injectable()
-export class FoldersService {
+export class FoldersService implements IFoldersService {
   public constructor(
     private readonly prismaService: PrismaService,
     private readonly foldersRepository: FoldersRepository,
@@ -25,15 +31,19 @@ export class FoldersService {
    * @param dto
    * @param userId
    */
-  async create(userId: string, dto: CreateFolderDto) {
+  async create(userId: string, dto: CreateFolderDto): Promise<Folders> {
     const parentId = dto.parentId ?? null;
     const isRoot = parentId !== null;
 
     if (parentId !== null) {
-      await this.validateDepth(userId, parentId);
+      await this.foldersProcess.validateDepth(userId, parentId);
     } else {
       // to prevent duplication on the root lvl
-      const isNameUsed = await this.isNameUsed(dto.name, userId, parentId);
+      const isNameUsed = await this.foldersProcess.isNameUsed(
+        dto.name,
+        userId,
+        parentId,
+      );
       if (isNameUsed) {
         throw new BadRequestException(
           'Folder name must be unique within the same parent',
@@ -71,7 +81,10 @@ export class FoldersService {
    * @param userId
    * @param folderId
    */
-  async getTree(userId: string, folderId: string): Promise<IFoldersTreeNode[]> {
+  async getParents(
+    userId: string,
+    folderId: string,
+  ): Promise<GetParentsResponseDto[]> {
     const folders = await this.foldersRepository.getTreeAsc(userId, folderId);
 
     if (!folders) {
@@ -79,6 +92,27 @@ export class FoldersService {
     }
 
     return await this.foldersProcess.buildTree(folders);
+  }
+
+  /**
+   *
+   * @param userId
+   * @param parentId
+   */
+  async getChildren(
+    userId: string,
+    parentId: string,
+  ): Promise<GetChildrenResponseDto[]> {
+    const result = await this.prismaService.folders.findMany({
+      where: { userId, parentId },
+      select: { id: true, name: true, parentId: true /* user: true */ },
+      // include: { user: true }, // include OR select can be used
+    });
+
+    if (!result?.length) {
+      throw new NotFoundException('Children not found');
+    }
+    return result;
   }
 
   /**
@@ -107,14 +141,14 @@ export class FoldersService {
   async update(
     userId: string,
     id: string,
-    dto: { name?: string; parentId?: string },
-  ): Promise<any> {
+    dto: UpdateFolderDto,
+  ): Promise<BatchPayload> {
     if (dto.parentId?.length && id === dto.parentId) {
       throw new BadRequestException('Cannot move folder into itself');
     }
 
     if (dto.parentId?.length) {
-      await this.validateDepth(userId, dto.parentId);
+      await this.foldersProcess.validateDepth(userId, dto.parentId);
 
       // to prevent cyclical dependency
       const isAncestor = await this.foldersProcess.isAncestor(
@@ -132,6 +166,7 @@ export class FoldersService {
         where: { id, userId },
         data: dto,
       });
+
       if (result.count === 0) {
         throw new NotFoundException('Folder not found');
       }
@@ -178,25 +213,5 @@ export class FoldersService {
     return this.prismaService.folders.delete({
       where: { id },
     });
-  }
-
-  private async isNameUsed(
-    name: string,
-    userId: string,
-    parentId: string | null,
-  ): Promise<boolean> {
-    const sibling = await this.prismaService.folders.findFirst({
-      where: { name, userId, parentId },
-    });
-    return sibling?.id !== undefined;
-  }
-
-  private async validateDepth(userId: string, parentId: string): Promise<void> {
-    const depth = await this.foldersRepository.getFolderDepth(userId, parentId);
-    if (depth + 1 >= MAX_FOLDERS_DEPTH) {
-      throw new BadRequestException(
-        `Nesting limit reached, maximum nesting depth: ${MAX_FOLDERS_DEPTH}`,
-      );
-    }
   }
 }

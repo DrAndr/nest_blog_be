@@ -7,7 +7,7 @@ import { AuthGuard } from '@/auth/presentation/guards/auth.guard';
 @Injectable()
 class MockAuthGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean {
-    return true; // allow access
+    return true; // give us access
   }
 }
 
@@ -15,6 +15,7 @@ describe('FoldersController', () => {
   let controller: FoldersController;
   let service: jest.Mocked<FoldersService>;
   const userId = 'user_id_value';
+  const parentId = 'parent_folder_id_value';
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -24,7 +25,8 @@ describe('FoldersController', () => {
           provide: FoldersService,
           useValue: {
             create: jest.fn(),
-            getTree: jest.fn(),
+            getParents: jest.fn(),
+            getChildren: jest.fn(),
             getById: jest.fn(),
             update: jest.fn(),
             remove: jest.fn(),
@@ -52,13 +54,24 @@ describe('FoldersController', () => {
     });
   });
 
-  describe('getTree', () => {
-    it('should call service.getTree', async () => {
-      service.getTree.mockResolvedValue([]);
+  describe('getParents tree', () => {
+    it('should call service.getParents', async () => {
+      service.getParents.mockResolvedValue([]);
 
-      const result = await controller.getTree(userId, '1');
+      const result = await controller.getParents(userId, '1');
 
-      expect(service.getTree).toHaveBeenCalledWith(userId, '1');
+      expect(service.getParents).toHaveBeenCalledWith(userId, '1');
+      expect(result).toEqual([]);
+    });
+  });
+
+  describe('getChildren', () => {
+    it('should call service.getChildren', async () => {
+      service.getChildren.mockResolvedValue([]);
+
+      const result = await controller.getChildren(userId, parentId);
+
+      expect(service.getChildren).toHaveBeenCalledWith(userId, parentId);
       expect(result).toEqual([]);
     });
   });

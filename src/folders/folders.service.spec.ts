@@ -5,6 +5,7 @@ import { MAX_FOLDERS_DEPTH } from '@/folders/libs/constants';
 describe('FoldersService', () => {
   let service: FoldersService;
   const userId = 'user_id_value';
+  const parentId = 'parent_id_value';
 
   let prisma: any;
   let repository: any;
@@ -16,6 +17,7 @@ describe('FoldersService', () => {
         create: jest.fn(),
         findFirst: jest.fn(),
         findUnique: jest.fn(),
+        findMany: jest.fn(),
         update: jest.fn(),
         updateMany: jest.fn(),
         delete: jest.fn(),
@@ -34,6 +36,8 @@ describe('FoldersService', () => {
     processService = {
       buildTree: jest.fn(),
       isAncestor: jest.fn(),
+      isNameUsed: jest.fn(),
+      validateDepth: jest.fn(),
     };
 
     service = new FoldersService(prisma, repository, processService);
@@ -63,16 +67,19 @@ describe('FoldersService', () => {
       repository.getFolderDepth.mockResolvedValue(1);
       prisma.folders.create.mockResolvedValue({ id: '2' });
 
-      await service.create(userId, { name: 'child', parentId: '1' });
+      await service.create(userId, { name: 'child', parentId });
 
-      expect(repository.getFolderDepth).toHaveBeenCalledWith(userId, '1');
+      expect(processService.validateDepth).toHaveBeenCalledWith(
+        userId,
+        parentId,
+      );
     });
 
     it('should throw if depth exceeded', async () => {
-      repository.getFolderDepth.mockResolvedValue(MAX_FOLDERS_DEPTH);
+      processService.validateDepth.mockRejectedValue(new BadRequestException());
 
       await expect(
-        service.create(userId, { name: 'child', parentId: '1' }),
+        service.create(userId, { name: 'child', parentId }),
       ).rejects.toThrow(BadRequestException);
     });
 
@@ -91,7 +98,7 @@ describe('FoldersService', () => {
       repository.getTreeAsc.mockResolvedValue(folders);
       processService.buildTree.mockResolvedValue([{ id: '1', children: [] }]);
 
-      const result = await service.getTree(userId, '1');
+      const result = await service.getParents(userId, '1');
 
       expect(processService.buildTree).toHaveBeenCalledWith(folders);
       expect(result).toEqual([{ id: '1', children: [] }]);
@@ -100,9 +107,45 @@ describe('FoldersService', () => {
     it('should throw if folder not found', async () => {
       repository.getTreeAsc.mockResolvedValue(null);
 
-      await expect(service.getTree(userId, '1')).rejects.toThrow(
+      await expect(service.getParents(userId, '1')).rejects.toThrow(
         NotFoundException,
       );
+    });
+  });
+
+  describe('getChildren', () => {
+    it('should return children if found', async () => {
+      const mockChildren = [
+        { id: '1', name: 'child-1', parentId },
+        { id: '2', name: 'child-2', parentId },
+      ];
+
+      prisma.folders.findMany.mockResolvedValue(mockChildren);
+
+      const result = await service.getChildren(userId, parentId);
+
+      expect(result).toEqual(mockChildren);
+
+      expect(prisma.folders.findMany).toHaveBeenCalledWith({
+        where: { userId, parentId },
+        select: { id: true, name: true, parentId: true },
+      });
+    });
+
+    it('should throw NotFoundException if empty array returned', async () => {
+      prisma.folders.findMany.mockResolvedValue([]);
+
+      await expect(
+        service.getChildren(userId, parentId),
+      ).rejects.toBeInstanceOf(NotFoundException);
+    });
+
+    it('should throw NotFoundException if null returned', async () => {
+      prisma.folders.findMany.mockResolvedValue(null);
+
+      await expect(
+        service.getChildren(userId, parentId),
+      ).rejects.toBeInstanceOf(NotFoundException);
     });
   });
 
