@@ -73,7 +73,7 @@ model Token {
 
 model Category {
   id          String     @id @default(uuid())
-  name        String
+  name        String?
   slug        String
   description String?
   excerpt     String?
@@ -127,6 +127,7 @@ model Post {
   @@map("posts")
 }
 
+// TODO rename to the Folder
 model Folders {
   id        String    @id @default(uuid())
   name      String // should be unyqe on the same depth lvl
