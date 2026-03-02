@@ -18,6 +18,7 @@ import { SessionProviderModule } from '@/infrastructure/session-provider/session
 import { HealthCheckModule } from '@/health-check/health-check.module';
 import { UploadFilesModule } from './upload-files/upload-files.module';
 import { FoldersModule } from './folders/folders.module';
+import { PostsModule } from './posts/posts.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { FoldersModule } from './folders/folders.module';
     HealthCheckModule,
     UploadFilesModule,
     FoldersModule,
+    PostsModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
