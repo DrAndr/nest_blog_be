@@ -92,5 +92,5 @@ export class CreatePostDto {
   @IsString()
   @MinLength(1)
   @MaxLength(20)
-  categoryId?: string;
+  categoryId!: string;
 }

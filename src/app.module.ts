@@ -19,6 +19,7 @@ import { HealthCheckModule } from '@/health-check/health-check.module';
 import { UploadFilesModule } from './upload-files/upload-files.module';
 import { FoldersModule } from './folders/folders.module';
 import { PostsModule } from './posts/posts.module';
+import { CategoriesModule } from './categories/categories.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { PostsModule } from './posts/posts.module';
     UploadFilesModule,
     FoldersModule,
     PostsModule,
+    CategoriesModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
