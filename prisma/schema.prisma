@@ -19,8 +19,10 @@ model User {
   email              String     @unique
   password           String
   name               String
+  tag                String     @unique @default(uuid())
   image              String?
   posts              Post[]
+  category           Category[]
   role               UserRole   @default(REGULAR)
   //
   isVerified         Boolean    @default(false) @map("is_verified")
@@ -69,17 +71,59 @@ model Token {
   @@map("tokens")
 }
 
-model Post {
-  id          String   @id @default(uuid())
-  title       String
-  content     String?
-  published   Boolean  @default(false)
-  user        User     @relation(fields: [userId], references: [id])
-  userId      String   @map("user_id")
-  publishedAt DateTime @default(now()) @map("published_at")
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+model Category {
+  id          String     @id @default(uuid())
+  name        String
+  slug        String
+  description String?
+  excerpt     String?
+  metaData    String?    @map("meta_data")
+  thumbnail   String?
+  //
+  user        User       @relation(fields: [userId], references: [id])
+  userId      String     @map("user_id")
+  //
+  parentId    String?    @map("parent_id")
+  parent      Category?  @relation("Tree", fields: [parentId], references: [id])
+  children    Category[] @relation("Tree")
+  //
+  posts       Post[]
+  //
+  deletedAt   DateTime?  @map("deleted_at") // soft && postpoed delete
+  isActive    Boolean    @default(true) @map("is_active") // active / inactive
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
 
+  //
+  @@unique([slug])
+  @@map("categories")
+}
+
+model Post {
+  id           String     @id @default(uuid())
+  title        String
+  slug         String // @unique
+  content      String?
+  excerpt      String?
+  canonicalUrl String?
+  thumbnail    String?
+  //
+  status       PostStatus @default(DRAFT)
+  //
+  metaData     String?    @map("meta_data") // any SEO things
+  //
+  user         User       @relation(fields: [userId], references: [id])
+  userId       String     @map("user_id")
+  //
+  category     Category   @relation(fields: [categoryId], references: [id])
+  categoryId   String     @map("category_id")
+  //
+  deletedAt    DateTime?  @map("deleted_at") // soft delete
+  publishedAt  DateTime   @default(now()) @map("published_at") // postponed publication
+  createdAt    DateTime   @default(now()) @map("created_at")
+  updatedAt    DateTime   @updatedAt @map("updated_at")
+
+  @@unique([slug])
   @@map("posts")
 }
 
@@ -90,20 +134,20 @@ model Folders {
   // it`s not useful when user change parrent folder, as it`s forsed us to update path for all childrens
   // path String @unique 
   //
-  parentId  String?   @default("root") @map("parent_id")
+  parentId  String?   @map("parent_id")
   parent    Folders?  @relation("Tree", fields: [parentId], references: [id])
   children  Folders[] @relation("Tree")
-  //
-  userId        String         @map("user_id")
-  user          User           @relation(fields: [userId], references: [id])
-  //
+  // 
+  userId    String    @map("user_id")
+  user      User      @relation(fields: [userId], references: [id])
+  // 
   files     Files[]
-  //
+  // 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
 
-  @@index([parentId])
   @@unique([parentId, name, userId]) // prevent name duplication if folders has the same parentId
+  @@index([parentId])
   @@map("folders")
 }
 
@@ -174,6 +218,12 @@ model FileVariants {
 //   DONE
 //   FAILED
 // }
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
 
 enum VariantType {
   ORIGINAL
